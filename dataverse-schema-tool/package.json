@@ -1,0 +1,17 @@
+{
+  "name": "onboarding-dataverse-schema-tool",
+  "version": "1.0.0",
+  "description": "Creates/updates the Dataverse tables for the Onboarding and Micro-learning system.",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "dry-run": "node create-tables.mjs --dry-run",
+    "create": "node create-tables.mjs"
+  },
+  "dependencies": {
+    "@azure/msal-node": "^2.13.1",
+    "dotenv": "^16.4.5"
+  }
+}

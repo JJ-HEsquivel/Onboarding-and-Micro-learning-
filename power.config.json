@@ -1,0 +1,104 @@
+{
+  "version": "1.0",
+  "appId": "61d15e6c-6e0d-45da-8a46-5fb59c7f5f3e",
+  "appDisplayName": "Onboarding and Micro-learning",
+  "region": "prod",
+  "environmentId": "b51a5f8a-454d-e86d-bef4-7df1da72e1eb",
+  "description": " ",
+  "buildPath": "./dist",
+  "buildEntryPoint": "index.html",
+  "localAppUrl": "http://localhost:3000",
+  "logoPath": "Default",
+  "connectionReferences": {},
+  "databaseReferences": {
+    "default.cds": {
+      "dataSources": {
+        "areas": {
+          "entitySetName": "jsi_areas",
+          "logicalName": "jsi_area"
+        },
+        "stages": {
+          "entitySetName": "jsi_stages",
+          "logicalName": "jsi_stage"
+        },
+        "stageareas": {
+          "entitySetName": "jsi_stageareas",
+          "logicalName": "jsi_stagearea"
+        },
+        "documentcategories": {
+          "entitySetName": "jsi_documentcategories",
+          "logicalName": "jsi_documentcategory"
+        },
+        "documents": {
+          "entitySetName": "jsi_documents",
+          "logicalName": "jsi_document"
+        },
+        "documentareas": {
+          "entitySetName": "jsi_documentareas",
+          "logicalName": "jsi_documentarea"
+        },
+        "documentversions": {
+          "entitySetName": "jsi_documentversions",
+          "logicalName": "jsi_documentversion"
+        },
+        "assessments": {
+          "entitySetName": "jsi_assessments",
+          "logicalName": "jsi_assessment"
+        },
+        "questions": {
+          "entitySetName": "jsi_questions",
+          "logicalName": "jsi_question"
+        },
+        "answeroptions": {
+          "entitySetName": "jsi_answeroptions",
+          "logicalName": "jsi_answeroption"
+        },
+        "documentassignments": {
+          "entitySetName": "jsi_documentassignments",
+          "logicalName": "jsi_documentassignment"
+        },
+        "assessmentassignments": {
+          "entitySetName": "jsi_assessmentassignments",
+          "logicalName": "jsi_assessmentassignment"
+        },
+        "assessmentattempts": {
+          "entitySetName": "jsi_assessmentattempts",
+          "logicalName": "jsi_assessmentattempt"
+        },
+        "questionresponses": {
+          "entitySetName": "jsi_questionresponses",
+          "logicalName": "jsi_questionresponse"
+        },
+        "campaigns": {
+          "entitySetName": "jsi_campaigns",
+          "logicalName": "jsi_campaign"
+        },
+        "campaignareas": {
+          "entitySetName": "jsi_campaignareas",
+          "logicalName": "jsi_campaignarea"
+        },
+        "campaigndeliveries": {
+          "entitySetName": "jsi_campaigndeliveries",
+          "logicalName": "jsi_campaigndelivery"
+        },
+        "notifications": {
+          "entitySetName": "jsi_notifications",
+          "logicalName": "jsi_notification"
+        },
+        "evidencerecords": {
+          "entitySetName": "jsi_evidences",
+          "logicalName": "jsi_evidence"
+        },
+        "gaps": {
+          "entitySetName": "jsi_gaps",
+          "logicalName": "jsi_gap"
+        },
+        "contactos": {
+          "entitySetName": "contacts",
+          "logicalName": "contact"
+        }
+      },
+      "environmentVariableName": ""
+    }
+  }
+}
