@@ -101,6 +101,31 @@ const PEOPLE = [
     area: 'Engineering',
     roles: ['Administrator'],
   },
+  // Managers de prueba (nombres del prototipo). Cambia los correos por los reales.
+  {
+    firstName: 'Iván',
+    lastName: 'Suárez',
+    email: 'ivan.suarez@jalasoft.com',
+    jobTitle: 'Engineering Manager',
+    area: 'Engineering',
+    roles: ['Manager'],
+  },
+  {
+    firstName: 'Gabriela',
+    lastName: 'Rocha',
+    email: 'gabriela.rocha@jalasoft.com',
+    jobTitle: 'Quality Control Manager',
+    area: 'Quality Control',
+    roles: ['Manager'],
+  },
+  {
+    firstName: 'Sofía',
+    lastName: 'Terceros',
+    email: 'sofia.terceros@jalasoft.com',
+    jobTitle: 'Project Manager',
+    area: 'Project Management',
+    roles: ['Manager'],
+  },
 ];
 
 // =============================================================================
@@ -318,6 +343,7 @@ async function main() {
       firstname: p.firstName,
       lastname: p.lastName,
       emailaddress1: p.email,
+      ...(p.jobTitle ? { jsi_jobtitle: p.jobTitle } : {}),
     }, `${p.firstName} ${p.lastName} <${p.email}>`, [
       { attr: 'jsi_area', target: 'jsi_area', id: areaId[p.area] },
     ]));

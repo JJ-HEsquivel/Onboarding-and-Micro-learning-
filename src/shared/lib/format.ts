@@ -11,6 +11,15 @@ export function formatDate(isoDate: string | null | undefined): string {
   return dateFormatter.format(new Date(year, month - 1, day));
 }
 
+/** Días entre dos fechas de solo día ("2026-09-07"). */
+export function daysBetween(startIso: string, endIso: string): number {
+  const toUtc = (iso: string) => {
+    const [year, month, day] = iso.slice(0, 10).split('-').map(Number);
+    return Date.UTC(year, month - 1, day);
+  };
+  return Math.round((toUtc(endIso) - toUtc(startIso)) / 86_400_000);
+}
+
 /** Fecha de hoy en formato "AAAA-MM-DD" (hora local). */
 export function todayIso(): string {
   const now = new Date();

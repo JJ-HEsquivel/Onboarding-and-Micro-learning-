@@ -22,11 +22,16 @@ type FormErrors = Partial<Record<keyof NewCollaboratorInput, string>>;
 
 const FORM_ID = 'register-collaborator-form';
 
+/** Formato básico de correo: algo@dominio.ext, sin espacios. */
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 /** Reglas de validación del formulario (función pura). */
 function validate(form: NewCollaboratorInput): FormErrors {
   const errors: FormErrors = {};
   if (!form.firstName.trim()) errors.firstName = 'Ingrese los nombres.';
   if (!form.lastName.trim()) errors.lastName = 'Ingrese los apellidos.';
+  if (!form.email.trim()) errors.email = 'Ingrese el correo corporativo.';
+  else if (!EMAIL_PATTERN.test(form.email.trim())) errors.email = 'Ingrese un correo válido (ej. ana.paredes@jalasoft.com).';
   if (!form.jobTitle.trim()) errors.jobTitle = 'Ingrese el cargo.';
   if (!form.areaId) errors.areaId = 'Seleccione un área.';
   if (!form.managerId) errors.managerId = 'Seleccione el manager responsable.';
@@ -39,6 +44,7 @@ export function RegisterCollaboratorModal({ areas, managers, onClose, onRegister
   const [form, setForm] = useState<NewCollaboratorInput>(() => ({
     firstName: '',
     lastName: '',
+    email: '',
     jobTitle: '',
     areaId: areas[0]?.id ?? '',
     managerId: managers.length === 1 ? managers[0].id : '',
@@ -134,9 +140,18 @@ export function RegisterCollaboratorModal({ areas, managers, onClose, onRegister
             />
           </FormField>
 
-          {/* TODO: definir quién genera el correo corporativo (ej. un flujo de Power Automate). */}
-          <FormField label="Correo corporativo" htmlFor="email">
-            <input id="email" className="input" placeholder="Se genera automáticamente" readOnly />
+          <FormField label="Correo corporativo" htmlFor="email" error={errors.email}>
+            <input
+              id="email"
+              type="email"
+              className="input"
+              placeholder="Ej. ana.paredes@jalasoft.com"
+              maxLength={100}
+              autoComplete="off"
+              value={form.email}
+              aria-invalid={Boolean(errors.email)}
+              onChange={(event) => updateField('email', event.target.value)}
+            />
           </FormField>
 
           <FormField label="Área" htmlFor="areaId" error={errors.areaId}>
@@ -160,16 +175,21 @@ export function RegisterCollaboratorModal({ areas, managers, onClose, onRegister
             label="Manager responsable"
             htmlFor="managerId"
             error={errors.managerId}
-            hint={managers.length === 0 ? 'No hay contactos con el rol Manager en Dataverse.' : undefined}
+            hint={
+              managers.length === 0
+                ? 'Para registrar colaboradores, primero asigne el rol Manager a una persona (tabla Role Assignment).'
+                : undefined
+            }
           >
             <select
               id="managerId"
               className="input"
               value={form.managerId}
+              disabled={managers.length === 0}
               aria-invalid={Boolean(errors.managerId)}
               onChange={(event) => updateField('managerId', event.target.value)}
             >
-              <option value="">Seleccione un manager</option>
+              <option value="">{managers.length === 0 ? 'No hay managers registrados' : 'Seleccione un manager'}</option>
               {managers.map((manager) => (
                 <option key={manager.id} value={manager.id}>
                   {manager.fullName}

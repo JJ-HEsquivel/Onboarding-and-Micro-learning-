@@ -96,6 +96,14 @@
         "contactos": {
           "entitySetName": "contacts",
           "logicalName": "contact"
+        },
+        "roleassignments": {
+          "entitySetName": "jsi_roleassignments",
+          "logicalName": "jsi_roleassignment"
+        },
+        "onboardings": {
+          "entitySetName": "jsi_onboardings",
+          "logicalName": "jsi_onboarding"
         }
       },
       "environmentVariableName": ""

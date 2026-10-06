@@ -108,30 +108,6 @@ export const Contactshaschildrencode = {
   1: 'Valorpredeterminado'
 } as const;
 export type Contactshaschildrencode = keyof typeof Contactshaschildrencode;
-export const Contactsjsi_onboardingstatus = {
-  100000000: 'Active',
-  100000001: 'PendingValidation'
-} as const;
-export type Contactsjsi_onboardingstatus = keyof typeof Contactsjsi_onboardingstatus;
-export const Contactsjsi_progressstatus = {
-  100000000: 'NotStarted',
-  100000001: 'InProgress',
-  100000002: 'Overdue',
-  100000003: 'Completed'
-} as const;
-export type Contactsjsi_progressstatus = keyof typeof Contactsjsi_progressstatus;
-export const Contactsjsi_risklevel = {
-  100000000: 'Low',
-  100000001: 'Medium',
-  100000002: 'High'
-} as const;
-export type Contactsjsi_risklevel = keyof typeof Contactsjsi_risklevel;
-export const Contactsjsi_userrole = {
-  100010000: 'Administrador',
-  100010001: 'Manager',
-  100010002: 'Colaborador'
-} as const;
-export type Contactsjsi_userrole = keyof typeof Contactsjsi_userrole;
 export const Contactsleadsourcecode = {
   1: 'Valorpredeterminado'
 } as const;
@@ -382,10 +358,6 @@ export interface ContactsBase {
   jsi_hiredate?: string;
   jsi_jobtitle?: string;
   "jsi_Manager@odata.bind"?: string;
-  jsi_onboardingstatus?: Contactsjsi_onboardingstatus;
-  jsi_progressstatus?: Contactsjsi_progressstatus;
-  jsi_risklevel?: Contactsjsi_risklevel;
-  jsi_userrole?: Contactsjsi_userrole;
   lastname: string;
   lastonholdtime?: string;
   lastusedincampaign?: string;
@@ -506,10 +478,6 @@ export interface Contacts extends ContactsBase {
   jsi_areaname?: string;
   jsi_managername?: string;
   jsi_manageryominame?: string;
-  jsi_onboardingstatusname?: string;
-  jsi_progressstatusname?: string;
-  jsi_risklevelname?: string;
-  jsi_userrolename?: string;
   leadsourcecodename?: string;
   marketingonlyname?: string;
   mastercontactidname?: string;

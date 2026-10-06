@@ -1,13 +1,13 @@
 {
-  "name": "jsi_documentassignment",
-  "title": "Document Assignments",
+  "name": "jsi_onboarding",
+  "title": "Onboardings",
   "schema": {
     "type": "array",
     "items": {
       "type": "object",
       "x-ms-dataverse-entity": true,
-      "x-ms-dataverse-entityset": "jsi_documentassignments",
-      "x-ms-dataverse-primary-id": "jsi_documentassignmentid",
+      "x-ms-dataverse-entityset": "jsi_onboardings",
+      "x-ms-dataverse-primary-id": "jsi_onboardingid",
       "x-ms-dataverse-primary-name": "jsi_name",
       "properties": {
         "createdby": {
@@ -79,46 +79,29 @@
           "x-ms-dataverse-type": "IntegerType",
           "x-ms-schema-name": "ImportSequenceNumber"
         },
-        "jsi_confirmedon": {
+        "jsi_area": {
           "type": "string",
-          "title": "Confirmed On",
-          "x-ms-dataverse-attribute": "jsi_confirmedon",
-          "x-ms-dataverse-type": "DateTimeType",
-          "x-ms-schema-name": "jsi_ConfirmedOn"
-        },
-        "jsi_document": {
-          "type": "string",
-          "title": "Document",
-          "x-ms-dataverse-attribute": "jsi_document",
+          "title": "Area",
+          "x-ms-dataverse-attribute": "jsi_area",
           "x-ms-dataverse-type": "LookupType",
-          "x-ms-schema-name": "jsi_Document",
+          "x-ms-schema-name": "jsi_Area",
           "required": true
         },
-        "jsi_documentassignmentid": {
+        "jsi_areaname": {
           "type": "string",
-          "title": "Document Assignment",
-          "x-ms-dataverse-attribute": "jsi_documentassignmentid",
-          "x-ms-dataverse-type": "UniqueidentifierType",
-          "x-ms-schema-name": "jsi_DocumentAssignmentId",
-          "x-ms-dataverse-primary-id": true,
-          "required": true,
-          "x-ms-keyType": "primary"
-        },
-        "jsi_documentname": {
-          "type": "string",
-          "title": "jsi_documentname",
-          "x-ms-dataverse-attribute": "jsi_documentname",
+          "title": "jsi_areaname",
+          "x-ms-dataverse-attribute": "jsi_areaname",
           "x-ms-dataverse-type": "StringType",
-          "x-ms-schema-name": "jsi_DocumentName",
+          "x-ms-schema-name": "jsi_AreaName",
           "x-ms-read-only": true,
-          "maxLength": 200
+          "maxLength": 100
         },
-        "jsi_duedate": {
+        "jsi_completedon": {
           "type": "string",
-          "title": "Due Date",
-          "x-ms-dataverse-attribute": "jsi_duedate",
+          "title": "Completed On",
+          "x-ms-dataverse-attribute": "jsi_completedon",
           "x-ms-dataverse-type": "DateTimeType",
-          "x-ms-schema-name": "jsi_DueDate"
+          "x-ms-schema-name": "jsi_CompletedOn"
         },
         "jsi_employee": {
           "type": "string",
@@ -153,58 +136,108 @@
           "x-ms-dataverse-type": "StringType",
           "x-ms-schema-name": "jsi_Name",
           "x-ms-dataverse-primary-name": true,
-          "maxLength": 200
-        },
-        "jsi_onboarding": {
-          "type": "string",
-          "title": "Onboarding",
-          "x-ms-dataverse-attribute": "jsi_onboarding",
-          "x-ms-dataverse-type": "LookupType",
-          "x-ms-schema-name": "jsi_Onboarding"
-        },
-        "jsi_onboardingname": {
-          "type": "string",
-          "title": "jsi_onboardingname",
-          "x-ms-dataverse-attribute": "jsi_onboardingname",
-          "x-ms-dataverse-type": "StringType",
-          "x-ms-schema-name": "jsi_OnboardingName",
-          "x-ms-read-only": true,
           "maxLength": 100
         },
-        "jsi_source": {
+        "jsi_onboardingid": {
           "type": "string",
-          "title": "Source",
-          "x-ms-dataverse-attribute": "jsi_source",
-          "x-ms-dataverse-type": "StringType",
-          "x-ms-schema-name": "jsi_Source",
-          "maxLength": 150
+          "title": "Onboarding",
+          "x-ms-dataverse-attribute": "jsi_onboardingid",
+          "x-ms-dataverse-type": "UniqueidentifierType",
+          "x-ms-schema-name": "jsi_OnboardingId",
+          "x-ms-dataverse-primary-id": true,
+          "required": true,
+          "x-ms-keyType": "primary"
         },
-        "jsi_stage": {
+        "jsi_progressstatus": {
           "type": "string",
-          "title": "Stage",
-          "x-ms-dataverse-attribute": "jsi_stage",
-          "x-ms-dataverse-type": "LookupType",
-          "x-ms-schema-name": "jsi_Stage"
-        },
-        "jsi_stagename": {
-          "type": "string",
-          "title": "jsi_stagename",
-          "x-ms-dataverse-attribute": "jsi_stagename",
-          "x-ms-dataverse-type": "StringType",
-          "x-ms-schema-name": "jsi_StageName",
-          "x-ms-read-only": true,
-          "maxLength": 150
-        },
-        "jsi_status": {
-          "type": "string",
-          "title": "Status",
-          "x-ms-dataverse-attribute": "jsi_status",
+          "title": "Progress Status",
+          "x-ms-dataverse-attribute": "jsi_progressstatus",
           "x-ms-dataverse-type": "PicklistType",
-          "x-ms-schema-name": "jsi_Status",
+          "x-ms-schema-name": "jsi_ProgressStatus",
           "required": true,
           "enum": [
-            "Pending",
-            "Read"
+            "NotStarted",
+            "InProgress",
+            "Overdue",
+            "Completed"
+          ],
+          "x-ms-enum-values": [
+            100000000,
+            100000001,
+            100000002,
+            100000003
+          ],
+          "Color": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "e78c60ec-cec1-f111-aaad-00224837cd6c",
+          "x-ms-isGlobal": false,
+          "x-ms-optionsetdisplayname": "Progress Status",
+          "x-ms-optionSetType": "Picklist"
+        },
+        "jsi_progressstatusname": {
+          "type": "string",
+          "title": "jsi_progressstatusname",
+          "x-ms-dataverse-attribute": "jsi_progressstatusname",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "jsi_progressstatusName",
+          "x-ms-read-only": true
+        },
+        "jsi_risklevel": {
+          "type": "string",
+          "title": "Risk Level",
+          "x-ms-dataverse-attribute": "jsi_risklevel",
+          "x-ms-dataverse-type": "PicklistType",
+          "x-ms-schema-name": "jsi_RiskLevel",
+          "required": true,
+          "enum": [
+            "Low",
+            "Medium",
+            "High"
+          ],
+          "x-ms-enum-values": [
+            100000000,
+            100000001,
+            100000002
+          ],
+          "Color": [
+            null,
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "6cf3a2f2-cec1-f111-aaad-00224837cd6c",
+          "x-ms-isGlobal": false,
+          "x-ms-optionsetdisplayname": "Risk Level",
+          "x-ms-optionSetType": "Picklist"
+        },
+        "jsi_risklevelname": {
+          "type": "string",
+          "title": "jsi_risklevelname",
+          "x-ms-dataverse-attribute": "jsi_risklevelname",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "jsi_risklevelName",
+          "x-ms-read-only": true
+        },
+        "jsi_startdate": {
+          "type": "string",
+          "title": "Start Date",
+          "x-ms-dataverse-attribute": "jsi_startdate",
+          "x-ms-dataverse-type": "DateTimeType",
+          "x-ms-schema-name": "jsi_StartDate"
+        },
+        "jsi_type": {
+          "type": "string",
+          "title": "Type",
+          "x-ms-dataverse-attribute": "jsi_type",
+          "x-ms-dataverse-type": "PicklistType",
+          "x-ms-schema-name": "jsi_Type",
+          "required": true,
+          "enum": [
+            "Initial",
+            "RoleChange"
           ],
           "x-ms-enum-values": [
             100000000,
@@ -214,18 +247,82 @@
             null,
             null
           ],
-          "x-ms-optionsetmetadataid": "9e64d05a-7abe-f111-a05b-00224837cd6c",
+          "x-ms-optionsetmetadataid": "cd8c60ec-cec1-f111-aaad-00224837cd6c",
           "x-ms-isGlobal": false,
-          "x-ms-optionsetdisplayname": "Status",
+          "x-ms-optionsetdisplayname": "Type",
           "x-ms-optionSetType": "Picklist"
         },
-        "jsi_statusname": {
+        "jsi_typename": {
           "type": "string",
-          "title": "jsi_statusname",
-          "x-ms-dataverse-attribute": "jsi_statusname",
+          "title": "jsi_typename",
+          "x-ms-dataverse-attribute": "jsi_typename",
           "x-ms-dataverse-type": "VirtualType",
-          "x-ms-schema-name": "jsi_statusName",
+          "x-ms-schema-name": "jsi_typeName",
           "x-ms-read-only": true
+        },
+        "jsi_validatedon": {
+          "type": "string",
+          "title": "Validated On",
+          "x-ms-dataverse-attribute": "jsi_validatedon",
+          "x-ms-dataverse-type": "DateTimeType",
+          "x-ms-schema-name": "jsi_ValidatedOn"
+        },
+        "jsi_validationstatus": {
+          "type": "string",
+          "title": "Validation Status",
+          "x-ms-dataverse-attribute": "jsi_validationstatus",
+          "x-ms-dataverse-type": "PicklistType",
+          "x-ms-schema-name": "jsi_ValidationStatus",
+          "required": true,
+          "enum": [
+            "PendingValidation",
+            "Validated"
+          ],
+          "x-ms-enum-values": [
+            100000000,
+            100000001
+          ],
+          "Color": [
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "d88c60ec-cec1-f111-aaad-00224837cd6c",
+          "x-ms-isGlobal": false,
+          "x-ms-optionsetdisplayname": "Validation Status",
+          "x-ms-optionSetType": "Picklist"
+        },
+        "jsi_validationstatusname": {
+          "type": "string",
+          "title": "jsi_validationstatusname",
+          "x-ms-dataverse-attribute": "jsi_validationstatusname",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "jsi_validationstatusName",
+          "x-ms-read-only": true
+        },
+        "jsi_validator": {
+          "type": "string",
+          "title": "Validator",
+          "x-ms-dataverse-attribute": "jsi_validator",
+          "x-ms-dataverse-type": "LookupType",
+          "x-ms-schema-name": "jsi_Validator"
+        },
+        "jsi_validatorname": {
+          "type": "string",
+          "title": "jsi_validatorname",
+          "x-ms-dataverse-attribute": "jsi_validatorname",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "jsi_ValidatorName",
+          "x-ms-read-only": true,
+          "maxLength": 160
+        },
+        "jsi_validatoryominame": {
+          "type": "string",
+          "title": "jsi_validatoryominame",
+          "x-ms-dataverse-attribute": "jsi_validatoryominame",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "jsi_ValidatorYomiName",
+          "x-ms-read-only": true,
+          "maxLength": 450
         },
         "modifiedby": {
           "type": "string",
@@ -385,7 +482,7 @@
             null,
             null
           ],
-          "x-ms-optionsetmetadataid": "2c55aee7-79be-f111-a05b-00224837cd6c",
+          "x-ms-optionsetmetadataid": "c36acfd7-cec1-f111-aaad-00224837cd6c",
           "x-ms-isGlobal": false,
           "x-ms-optionsetdisplayname": "Estado",
           "x-ms-optionSetType": "State"
@@ -416,7 +513,7 @@
             null,
             null
           ],
-          "x-ms-optionsetmetadataid": "3655aee7-79be-f111-a05b-00224837cd6c",
+          "x-ms-optionsetmetadataid": "cd6acfd7-cec1-f111-aaad-00224837cd6c",
           "x-ms-isGlobal": false,
           "x-ms-optionsetdisplayname": "Razón para el estado",
           "x-ms-optionSetType": "Status"
@@ -455,10 +552,13 @@
       "required": [
         "createdbyyominame",
         "createdonbehalfbyyominame",
-        "jsi_document",
-        "jsi_documentassignmentid",
+        "jsi_area",
         "jsi_employee",
-        "jsi_status",
+        "jsi_onboardingid",
+        "jsi_progressstatus",
+        "jsi_risklevel",
+        "jsi_type",
+        "jsi_validationstatus",
         "modifiedbyyominame",
         "modifiedonbehalfbyyominame",
         "ownerid",

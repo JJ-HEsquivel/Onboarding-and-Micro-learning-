@@ -28,7 +28,11 @@ export interface Collaborator {
   managerName: string;
   /** Fecha en formato ISO "AAAA-MM-DD". */
   hireDate: string | null;
+  /** Datos de su inducción más reciente (jsi_onboarding). */
+  onboardingId: string | null;
   status: CollaboratorStatus;
+  /** Duración de la inducción en días, solo si ya se cerró. */
+  closingDays: number | null;
   documentsTotal: number;
   documentsRead: number;
 }
@@ -53,6 +57,8 @@ export interface RouteStage {
 export interface NewCollaboratorInput {
   firstName: string;
   lastName: string;
+  /** Correo corporativo; identifica a la persona al iniciar sesión, por eso es único. */
+  email: string;
   jobTitle: string;
   areaId: string;
   managerId: string;
