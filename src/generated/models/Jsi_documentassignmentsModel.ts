@@ -26,6 +26,7 @@ export interface Jsi_documentassignmentsBase {
   jsi_duedate?: string;
   "jsi_Employee@odata.bind": string;
   jsi_name?: string;
+  "jsi_Onboarding@odata.bind"?: string;
   jsi_source?: string;
   "jsi_Stage@odata.bind"?: string;
   jsi_status: Jsi_documentassignmentsjsi_status;
@@ -47,6 +48,7 @@ export interface Jsi_documentassignments extends Jsi_documentassignmentsBase {
   jsi_documentname?: string;
   jsi_employeename?: string;
   jsi_employeeyominame?: string;
+  jsi_onboardingname?: string;
   jsi_stagename?: string;
   jsi_statusname?: string;
   modifiedbyname?: string;
@@ -68,6 +70,8 @@ export interface Jsi_documentassignments extends Jsi_documentassignmentsBase {
   _jsi_document_value?: string;
   jsi_employee?: object;
   _jsi_employee_value?: string;
+  jsi_onboarding?: object;
+  _jsi_onboarding_value?: string;
   jsi_stage?: object;
   _jsi_stage_value?: string;
   modifiedby?: object;

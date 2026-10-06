@@ -12,6 +12,18 @@
   --color-border: #e2e8f0;
   --color-text: #0f172a;
   --color-text-muted: #64748b;
+  --color-surface-muted: #f8fafc;
+
+  --tone-neutral-bg: #f1f5f9;
+  --tone-neutral-text: #64748b;
+  --tone-info-bg: #eaf0ff;
+  --tone-info-text: #1d4ed8;
+  --tone-success-bg: #e7f6ec;
+  --tone-success-text: #15803d;
+  --tone-warning-bg: #fef6e0;
+  --tone-warning-text: #a16207;
+  --tone-danger-bg: #fdecec;
+  --tone-danger-text: #dc2626;
 
   --color-sidebar-bg: #0f1b33;
   --color-sidebar-hover: #1b2a47;
@@ -52,67 +64,24 @@ ul {
   list-style: none;
 }
 
-/* ---------- Componentes compartidos ---------- */
-.page-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 24px;
+button,
+input,
+select {
+  font: inherit;
 }
 
-.page-header__title {
-  font-size: 24px;
-  font-weight: 700;
+/* ---------- Utilidades ---------- */
+
+/* Oculta un texto a la vista pero lo deja disponible para lectores de pantalla. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
-.page-header__description {
-  margin-top: 4px;
-  color: var(--color-text-muted);
-}
-
-.page-header__actions {
-  display: flex;
-  gap: 8px;
-}
-
-.placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 64px 24px;
-  border: 1px dashed var(--color-border);
-  border-radius: var(--radius-card);
-  background: var(--color-surface);
-  color: var(--color-text-muted);
-  text-align: center;
-}
-
-.placeholder__title {
-  font-weight: 600;
-  color: var(--color-text);
-}
-
-.avatar {
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: #1e3a8a;
-  color: #fff;
-  font-weight: 700;
-}
-
-.avatar--sm {
-  width: 32px;
-  height: 32px;
-  font-size: 12px;
-}
-
-.avatar--md {
-  width: 38px;
-  height: 38px;
-  font-size: 13px;
+.nowrap {
+  white-space: nowrap;
 }

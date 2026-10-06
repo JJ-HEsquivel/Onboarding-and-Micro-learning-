@@ -179,3 +179,40 @@ onboarding-dataverse-schema-tool/
 Si necesitas agregar una tabla o columna nueva más adelante, edítala en
 `schema.mjs` (siguiendo el mismo patrón) y vuelve a correr
 `npm run create` — el script solo creará lo nuevo.
+
+---
+
+## 10. Scripts disponibles
+
+| Comando | Qué hace |
+|---|---|
+| `npm run dry-run` / `npm run create` | Crea tablas, columnas y relaciones que falten (nunca borra) |
+| `npm run remove-columns:dry-run` / `npm run remove-columns` | Borra las columnas listadas en `REMOVED_COLUMNS` (schema.mjs) |
+| `npm run seed:dry-run` / `npm run seed` | Carga catálogos (áreas, etapas, documentos) y personas iniciales |
+
+Archivos:
+- `lib/dataverse-client.mjs`: inicio de sesión y llamadas a la Web API, compartido por los scripts.
+- `remove-columns.mjs`: borra columnas obsoletas. **Borrar una columna borra sus datos.**
+
+## 11. Cambio de modelo: personas, roles e inducciones
+
+La persona (`contact`) existe una sola vez. Sus roles están en `jsi_roleassignment`
+(puede tener varios) y cada inducción en `jsi_onboarding`. Por eso se quitaron de
+`contact` las columnas `jsi_onboardingstatus`, `jsi_progressstatus`, `jsi_risklevel`
+y `jsi_userrole`.
+
+Orden para aplicarlo (siempre primero el dry-run de cada paso):
+
+```powershell
+# 1. Crea jsi_roleassignment y jsi_onboarding
+npm run dry-run
+npm run create
+
+# 2. Borra las columnas viejas de contact
+npm run remove-columns:dry-run
+npm run remove-columns
+
+# 3. Carga el administrador inicial
+npm run seed:dry-run
+npm run seed
+```

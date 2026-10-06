@@ -2349,111 +2349,6 @@
           "x-ms-read-only": true,
           "maxLength": 450
         },
-        "jsi_onboardingstatus": {
-          "type": "string",
-          "title": "Onboarding Status",
-          "x-ms-dataverse-attribute": "jsi_onboardingstatus",
-          "x-ms-dataverse-type": "PicklistType",
-          "x-ms-schema-name": "jsi_OnboardingStatus",
-          "required": true,
-          "enum": [
-            "Active",
-            "PendingValidation"
-          ],
-          "x-ms-enum-values": [
-            100000000,
-            100000001
-          ],
-          "Color": [
-            null,
-            null
-          ],
-          "x-ms-optionsetmetadataid": "0ae96986-7abe-f111-a05b-00224837cd6c",
-          "x-ms-isGlobal": false,
-          "x-ms-optionsetdisplayname": "Onboarding Status",
-          "x-ms-optionSetType": "Picklist"
-        },
-        "jsi_onboardingstatusname": {
-          "type": "string",
-          "title": "jsi_onboardingstatusname",
-          "x-ms-dataverse-attribute": "jsi_onboardingstatusname",
-          "x-ms-dataverse-type": "VirtualType",
-          "x-ms-schema-name": "jsi_onboardingstatusName",
-          "x-ms-read-only": true
-        },
-        "jsi_progressstatus": {
-          "type": "string",
-          "title": "Progress Status",
-          "x-ms-dataverse-attribute": "jsi_progressstatus",
-          "x-ms-dataverse-type": "PicklistType",
-          "x-ms-schema-name": "jsi_ProgressStatus",
-          "required": true,
-          "enum": [
-            "NotStarted",
-            "InProgress",
-            "Overdue",
-            "Completed"
-          ],
-          "x-ms-enum-values": [
-            100000000,
-            100000001,
-            100000002,
-            100000003
-          ],
-          "Color": [
-            null,
-            null,
-            null,
-            null
-          ],
-          "x-ms-optionsetmetadataid": "15e96986-7abe-f111-a05b-00224837cd6c",
-          "x-ms-isGlobal": false,
-          "x-ms-optionsetdisplayname": "Progress Status",
-          "x-ms-optionSetType": "Picklist"
-        },
-        "jsi_progressstatusname": {
-          "type": "string",
-          "title": "jsi_progressstatusname",
-          "x-ms-dataverse-attribute": "jsi_progressstatusname",
-          "x-ms-dataverse-type": "VirtualType",
-          "x-ms-schema-name": "jsi_progressstatusName",
-          "x-ms-read-only": true
-        },
-        "jsi_risklevel": {
-          "type": "string",
-          "title": "Risk Level",
-          "x-ms-dataverse-attribute": "jsi_risklevel",
-          "x-ms-dataverse-type": "PicklistType",
-          "x-ms-schema-name": "jsi_RiskLevel",
-          "required": true,
-          "enum": [
-            "Low",
-            "Medium",
-            "High"
-          ],
-          "x-ms-enum-values": [
-            100000000,
-            100000001,
-            100000002
-          ],
-          "Color": [
-            null,
-            null,
-            null
-          ],
-          "x-ms-optionsetmetadataid": "23e96986-7abe-f111-a05b-00224837cd6c",
-          "x-ms-isGlobal": false,
-          "x-ms-optionsetdisplayname": "Risk Level",
-          "x-ms-optionSetType": "Picklist"
-        },
-        "jsi_risklevelname": {
-          "type": "string",
-          "title": "jsi_risklevelname",
-          "x-ms-dataverse-attribute": "jsi_risklevelname",
-          "x-ms-dataverse-type": "VirtualType",
-          "x-ms-schema-name": "jsi_risklevelName",
-          "x-ms-read-only": true
-        },
         "lastname": {
           "type": "string",
           "title": "Apellidos",
@@ -3707,9 +3602,6 @@
       "required": [
         "contactid",
         "jsi_area",
-        "jsi_onboardingstatus",
-        "jsi_progressstatus",
-        "jsi_risklevel",
         "lastname",
         "ownerid",
         "owneridname",

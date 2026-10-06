@@ -31,11 +31,38 @@ npm run lint     # revisar el código
     │   ├── manager/
     │   ├── collaborator/
     │   └── auth/               # Selector de rol (temporal, solo desarrollo)
+    ├── services/               # Acceso a datos: usa src/generated y devuelve modelos de dominio
     ├── shared/                 # Código reutilizable entre roles
-    │   ├── components/         # PageHeader, Avatar, PagePlaceholder…
-    │   ├── styles/global.css   # Colores y estilos base (variables CSS)
-    │   └── types/              # Tipos compartidos
+    │   ├── components/         # Button, Modal, Badge, StatCard, PageHeader…
+    │   ├── constants/          # Valores de los Choice de Dataverse, etiquetas de estado
+    │   ├── hooks/              # useAsync (carga de datos con estado de carga/error)
+    │   ├── lib/                # Funciones utilitarias (formato de fechas, CSV)
+    │   ├── styles/             # global.css (variables y base) y components.css
+    │   └── types/              # Tipos compartidos y modelos de dominio
     └── generated/              # Modelos y servicios de Dataverse generados por PAC CLI (no editar)
+```
+
+## Capas
+
+```
+Pantalla (modules/.../pages)  →  services/*.service.ts  →  generated/services  →  Dataverse
+```
+
+- Las pantallas **no** usan `src/generated` directamente: llaman a `src/services`.
+- `src/services` traduce las columnas de Dataverse (`jsi_...`, `_jsi_area_value`) a modelos simples
+  (`Collaborator`, `Area`…) definidos en `src/shared/types/onboarding.ts`.
+- Los números de las columnas Choice están en `src/shared/constants/choices.ts`; nunca se escriben sueltos.
+
+## Pantallas con varias partes
+
+Una pantalla simple es un archivo (`pages/AdminDocumentsPage.tsx`). Cuando crece, pasa a ser una carpeta:
+
+```
+pages/collaborators/
+├── AdminCollaboratorsPage.tsx   # Compone la pantalla y maneja su estado
+├── AdminCollaboratorsPage.css
+├── collaboratorFilters.ts       # Lógica sin interfaz (filtros, exportación)
+└── components/                  # Partes de la pantalla (tabla, filtros, modal…)
 ```
 
 ## Cómo agregar una pantalla nueva

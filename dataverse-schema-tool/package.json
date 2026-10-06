@@ -8,7 +8,11 @@
   },
   "scripts": {
     "dry-run": "node create-tables.mjs --dry-run",
-    "create": "node create-tables.mjs"
+    "create": "node create-tables.mjs",
+    "remove-columns:dry-run": "node remove-columns.mjs --dry-run",
+    "remove-columns": "node remove-columns.mjs",
+    "seed:dry-run": "node seed-data.mjs --dry-run",
+    "seed": "node seed-data.mjs"
   },
   "dependencies": {
     "@azure/msal-node": "^2.13.1",

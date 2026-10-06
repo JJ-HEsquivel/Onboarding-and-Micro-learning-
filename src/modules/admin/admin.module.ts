@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import type { RoleModule } from '@/shared/types/navigation';
 import AdminDashboardPage from './pages/AdminDashboardPage';
-import AdminCollaboratorsPage from './pages/AdminCollaboratorsPage';
+import AdminCollaboratorsPage from './pages/collaborators/AdminCollaboratorsPage';
 import AdminDocumentsPage from './pages/AdminDocumentsPage';
 import AdminLearningPathsPage from './pages/AdminLearningPathsPage';
 import AdminAssessmentsPage from './pages/AdminAssessmentsPage';

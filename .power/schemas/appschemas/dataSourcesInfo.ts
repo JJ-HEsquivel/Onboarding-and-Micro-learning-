@@ -124,6 +124,13 @@ export const dataSourcesInfo = {
     "dataSourceType": "Dataverse",
     "apis": {}
   },
+  "jsi_onboardings": {
+    "tableId": "",
+    "version": "",
+    "primaryKey": "jsi_onboardingid",
+    "dataSourceType": "Dataverse",
+    "apis": {}
+  },
   "jsi_questionresponses": {
     "tableId": "",
     "version": "",
@@ -135,6 +142,13 @@ export const dataSourcesInfo = {
     "tableId": "",
     "version": "",
     "primaryKey": "jsi_questionid",
+    "dataSourceType": "Dataverse",
+    "apis": {}
+  },
+  "jsi_roleassignments": {
+    "tableId": "",
+    "version": "",
+    "primaryKey": "jsi_roleassignmentid",
     "dataSourceType": "Dataverse",
     "apis": {}
   },
