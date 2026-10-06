@@ -1,75 +1,53 @@
-# React + TypeScript + Vite
+# Onboarding and Micro-learning
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Power Apps **Code App** (React + TypeScript + Vite) para la inducción y el micro aprendizaje de colaboradores.
+Datos en **Dataverse**, automatizaciones en **Power Automate** y reportes en **Power BI**.
 
-It is preconfigured to work with Power Apps Code Apps.
+## Comandos
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```powershell
+npm install      # instalar dependencias
+npm run dev      # servidor local (abrir el enlace de Power Apps que muestra la consola)
+npm run build    # compilar a ./dist
+npm run lint     # revisar el código
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Estructura
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+├── .power/                     # Esquemas de Dataverse generados por PAC CLI (no editar)
+├── dataverse-schema-tool/      # Script Node que crea tablas, columnas y datos semilla en Dataverse
+├── docs/                       # Modelo entidad-relación y documentación funcional
+├── public/                     # Archivos estáticos (favicon)
+└── src/
+    ├── main.tsx                # Punto de entrada
+    ├── app/                    # Arranque de la app: App.tsx y router.tsx
+    ├── layouts/AppLayout/      # Barra lateral + barra superior comunes a todos los roles
+    ├── modules/                # Un módulo por rol
+    │   ├── index.ts            # Registro de roles
+    │   ├── admin/
+    │   │   ├── admin.module.ts # Menú lateral + rutas del Administrador
+    │   │   └── pages/          # Una pantalla por opción del menú
+    │   ├── manager/
+    │   ├── collaborator/
+    │   └── auth/               # Selector de rol (temporal, solo desarrollo)
+    ├── shared/                 # Código reutilizable entre roles
+    │   ├── components/         # PageHeader, Avatar, PagePlaceholder…
+    │   ├── styles/global.css   # Colores y estilos base (variables CSS)
+    │   └── types/              # Tipos compartidos
+    └── generated/              # Modelos y servicios de Dataverse generados por PAC CLI (no editar)
+```
+
+## Cómo agregar una pantalla nueva
+
+1. Crear el componente en `src/modules/<rol>/pages/MiPantallaPage.tsx`.
+2. Agregarlo al menú en `src/modules/<rol>/<rol>.module.ts` (`path`, `label`, `icon`, `page`).
+
+La ruta y la opción de la barra lateral se crean automáticamente a partir de esa configuración.
+
+## Convenciones
+
+- Las importaciones usan el alias `@/` → `src/` (ej. `import { Avatar } from '@/shared/components/Avatar'`).
+- `src/generated/` y `.power/` los regenera `pac code add-data-source`; no se modifican a mano
+  ni se mueven (los servicios importan `.power/` con rutas relativas).
+- Íconos: [lucide-react](https://lucide.dev/icons).
