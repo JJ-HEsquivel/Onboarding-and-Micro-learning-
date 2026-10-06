@@ -1,0 +1,118 @@
+/* ---------- Tokens de diseño ---------- */
+:root {
+  --color-primary: #1d4ed8;
+  --color-primary-hover: #1e40af;
+  --color-accent: #ea580c;
+  --color-success: #15803d;
+  --color-warning: #ca8a04;
+  --color-danger: #dc2626;
+
+  --color-bg: #f3f5f9;
+  --color-surface: #ffffff;
+  --color-border: #e2e8f0;
+  --color-text: #0f172a;
+  --color-text-muted: #64748b;
+
+  --color-sidebar-bg: #0f1b33;
+  --color-sidebar-hover: #1b2a47;
+  --color-sidebar-border: #1e2b45;
+  --color-sidebar-text: #e2e8f0;
+  --color-sidebar-muted: #8a9bb8;
+
+  --sidebar-width: 240px;
+  --radius-card: 12px;
+
+  font-family: 'Segoe UI', system-ui, Roboto, sans-serif;
+  line-height: 1.5;
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+}
+
+h1,
+h2,
+h3,
+p,
+ul {
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+/* ---------- Componentes compartidos ---------- */
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.page-header__title {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.page-header__description {
+  margin-top: 4px;
+  color: var(--color-text-muted);
+}
+
+.page-header__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 64px 24px;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.placeholder__title {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #1e3a8a;
+  color: #fff;
+  font-weight: 700;
+}
+
+.avatar--sm {
+  width: 32px;
+  height: 32px;
+  font-size: 12px;
+}
+
+.avatar--md {
+  width: 38px;
+  height: 38px;
+  font-size: 13px;
+}
