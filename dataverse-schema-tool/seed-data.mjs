@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // =============================================================================
 // seed-data.mjs
-// Carga los registros DEFINIDOS (catalogos) en Dataverse:
-//   jsi_area, jsi_stage, jsi_stagearea, jsi_document
+// Carga los registros DEFINIDOS (catalogos y personas iniciales) en Dataverse:
+//   jsi_area, jsi_stage, jsi_stagearea, jsi_document, contact, jsi_roleassignment
 //
 // USO (dentro de la carpeta dataverse-schema-tool):
 //   node seed-data.mjs --dry-run     (solo muestra que haria, no escribe nada)
@@ -88,6 +88,20 @@ const DOCS = [
   { code: 'MAN-ADM-016', title: 'Compra de bienes y servicios - Manual (ESP-ENG)',                         stage: 's3adm', pages: 22, min: null, owner: PAC, dot: false },
 ];
 const DOC_VERSION = '1.0';   // el prototipo muestra "v1.0"
+
+// --- Personas iniciales y sus roles -------------------------------------------
+// Solo las personas necesarias para arrancar (ej. el primer Administrador).
+// El resto se registra desde la app. Se busca por correo: no se duplican.
+const ROLE = { Administrator: 100000000, Manager: 100000001, Collaborator: 100000002 };
+const PEOPLE = [
+  {
+    firstName: 'Juan Jose',
+    lastName: 'Ezequiel',
+    email: '202111354@est.umss.edu',
+    area: 'Engineering',
+    roles: ['Administrator'],
+  },
+];
 
 // =============================================================================
 // ===================  MOTOR (no necesitas editar de aqui en adelante)  =======
@@ -238,14 +252,14 @@ async function main() {
   const who = await api('GET', 'WhoAmI');
   console.log(`Conexion OK con Dataverse (UserId: ${who.UserId}).\n`);
 
-  // Validar que existan las 4 tablas antes de empezar
-  for (const t of ['jsi_area', 'jsi_stage', 'jsi_stagearea', 'jsi_document']) await getMeta(t);
+  // Validar que existan las tablas antes de empezar
+  for (const t of ['jsi_area', 'jsi_stage', 'jsi_stagearea', 'jsi_document', 'contact', 'jsi_roleassignment']) await getMeta(t);
 
   const stats = { create: 0, update: 0 };
   const tally = (r) => { stats[r.action]++; return r; };
 
   // 1) Areas
-  console.log('--- 1/4 Areas ---');
+  console.log('--- 1/5 Areas ---');
   const areaId = {};
   for (const a of AREAS) {
     const r = tally(await upsert('jsi_area', `jsi_name eq '${q(a.name)}'`, { jsi_name: a.name, jsi_code: a.code }, a.name));
@@ -253,7 +267,7 @@ async function main() {
   }
 
   // 2) Etapas
-  console.log('\n--- 2/4 Etapas ---');
+  console.log('\n--- 2/5 Etapas ---');
   const stageId = {};
   for (const s of STAGES) {
     const payload = { jsi_name: s.name, jsi_order: s.order, jsi_scope: s.scope };
@@ -263,7 +277,7 @@ async function main() {
   }
 
   // 3) Etapa <-> Area
-  console.log('\n--- 3/4 Etapa-Area ---');
+  console.log('\n--- 3/5 Etapa-Area ---');
   if (STAGE_AREAS.length === 0) console.log('   (ninguna)');
   for (const sa of STAGE_AREAS) {
     if (!areaId[sa.area]) throw new Error(`El area "${sa.area}" de STAGE_AREAS no esta en la lista AREAS.`);
@@ -278,7 +292,7 @@ async function main() {
   }
 
   // 4) Documentos
-  console.log('\n--- 4/4 Documentos ---');
+  console.log('\n--- 4/5 Documentos ---');
   for (const d of DOCS) {
     const payload = {
       jsi_title: d.title,
@@ -296,6 +310,29 @@ async function main() {
     ]));
   }
 
+  // 5) Personas iniciales y sus roles
+  console.log('\n--- 5/5 Personas y roles ---');
+  for (const p of PEOPLE) {
+    if (!areaId[p.area]) throw new Error(`El area "${p.area}" de PEOPLE no esta en la lista AREAS.`);
+    const person = tally(await upsert('contact', `emailaddress1 eq '${q(p.email)}'`, {
+      firstname: p.firstName,
+      lastname: p.lastName,
+      emailaddress1: p.email,
+    }, `${p.firstName} ${p.lastName} <${p.email}>`, [
+      { attr: 'jsi_area', target: 'jsi_area', id: areaId[p.area] },
+    ]));
+
+    for (const role of p.roles) {
+      if (ROLE[role] === undefined) throw new Error(`El rol "${role}" de PEOPLE no existe. Usa: ${Object.keys(ROLE).join(', ')}.`);
+      const filter = String(person.id).startsWith('dryrun')
+        ? `jsi_name eq 'dryrun-no-existe'`
+        : `_jsi_person_value eq ${person.id} and jsi_role eq ${ROLE[role]}`;
+      tally(await upsert('jsi_roleassignment', filter, { jsi_role: ROLE[role], jsi_isactive: true }, `   rol ${role}`, [
+        { attr: 'jsi_person', target: 'contact', id: person.id },
+      ]));
+    }
+  }
+
   // Resumen
   console.log('\n==================================================================');
   if (DRY_RUN) {
@@ -304,10 +341,16 @@ async function main() {
   } else {
     console.log(` Listo. Creados: ${stats.create} · Actualizados: ${stats.update}`);
     console.log('\n Verificacion (registros que hay ahora en Dataverse):');
-    const expected = { jsi_area: AREAS.length, jsi_stage: STAGES.length, jsi_stagearea: STAGE_AREAS.length, jsi_document: DOCS.length };
+    const expected = {
+      jsi_area: AREAS.length,
+      jsi_stage: STAGES.length,
+      jsi_stagearea: STAGE_AREAS.length,
+      jsi_document: DOCS.length,
+      jsi_roleassignment: PEOPLE.reduce((sum, p) => sum + p.roles.length, 0),
+    };
     for (const t of Object.keys(expected)) {
       const n = await count(t);
-      console.log(`   ${t.padEnd(15)} ${String(n).padStart(3)} registros (esperado en esta carga: ${expected[t]})${n >= expected[t] ? '  OK' : '  <-- REVISAR'}`);
+      console.log(`   ${t.padEnd(20)} ${String(n).padStart(3)} registros (esperado en esta carga: ${expected[t]})${n >= expected[t] ? '  OK' : '  <-- REVISAR'}`);
     }
   }
   console.log('==================================================================');

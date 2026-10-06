@@ -199,6 +199,46 @@ export const TABLES = [
   },
 
   // =====================================================================
+  // PERSONAS: ROLES E INDUCCIONES
+  // La persona existe UNA sola vez (contact). Sus roles y sus inducciones
+  // son registros aparte, asi una persona puede tener varios roles a la vez
+  // (ej. Manager y Administrador) y conservar el historial de sus inducciones.
+  // =====================================================================
+  {
+    schemaName: 'jsi_RoleAssignment',
+    displayName: 'Role Assignment', displayCollectionName: 'Role Assignments',
+    ownershipType: 'Organization',
+    description: 'A role held by a person in the app (a person can hold several).',
+    primaryColumn: { schemaName: 'jsi_Name', displayName: 'Name', maxLength: 100, autoNumber: 'ROLE-{SEQNUM:5}' },
+    columns: [
+      { schemaName: 'jsi_Person', type: 'Lookup', displayName: 'Person', requiredLevel: REQUIRED, target: 'contact', relationshipSchemaName: 'jsi_contact_roleassignment' },
+      { schemaName: 'jsi_Role', type: 'Picklist', displayName: 'Role', requiredLevel: REQUIRED, options: choice(['Administrator', 'Manager', 'Collaborator']) },
+      { schemaName: 'jsi_StartDate', type: 'DateOnly', displayName: 'Start Date', requiredLevel: OPTIONAL },
+      { schemaName: 'jsi_EndDate', type: 'DateOnly', displayName: 'End Date', requiredLevel: OPTIONAL },
+      { schemaName: 'jsi_IsActive', type: 'Boolean', displayName: 'Is Active', trueLabel: 'Yes', falseLabel: 'No', defaultValue: true },
+    ],
+  },
+  {
+    schemaName: 'jsi_Onboarding',
+    displayName: 'Onboarding', displayCollectionName: 'Onboardings',
+    ownershipType: 'UserOwned',
+    description: 'One onboarding process of a person (initial onboarding or a later one, e.g. after a promotion).',
+    primaryColumn: { schemaName: 'jsi_Name', displayName: 'Name', maxLength: 100, autoNumber: 'ONB-{SEQNUM:5}' },
+    columns: [
+      { schemaName: 'jsi_Employee', type: 'Lookup', displayName: 'Employee', requiredLevel: REQUIRED, target: 'contact', relationshipSchemaName: 'jsi_contact_onboarding' },
+      { schemaName: 'jsi_Validator', type: 'Lookup', displayName: 'Validator', requiredLevel: OPTIONAL, target: 'contact', relationshipSchemaName: 'jsi_contact_onboarding_validator' },
+      { schemaName: 'jsi_Area', type: 'Lookup', displayName: 'Area', requiredLevel: REQUIRED, target: 'jsi_Area', relationshipSchemaName: 'jsi_area_onboarding' },
+      { schemaName: 'jsi_Type', type: 'Picklist', displayName: 'Type', requiredLevel: REQUIRED, options: choice(['Initial', 'RoleChange']) },
+      { schemaName: 'jsi_ValidationStatus', type: 'Picklist', displayName: 'Validation Status', requiredLevel: REQUIRED, options: choice(['PendingValidation', 'Validated']) },
+      { schemaName: 'jsi_ProgressStatus', type: 'Picklist', displayName: 'Progress Status', requiredLevel: REQUIRED, options: choice(['NotStarted', 'InProgress', 'Overdue', 'Completed']) },
+      { schemaName: 'jsi_RiskLevel', type: 'Picklist', displayName: 'Risk Level', requiredLevel: REQUIRED, options: choice(['Low', 'Medium', 'High']) },
+      { schemaName: 'jsi_StartDate', type: 'DateOnly', displayName: 'Start Date', requiredLevel: RECOMMENDED },
+      { schemaName: 'jsi_ValidatedOn', type: 'DateTime', displayName: 'Validated On', requiredLevel: OPTIONAL },
+      { schemaName: 'jsi_CompletedOn', type: 'DateOnly', displayName: 'Completed On', requiredLevel: OPTIONAL },
+    ],
+  },
+
+  // =====================================================================
   // SEGUIMIENTO POR COLABORADOR (Employee = tabla estandar "contact")
   // =====================================================================
   {
@@ -211,6 +251,7 @@ export const TABLES = [
       { schemaName: 'jsi_Employee', type: 'Lookup', displayName: 'Employee', requiredLevel: REQUIRED, target: 'contact', relationshipSchemaName: 'jsi_contact_documentassignment' },
       { schemaName: 'jsi_Document', type: 'Lookup', displayName: 'Document', requiredLevel: REQUIRED, target: 'jsi_Document', relationshipSchemaName: 'jsi_document_documentassignment' },
       { schemaName: 'jsi_Stage', type: 'Lookup', displayName: 'Stage', requiredLevel: OPTIONAL, target: 'jsi_Stage', relationshipSchemaName: 'jsi_stage_documentassignment' },
+      { schemaName: 'jsi_Onboarding', type: 'Lookup', displayName: 'Onboarding', requiredLevel: OPTIONAL, target: 'jsi_Onboarding', relationshipSchemaName: 'jsi_onboarding_documentassignment' },
       { schemaName: 'jsi_Status', type: 'Picklist', displayName: 'Status', requiredLevel: REQUIRED, options: choice(['Pending', 'Read']) },
       { schemaName: 'jsi_ConfirmedOn', type: 'DateTime', displayName: 'Confirmed On', requiredLevel: OPTIONAL },
       { schemaName: 'jsi_DueDate', type: 'DateOnly', displayName: 'Due Date', requiredLevel: OPTIONAL },
@@ -227,6 +268,7 @@ export const TABLES = [
       { schemaName: 'jsi_Employee', type: 'Lookup', displayName: 'Employee', requiredLevel: REQUIRED, target: 'contact', relationshipSchemaName: 'jsi_contact_assessmentassignment' },
       { schemaName: 'jsi_Assessment', type: 'Lookup', displayName: 'Assessment', requiredLevel: REQUIRED, target: 'jsi_Assessment', relationshipSchemaName: 'jsi_assessment_assessmentassignment' },
       { schemaName: 'jsi_CampaignDelivery', type: 'Lookup', displayName: 'Campaign Delivery', requiredLevel: OPTIONAL, target: 'jsi_CampaignDelivery', relationshipSchemaName: 'jsi_campaigndelivery_assessmentassignment' },
+      { schemaName: 'jsi_Onboarding', type: 'Lookup', displayName: 'Onboarding', requiredLevel: OPTIONAL, target: 'jsi_Onboarding', relationshipSchemaName: 'jsi_onboarding_assessmentassignment' },
       { schemaName: 'jsi_Status', type: 'Picklist', displayName: 'Status', requiredLevel: REQUIRED, options: choice(['Locked', 'Pending', 'Passed', 'Failed']) },
       { schemaName: 'jsi_Score', type: 'Integer', displayName: 'Score', requiredLevel: OPTIONAL },
       { schemaName: 'jsi_AttemptsUsed', type: 'Integer', displayName: 'Attempts Used', requiredLevel: OPTIONAL },
@@ -356,8 +398,11 @@ export const TABLES = [
 ];
 
 // =============================================================================
-// Extension de la tabla estandar "contact" (Employee). NO se crea la tabla,
+// Extension de la tabla estandar "contact" (la PERSONA). NO se crea la tabla,
 // solo se agregan columnas y relaciones si faltan.
+// Solo guarda datos de la persona; los roles estan en jsi_RoleAssignment y el
+// avance de la induccion en jsi_Onboarding.
+// El correo usa la columna estandar "emailaddress1".
 // =============================================================================
 export const TABLE_EXTENSIONS = [
   {
@@ -367,9 +412,17 @@ export const TABLE_EXTENSIONS = [
       { schemaName: 'jsi_Area', type: 'Lookup', displayName: 'Area', requiredLevel: REQUIRED, target: 'jsi_Area', relationshipSchemaName: 'jsi_area_contact' },
       { schemaName: 'jsi_Manager', type: 'Lookup', displayName: 'Manager', requiredLevel: OPTIONAL, target: 'contact', relationshipSchemaName: 'jsi_contact_manager_contact' },
       { schemaName: 'jsi_HireDate', type: 'DateOnly', displayName: 'Hire Date', requiredLevel: OPTIONAL },
-      { schemaName: 'jsi_OnboardingStatus', type: 'Picklist', displayName: 'Onboarding Status', requiredLevel: REQUIRED, options: choice(['Active', 'PendingValidation']) },
-      { schemaName: 'jsi_ProgressStatus', type: 'Picklist', displayName: 'Progress Status', requiredLevel: REQUIRED, options: choice(['NotStarted', 'InProgress', 'Overdue', 'Completed']) },
-      { schemaName: 'jsi_RiskLevel', type: 'Picklist', displayName: 'Risk Level', requiredLevel: REQUIRED, options: choice(['Low', 'Medium', 'High']) },
     ],
   },
+];
+
+// =============================================================================
+// Columnas que existieron en versiones anteriores y se deben BORRAR.
+// create-tables.mjs nunca borra nada; las borra remove-columns.mjs.
+// =============================================================================
+export const REMOVED_COLUMNS = [
+  { table: 'contact', column: 'jsi_onboardingstatus', reason: 'Ahora es jsi_onboarding.jsi_validationstatus' },
+  { table: 'contact', column: 'jsi_progressstatus', reason: 'Ahora es jsi_onboarding.jsi_progressstatus' },
+  { table: 'contact', column: 'jsi_risklevel', reason: 'Ahora es jsi_onboarding.jsi_risklevel' },
+  { table: 'contact', column: 'jsi_userrole', reason: 'Reemplazada por la tabla jsi_roleassignment' },
 ];

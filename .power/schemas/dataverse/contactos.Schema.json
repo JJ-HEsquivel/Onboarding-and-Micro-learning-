@@ -2355,7 +2355,6 @@
           "x-ms-dataverse-attribute": "jsi_onboardingstatus",
           "x-ms-dataverse-type": "PicklistType",
           "x-ms-schema-name": "jsi_OnboardingStatus",
-          "required": true,
           "enum": [
             "Active",
             "PendingValidation"
@@ -2387,7 +2386,6 @@
           "x-ms-dataverse-attribute": "jsi_progressstatus",
           "x-ms-dataverse-type": "PicklistType",
           "x-ms-schema-name": "jsi_ProgressStatus",
-          "required": true,
           "enum": [
             "NotStarted",
             "InProgress",
@@ -2425,7 +2423,6 @@
           "x-ms-dataverse-attribute": "jsi_risklevel",
           "x-ms-dataverse-type": "PicklistType",
           "x-ms-schema-name": "jsi_RiskLevel",
-          "required": true,
           "enum": [
             "Low",
             "Medium",
@@ -2452,6 +2449,40 @@
           "x-ms-dataverse-attribute": "jsi_risklevelname",
           "x-ms-dataverse-type": "VirtualType",
           "x-ms-schema-name": "jsi_risklevelName",
+          "x-ms-read-only": true
+        },
+        "jsi_userrole": {
+          "type": "string",
+          "title": "User role",
+          "x-ms-dataverse-attribute": "jsi_userrole",
+          "x-ms-dataverse-type": "PicklistType",
+          "x-ms-schema-name": "jsi_Userrole",
+          "enum": [
+            "Administrador",
+            "Manager",
+            "Colaborador"
+          ],
+          "x-ms-enum-values": [
+            100010000,
+            100010001,
+            100010002
+          ],
+          "Color": [
+            null,
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "b77eef53-bcc1-f111-aaad-00224837cd6c",
+          "x-ms-isGlobal": true,
+          "x-ms-optionsetdisplayname": "Choice role",
+          "x-ms-optionSetType": "Picklist"
+        },
+        "jsi_userrolename": {
+          "type": "string",
+          "title": "jsi_userrolename",
+          "x-ms-dataverse-attribute": "jsi_userrolename",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "jsi_userroleName",
           "x-ms-read-only": true
         },
         "lastname": {
@@ -3707,9 +3738,6 @@
       "required": [
         "contactid",
         "jsi_area",
-        "jsi_onboardingstatus",
-        "jsi_progressstatus",
-        "jsi_risklevel",
         "lastname",
         "ownerid",
         "owneridname",
