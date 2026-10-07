@@ -3,7 +3,8 @@ import { Avatar } from '@/shared/components/Avatar';
 import { Button } from '@/shared/components/Button';
 import { CollaboratorStatusBadge } from '@/shared/components/CollaboratorStatusBadge';
 import { EmptyState } from '@/shared/components/EmptyState';
-import { formatDate, getInitials } from '@/shared/lib/format';
+import { formatDate } from '@/shared/lib/dates';
+import { getInitials } from '@/shared/lib/format';
 import type { Collaborator } from '@/shared/types/onboarding';
 
 interface CollaboratorsTableProps {

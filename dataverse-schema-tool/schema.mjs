@@ -227,6 +227,7 @@ export const TABLES = [
     columns: [
       { schemaName: 'jsi_Employee', type: 'Lookup', displayName: 'Employee', requiredLevel: REQUIRED, target: 'contact', relationshipSchemaName: 'jsi_contact_onboarding' },
       { schemaName: 'jsi_Validator', type: 'Lookup', displayName: 'Validator', requiredLevel: OPTIONAL, target: 'contact', relationshipSchemaName: 'jsi_contact_onboarding_validator' },
+      { schemaName: 'jsi_RegisteredBy', type: 'Lookup', displayName: 'Registered By', requiredLevel: OPTIONAL, target: 'contact', relationshipSchemaName: 'jsi_contact_onboarding_registeredby' },
       { schemaName: 'jsi_Area', type: 'Lookup', displayName: 'Area', requiredLevel: REQUIRED, target: 'jsi_Area', relationshipSchemaName: 'jsi_area_onboarding' },
       { schemaName: 'jsi_Type', type: 'Picklist', displayName: 'Type', requiredLevel: REQUIRED, options: choice(['Initial', 'RoleChange']) },
       { schemaName: 'jsi_ValidationStatus', type: 'Picklist', displayName: 'Validation Status', requiredLevel: REQUIRED, options: choice(['PendingValidation', 'Validated']) },

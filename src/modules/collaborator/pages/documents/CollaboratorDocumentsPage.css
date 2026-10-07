@@ -1,0 +1,71 @@
+.my-documents {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.my-documents__loading {
+  padding: 40px 16px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* La tarjeta ya tiene borde: el grupo de etapa no necesita otro. */
+.my-documents__stage .stage-group {
+  border: 0;
+  background: transparent;
+}
+
+.my-documents__overdue {
+  color: var(--color-danger);
+  font-weight: 600;
+}
+
+/* ---------- Resumen de avance ---------- */
+.reading-progress {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 20px;
+}
+
+.reading-progress__title {
+  font-weight: 600;
+}
+
+.reading-progress__subtitle {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.reading-progress__bar {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--tone-neutral-bg);
+  overflow: hidden;
+}
+
+.reading-progress__bar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--color-primary);
+  transition: width 0.3s ease;
+}
+
+.reading-progress__percent {
+  min-width: 44px;
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .reading-progress {
+    flex-wrap: wrap;
+  }
+
+  .reading-progress__bar {
+    flex-basis: 100%;
+    order: 3;
+  }
+}

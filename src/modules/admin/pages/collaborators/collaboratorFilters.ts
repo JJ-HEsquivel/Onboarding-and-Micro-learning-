@@ -1,6 +1,6 @@
 import { COLLABORATOR_STATUS } from '@/shared/constants/collaboratorStatus';
 import { downloadCsv } from '@/shared/lib/csv';
-import { formatDate, todayIso } from '@/shared/lib/format';
+import { formatDate, todayIso } from '@/shared/lib/dates';
 import type { Collaborator, CollaboratorStatus } from '@/shared/types/onboarding';
 
 export interface CollaboratorFilters {

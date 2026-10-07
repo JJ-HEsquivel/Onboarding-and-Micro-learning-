@@ -1,5 +1,6 @@
-import { FileText } from 'lucide-react';
 import { Badge } from '@/shared/components/Badge';
+import { DocumentItem } from '@/shared/components/DocumentItem';
+import { StageGroup } from '@/shared/components/StageGroup';
 import { pluralize } from '@/shared/lib/format';
 import type { RouteStage } from '@/shared/types/onboarding';
 
@@ -32,32 +33,13 @@ export function ProposedRoute({ stages, loading }: ProposedRouteProps) {
       )}
 
       {stages.map((stage) => (
-        <div key={stage.id} className="route-stage">
-          <div className="route-stage__header">
-            <p className="route-stage__name">{stage.name}</p>
-            <span className="route-stage__count">{pluralize(stage.documents.length, 'documento', 'documentos')}</span>
-          </div>
-
-          <ul className="route-stage__documents">
-            {stage.documents.map((document) => (
-              <li key={document.id} className="route-document">
-                <span className={`route-document__icon${document.isCritical ? ' route-document__icon--critical' : ''}`}>
-                  <FileText size={16} />
-                  {document.isCritical && <span className="visually-hidden">Criticidad alta</span>}
-                </span>
-                <div className="route-document__info">
-                  <p className="route-document__title">{document.title}</p>
-                  <p className="route-document__meta">
-                    <span>{document.code}</span>
-                    <span>v{document.version}</span>
-                    {document.readingMinutes !== null && <span>{document.readingMinutes} min</span>}
-                  </p>
-                </div>
-                <Badge tone="info">Propuesto</Badge>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <StageGroup key={stage.id} name={stage.name} summary={pluralize(stage.documents.length, 'documento', 'documentos')}>
+          {stage.documents.map((document) => (
+            <li key={document.id}>
+              <DocumentItem document={document} actions={<Badge tone="info">Propuesto</Badge>} />
+            </li>
+          ))}
+        </StageGroup>
       ))}
     </section>
   );

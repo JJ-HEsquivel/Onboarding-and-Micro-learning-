@@ -1,7 +1,8 @@
 import { Award, BookOpen, House, MessageSquare, SquareCheckBig, Zap } from 'lucide-react';
+import { ROLE } from '@/shared/constants/choices';
 import type { RoleModule } from '@/shared/types/navigation';
 import CollaboratorProgressPage from './pages/CollaboratorProgressPage';
-import CollaboratorDocumentsPage from './pages/CollaboratorDocumentsPage';
+import CollaboratorDocumentsPage from './pages/documents/CollaboratorDocumentsPage';
 import CollaboratorAssessmentsPage from './pages/CollaboratorAssessmentsPage';
 import CollaboratorMicroLearningPage from './pages/CollaboratorMicroLearningPage';
 import CollaboratorAssistantPage from './pages/CollaboratorAssistantPage';
@@ -9,10 +10,9 @@ import CollaboratorCertificatesPage from './pages/CollaboratorCertificatesPage';
 
 export const collaboratorModule: RoleModule = {
   role: 'collaborator',
+  dataverseRole: ROLE.Collaborator,
   label: 'Colaborador',
   basePath: '/colaborador',
-  // TODO: reemplazar por el usuario autenticado (Dataverse / Office 365).
-  user: { fullName: 'Camila Rojas', jobTitle: 'QA Engineer', initials: 'CR' },
   navigation: [
     {
       title: 'Mi inducción',

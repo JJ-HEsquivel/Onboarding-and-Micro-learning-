@@ -1,5 +1,5 @@
 import { Bell, LogOut, Menu, Search } from 'lucide-react';
-import { useNavigate } from 'react-router';
+import { useSession } from '@/app/session/useSession';
 
 interface TopbarProps {
   roleLabel: string;
@@ -8,7 +8,8 @@ interface TopbarProps {
 }
 
 export function Topbar({ roleLabel, pageLabel, onToggleSidebar }: TopbarProps) {
-  const navigate = useNavigate();
+  // Al cerrar sesión, AppLayout redirige solo al inicio.
+  const { signOut } = useSession();
 
   return (
     <header className="topbar">
@@ -30,8 +31,7 @@ export function Topbar({ roleLabel, pageLabel, onToggleSidebar }: TopbarProps) {
         <button type="button" className="icon-button icon-button--dot" aria-label="Notificaciones">
           <Bell size={20} />
         </button>
-        {/* TODO: cerrar sesión real; por ahora vuelve al selector de rol. */}
-        <button type="button" className="icon-button" aria-label="Cerrar sesión" onClick={() => navigate('/')}>
+        <button type="button" className="icon-button" aria-label="Cerrar sesión" onClick={signOut}>
           <LogOut size={20} />
         </button>
       </div>

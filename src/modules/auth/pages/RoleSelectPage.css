@@ -7,7 +7,7 @@
 
 .role-select__card {
   width: 100%;
-  max-width: 440px;
+  max-width: 460px;
   padding: 32px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-card);
@@ -31,28 +31,79 @@
   margin-top: 24px;
 }
 
+.role-select__item {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+}
+
+.role-select__item--open,
+.role-select__item:hover {
+  border-color: var(--color-primary);
+}
+
 .role-select__option {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px 14px;
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 16px;
+  border: 0;
+  background: transparent;
   color: inherit;
-  text-decoration: none;
-  transition: border-color 0.15s ease, background 0.15s ease;
+  text-align: left;
+  cursor: pointer;
 }
 
-.role-select__option:hover {
-  border-color: var(--color-primary);
-  background: #eff4ff;
+.role-select__chevron {
+  color: var(--color-text-muted);
+  transition: transform 0.15s ease;
 }
 
-.role-select__option span {
+.role-select__item--open .role-select__chevron {
+  transform: rotate(180deg);
+}
+
+/* ---------- Personas de un rol ---------- */
+.role-people {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface-muted);
+}
+
+.role-people__person {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 16px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.role-people__person:hover {
+  background: var(--tone-info-bg);
+}
+
+.role-people__person span {
   display: flex;
   flex-direction: column;
 }
 
-.role-select__option small {
+.role-people__person small {
   color: var(--color-text-muted);
+}
+
+.role-people__message {
+  padding: 12px 16px;
+  border-top: 1px solid var(--color-border);
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.role-people__message--error {
+  color: var(--color-danger);
 }

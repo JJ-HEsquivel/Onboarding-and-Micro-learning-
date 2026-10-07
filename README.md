@@ -21,7 +21,7 @@ npm run lint     # revisar el código
 ├── public/                     # Archivos estáticos (favicon)
 └── src/
     ├── main.tsx                # Punto de entrada
-    ├── app/                    # Arranque de la app: App.tsx y router.tsx
+    ├── app/                    # Arranque de la app: App.tsx, router.tsx y session/ (sesión simulada)
     ├── layouts/AppLayout/      # Barra lateral + barra superior comunes a todos los roles
     ├── modules/                # Un módulo por rol
     │   ├── index.ts            # Registro de roles
@@ -30,7 +30,7 @@ npm run lint     # revisar el código
     │   │   └── pages/          # Una pantalla por opción del menú
     │   ├── manager/
     │   ├── collaborator/
-    │   └── auth/               # Selector de rol (temporal, solo desarrollo)
+    │   └── auth/               # Inicio: elegir rol y persona (temporal, para practicar)
     ├── services/               # Acceso a datos: usa src/generated y devuelve modelos de dominio
     ├── shared/                 # Código reutilizable entre roles
     │   ├── components/         # Button, Modal, Badge, StatCard, PageHeader…
@@ -78,3 +78,18 @@ La ruta y la opción de la barra lateral se crean automáticamente a partir de e
 - `src/generated/` y `.power/` los regenera `pac code add-data-source`; no se modifican a mano
   ni se mueven (los servicios importan `.power/` con rutas relativas).
 - Íconos: [lucide-react](https://lucide.dev/icons).
+
+## Sesión simulada (para practicar)
+
+Mientras no se use el usuario real de Power Apps, la pantalla de inicio permite elegir un rol y
+una persona que tenga ese rol en Dataverse (tabla `jsi_roleassignment`). La sesión se guarda en
+`src/app/session` y cualquier pantalla obtiene a la persona con `useCurrentUser()`.
+
+## Flujo de inducción implementado
+
+1. **Admin → Colaboradores → Registrar colaborador:** crea la persona, su rol Colaborador, su
+   inducción (pendiente de validación, con el Admin como `jsi_registeredby`) y la ruta propuesta.
+2. **Manager → Nuevos por validar:** ve a quienes debe validar, tilda o destilda documentos de
+   cualquier etapa y confirma. Se calculan los vencimientos y la inducción pasa a "Validated".
+3. **Colaborador → Mis documentos:** ve su ruta solo si ya fue validada y confirma cada lectura
+   (se guarda una evidencia en `jsi_evidence`).

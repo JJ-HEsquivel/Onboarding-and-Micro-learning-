@@ -3,8 +3,9 @@ import { Alert } from '@/shared/components/Alert';
 import { Button } from '@/shared/components/Button';
 import { FormField } from '@/shared/components/FormField';
 import { Modal } from '@/shared/components/Modal';
+import { useCurrentUser } from '@/app/session/useSession';
 import { useAsync } from '@/shared/hooks/useAsync';
-import { todayIso } from '@/shared/lib/format';
+import { todayIso } from '@/shared/lib/dates';
 import type { Area, Manager, NewCollaboratorInput } from '@/shared/types/onboarding';
 import { registerCollaborator } from '@/services/collaborators.service';
 import { buildProposedRoute, loadOnboardingCatalog } from '@/services/onboardingRoute.service';
@@ -40,6 +41,7 @@ function validate(form: NewCollaboratorInput): FormErrors {
 }
 
 export function RegisterCollaboratorModal({ areas, managers, onClose, onRegistered }: RegisterCollaboratorModalProps) {
+  const admin = useCurrentUser();
   const catalog = useAsync(loadOnboardingCatalog);
   const [form, setForm] = useState<NewCollaboratorInput>(() => ({
     firstName: '',
@@ -78,7 +80,7 @@ export function RegisterCollaboratorModal({ areas, managers, onClose, onRegister
     setSubmitting(true);
     setSubmitError(null);
     try {
-      await registerCollaborator(form, route);
+      await registerCollaborator(form, route, admin.id);
       onRegistered(`${form.firstName.trim()} ${form.lastName.trim()}`);
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : String(error));

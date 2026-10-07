@@ -51,6 +51,7 @@ erDiagram
     contact ||--o{ jsi_roleassignment : "jsi_person"
     contact ||--o{ jsi_onboarding : "jsi_employee"
     contact |o--o{ jsi_onboarding : "jsi_validator"
+    contact |o--o{ jsi_onboarding : "jsi_registeredby"
     jsi_area ||--o{ jsi_onboarding : "jsi_area"
     jsi_onboarding |o--o{ jsi_documentassignment : "jsi_onboarding"
     jsi_onboarding |o--o{ jsi_assessmentassignment : "jsi_onboarding"
@@ -184,6 +185,7 @@ erDiagram
         string jsi_name
         uuid jsi_employee FK
         uuid jsi_validator FK
+        uuid jsi_registeredby FK
         uuid jsi_area FK
     }
 ```
@@ -258,6 +260,7 @@ erDiagram
 | `contact` | `jsi_roleassignment` | `jsi_person` | `jsi_contact_roleassignment` | Sí |
 | `contact` | `jsi_onboarding` | `jsi_employee` | `jsi_contact_onboarding` | Sí |
 | `contact` | `jsi_onboarding` | `jsi_validator` | `jsi_contact_onboarding_validator` | No |
+| `contact` | `jsi_onboarding` | `jsi_registeredby` | `jsi_contact_onboarding_registeredby` | No |
 | `jsi_area` | `jsi_onboarding` | `jsi_area` | `jsi_area_onboarding` | Sí |
 | `jsi_onboarding` | `jsi_documentassignment` | `jsi_onboarding` | `jsi_onboarding_documentassignment` | No |
 | `jsi_onboarding` | `jsi_assessmentassignment` | `jsi_onboarding` | `jsi_onboarding_assessmentassignment` | No |
@@ -709,6 +712,7 @@ Tabla estándar de Dataverse que representa a la **persona** (existe una sola ve
 - `jsi_roleassignment` mediante la columna `jsi_person` (relación `jsi_contact_roleassignment`)
 - `jsi_onboarding` mediante la columna `jsi_employee` (relación `jsi_contact_onboarding`)
 - `jsi_onboarding` mediante la columna `jsi_validator` (relación `jsi_contact_onboarding_validator`)
+- `jsi_onboarding` mediante la columna `jsi_registeredby` (relación `jsi_contact_onboarding_registeredby`)
 
 ### 4.22 Role Assignment — `jsi_roleassignment`
 
@@ -744,6 +748,7 @@ One onboarding process of a person. La inducción inicial de un colaborador es u
 | `jsi_name` | Name | Texto (columna principal) | Auto | Autonumérica |
 | `jsi_employee` | Employee | Lookup (FK) | Sí | → `contact` · relación `jsi_contact_onboarding` |
 | `jsi_validator` | Validator | Lookup (FK) | No | → `contact` · relación `jsi_contact_onboarding_validator` (manager que valida) |
+| `jsi_registeredby` | Registered By | Lookup (FK) | No | → `contact` · relación `jsi_contact_onboarding_registeredby` (administrador que registró) |
 | `jsi_area` | Area | Lookup (FK) | Sí | → `jsi_area` · relación `jsi_area_onboarding` (área cuya ruta se usó) |
 | `jsi_type` | Type | Choice | Sí | 100000000=Initial, 100000001=RoleChange |
 | `jsi_validationstatus` | Validation Status | Choice | Sí | 100000000=PendingValidation, 100000001=Validated |

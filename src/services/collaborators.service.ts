@@ -15,7 +15,7 @@ import {
   ROLE,
   VALIDATION_STATUS,
 } from '@/shared/constants/choices';
-import { daysBetween } from '@/shared/lib/format';
+import { daysBetween } from '@/shared/lib/dates';
 import type {
   Area,
   Collaborator,
@@ -174,9 +174,14 @@ async function isEmailRegistered(email: string): Promise<boolean> {
  * 4. Le asigna los documentos de la ruta de su área, en estado Pending (jsi_documentassignment).
  *
  * Antes de crear nada verifica que el correo no esté registrado.
+ * @param registeredById contactid del Administrador que registra (se le muestra al Manager).
  * Si algún paso falla, se deshace lo creado para no dejar datos a medias.
  */
-export async function registerCollaborator(input: NewCollaboratorInput, route: RouteStage[]): Promise<string> {
+export async function registerCollaborator(
+  input: NewCollaboratorInput,
+  route: RouteStage[],
+  registeredById: string,
+): Promise<string> {
   const email = input.email.trim().toLowerCase();
   if (await isEmailRegistered(email)) {
     throw new Error(`Ya existe una persona registrada con el correo ${email}.`);
@@ -216,6 +221,7 @@ export async function registerCollaborator(input: NewCollaboratorInput, route: R
       await Jsi_onboardingsService.create({
         'jsi_Employee@odata.bind': bind('contacts', personId),
         'jsi_Validator@odata.bind': bind('contacts', input.managerId),
+        'jsi_RegisteredBy@odata.bind': bind('contacts', registeredById),
         'jsi_Area@odata.bind': bind('jsi_areas', input.areaId),
         jsi_type: ONBOARDING_TYPE.Initial,
         jsi_validationstatus: VALIDATION_STATUS.PendingValidation,
