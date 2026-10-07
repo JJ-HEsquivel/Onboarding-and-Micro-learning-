@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Outlet, useLocation } from 'react-router';
+import { Navigate, Outlet, useLocation } from 'react-router';
+import { useSession } from '@/app/session/useSession';
 import type { RoleModule } from '@/shared/types/navigation';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
@@ -15,6 +16,12 @@ interface AppLayoutProps {
 export function AppLayout({ module }: AppLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(() => !isMobile());
   const { pathname } = useLocation();
+  const { session } = useSession();
+
+  // Solo se entra a las pantallas de un rol con una sesión de ese mismo rol.
+  if (!session || session.role !== module.role) {
+    return <Navigate to="/" replace />;
+  }
 
   const currentItem = module.navigation
     .flatMap((section) => section.items)
@@ -27,7 +34,7 @@ export function AppLayout({ module }: AppLayoutProps) {
 
   return (
     <div className={`app-layout${sidebarOpen ? '' : ' app-layout--collapsed'}`}>
-      <Sidebar module={module} onNavigate={closeOnMobile} />
+      <Sidebar module={module} user={session.user} onNavigate={closeOnMobile} />
       <div className="app-layout__backdrop" onClick={() => setSidebarOpen(false)} />
       <div className="app-layout__main">
         <Topbar

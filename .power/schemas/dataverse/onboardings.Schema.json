@@ -186,6 +186,31 @@
           "x-ms-schema-name": "jsi_progressstatusName",
           "x-ms-read-only": true
         },
+        "jsi_registeredby": {
+          "type": "string",
+          "title": "Registered By",
+          "x-ms-dataverse-attribute": "jsi_registeredby",
+          "x-ms-dataverse-type": "LookupType",
+          "x-ms-schema-name": "jsi_RegisteredBy"
+        },
+        "jsi_registeredbyname": {
+          "type": "string",
+          "title": "jsi_registeredbyname",
+          "x-ms-dataverse-attribute": "jsi_registeredbyname",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "jsi_RegisteredByName",
+          "x-ms-read-only": true,
+          "maxLength": 160
+        },
+        "jsi_registeredbyyominame": {
+          "type": "string",
+          "title": "jsi_registeredbyyominame",
+          "x-ms-dataverse-attribute": "jsi_registeredbyyominame",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "jsi_RegisteredByYomiName",
+          "x-ms-read-only": true,
+          "maxLength": 450
+        },
         "jsi_risklevel": {
           "type": "string",
           "title": "Risk Level",

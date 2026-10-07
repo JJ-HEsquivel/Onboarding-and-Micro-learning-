@@ -1,14 +1,16 @@
 import type { ComponentType } from 'react';
 import type { LucideIcon } from 'lucide-react';
+import type { RoleValue } from '@/shared/constants/choices';
 
 /** Roles soportados por la aplicación. */
 export type UserRole = 'admin' | 'manager' | 'collaborator';
 
-/** Usuario que se muestra en la barra lateral. */
+/** Persona con la que se ingresó a la app (se muestra en la barra lateral). */
 export interface SessionUser {
+  /** contactid en Dataverse. */
+  id: string;
   fullName: string;
   jobTitle: string;
-  initials: string;
 }
 
 /** Una opción de la barra lateral: también define la ruta y la pantalla que se muestra. */
@@ -32,10 +34,11 @@ export interface NavSection {
 /** Configuración completa de un rol: única fuente de verdad para su menú y sus rutas. */
 export interface RoleModule {
   role: UserRole;
+  /** Valor del rol en Dataverse (jsi_roleassignment.jsi_role). */
+  dataverseRole: RoleValue;
   /** Texto del breadcrumb (ej. "Administración"). */
   label: string;
   /** Prefijo de las rutas del rol (ej. "/admin"). */
   basePath: string;
-  user: SessionUser;
   navigation: NavSection[];
 }

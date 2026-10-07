@@ -21,6 +21,8 @@ export const ROLE = {
   Collaborator: 100000002,
 } as const satisfies Record<string, Jsi_roleassignmentsjsi_role>;
 
+export type RoleValue = (typeof ROLE)[keyof typeof ROLE];
+
 /** jsi_onboarding.jsi_type */
 export const ONBOARDING_TYPE = {
   Initial: 100000000,

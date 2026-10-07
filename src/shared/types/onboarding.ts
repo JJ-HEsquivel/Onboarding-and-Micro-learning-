@@ -51,6 +51,8 @@ export interface RouteStage {
   id: string;
   name: string;
   order: number;
+  /** Plazo de la etapa en días hábiles (null si no tiene plazo). */
+  businessDays: number | null;
   documents: RouteDocument[];
 }
 

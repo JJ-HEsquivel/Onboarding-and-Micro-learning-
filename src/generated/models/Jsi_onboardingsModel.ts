@@ -44,6 +44,7 @@ export interface Jsi_onboardingsBase {
   jsi_name?: string;
   jsi_onboardingid: string;
   jsi_progressstatus: Jsi_onboardingsjsi_progressstatus;
+  "jsi_RegisteredBy@odata.bind"?: string;
   jsi_risklevel: Jsi_onboardingsjsi_risklevel;
   jsi_startdate?: string;
   jsi_type: Jsi_onboardingsjsi_type;
@@ -69,6 +70,8 @@ export interface Jsi_onboardings extends Jsi_onboardingsBase {
   jsi_employeename?: string;
   jsi_employeeyominame?: string;
   jsi_progressstatusname?: string;
+  jsi_registeredbyname?: string;
+  jsi_registeredbyyominame?: string;
   jsi_risklevelname?: string;
   jsi_typename?: string;
   jsi_validationstatusname?: string;
@@ -93,6 +96,8 @@ export interface Jsi_onboardings extends Jsi_onboardingsBase {
   _jsi_area_value?: string;
   jsi_employee?: object;
   _jsi_employee_value?: string;
+  jsi_registeredby?: object;
+  _jsi_registeredby_value?: string;
   jsi_validator?: object;
   _jsi_validator_value?: string;
   modifiedby?: object;

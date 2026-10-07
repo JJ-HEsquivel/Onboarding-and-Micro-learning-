@@ -1,7 +1,8 @@
 import { Bell, ChartLine, FileText, House, SquareCheckBig, TriangleAlert, Users } from 'lucide-react';
+import { ROLE } from '@/shared/constants/choices';
 import type { RoleModule } from '@/shared/types/navigation';
 import ManagerDashboardPage from './pages/ManagerDashboardPage';
-import ManagerPendingValidationPage from './pages/ManagerPendingValidationPage';
+import ManagerPendingValidationPage from './pages/pending-validation/ManagerPendingValidationPage';
 import ManagerCollaboratorsPage from './pages/ManagerCollaboratorsPage';
 import ManagerAssignDocumentsPage from './pages/ManagerAssignDocumentsPage';
 import ManagerResultsPage from './pages/ManagerResultsPage';
@@ -10,10 +11,9 @@ import ManagerTeamGapsPage from './pages/ManagerTeamGapsPage';
 
 export const managerModule: RoleModule = {
   role: 'manager',
+  dataverseRole: ROLE.Manager,
   label: 'Manager',
   basePath: '/manager',
-  // TODO: reemplazar por el usuario autenticado (Dataverse / Office 365).
-  user: { fullName: 'Iván Suárez', jobTitle: 'Engineering Manager', initials: 'IS' },
   navigation: [
     {
       title: 'Mi equipo',

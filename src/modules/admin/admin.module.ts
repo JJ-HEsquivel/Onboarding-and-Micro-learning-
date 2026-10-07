@@ -10,6 +10,7 @@ import {
   Users,
   Zap,
 } from 'lucide-react';
+import { ROLE } from '@/shared/constants/choices';
 import type { RoleModule } from '@/shared/types/navigation';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import AdminCollaboratorsPage from './pages/collaborators/AdminCollaboratorsPage';
@@ -24,10 +25,9 @@ import AdminSettingsPage from './pages/AdminSettingsPage';
 
 export const adminModule: RoleModule = {
   role: 'admin',
+  dataverseRole: ROLE.Administrator,
   label: 'Administración',
   basePath: '/admin',
-  // TODO: reemplazar por el usuario autenticado (Dataverse / Office 365).
-  user: { fullName: 'Marcelo Antezana', jobTitle: 'Quality Control Processes Lead', initials: 'MA' },
   navigation: [
     {
       title: 'Operación',

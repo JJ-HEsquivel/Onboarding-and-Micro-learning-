@@ -1,15 +1,17 @@
 import { NavLink } from 'react-router';
 import { BookOpen } from 'lucide-react';
 import { Avatar } from '@/shared/components/Avatar';
-import type { RoleModule } from '@/shared/types/navigation';
+import { getInitials } from '@/shared/lib/format';
+import type { RoleModule, SessionUser } from '@/shared/types/navigation';
 
 interface SidebarProps {
   module: RoleModule;
+  user: SessionUser;
   onNavigate?: () => void;
 }
 
-export function Sidebar({ module, onNavigate }: SidebarProps) {
-  const { basePath, navigation, user } = module;
+export function Sidebar({ module, user, onNavigate }: SidebarProps) {
+  const { basePath, navigation } = module;
 
   return (
     <aside className="sidebar">
@@ -47,7 +49,7 @@ export function Sidebar({ module, onNavigate }: SidebarProps) {
       </nav>
 
       <div className="sidebar__user">
-        <Avatar initials={user.initials} />
+        <Avatar initials={getInitials(user.fullName)} />
         <div>
           <p className="sidebar__user-name">{user.fullName}</p>
           <p className="sidebar__user-title">{user.jobTitle}</p>
