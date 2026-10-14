@@ -46,7 +46,7 @@ export default function ManagerPendingValidationPage() {
 
         {overview.loading && !overview.data && <p className="pending-validation__loading">Cargando…</p>}
 
-        {overview.data && overview.data.pending.length === 0 && (
+        {overview.data && overview.data.length === 0 && (
           <section className="card">
             <EmptyState
               icon={CircleCheck}
@@ -56,13 +56,8 @@ export default function ManagerPendingValidationPage() {
           </section>
         )}
 
-        {overview.data?.pending.map((pending) => (
-          <PendingValidationCard
-            key={pending.onboardingId}
-            pending={pending}
-            catalog={overview.data!.catalog}
-            onConfirmed={handleConfirmed}
-          />
+        {overview.data?.map((pending) => (
+          <PendingValidationCard key={pending.onboardingId} pending={pending} onConfirmed={handleConfirmed} />
         ))}
       </div>
     </>

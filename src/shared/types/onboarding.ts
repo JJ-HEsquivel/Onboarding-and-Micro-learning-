@@ -13,14 +13,36 @@ export interface Area {
 export interface Manager {
   id: string;
   fullName: string;
+  jobTitle: string;
+  areaId: string | null;
 }
 
 /** Estado visible de un colaborador en su inducción. */
 export type CollaboratorStatus = 'pendingValidation' | 'notStarted' | 'inProgress' | 'overdue' | 'completed';
 
+/** Nivel de riesgo de una inducción. */
+export type RiskLevel = 'low' | 'medium' | 'high';
+
+/** Resumen numérico del avance de una inducción (ver shared/domain/onboardingProgress.ts). */
+export interface ProgressSummary {
+  /** Documentos de la ruta. */
+  total: number;
+  /** Documentos con la lectura confirmada. */
+  read: number;
+  /** Documentos leídos y con su examen aprobado: son los que "suman". */
+  approved: number;
+  /** Exámenes habilitados que falta rendir (o reintentar). */
+  examsToTake: number;
+  /** Promedio de los exámenes rendidos, o null si no rindió ninguno. */
+  averageScore: number | null;
+  status: Exclude<CollaboratorStatus, 'pendingValidation'>;
+  risk: RiskLevel;
+}
+
 export interface Collaborator {
   id: string;
   fullName: string;
+  email: string;
   jobTitle: string;
   areaId: string | null;
   areaName: string;
@@ -28,13 +50,15 @@ export interface Collaborator {
   managerName: string;
   /** Fecha en formato ISO "AAAA-MM-DD". */
   hireDate: string | null;
-  /** Datos de su inducción más reciente (jsi_onboarding). */
+  /** Inducción más reciente (jsi_onboarding). */
   onboardingId: string | null;
   status: CollaboratorStatus;
+  risk: RiskLevel;
+  documentsTotal: number;
+  documentsApproved: number;
+  averageScore: number | null;
   /** Duración de la inducción en días, solo si ya se cerró. */
   closingDays: number | null;
-  documentsTotal: number;
-  documentsRead: number;
 }
 
 export interface RouteDocument {
@@ -44,6 +68,10 @@ export interface RouteDocument {
   version: string;
   readingMinutes: number | null;
   isCritical: boolean;
+  /** En la Etapa 3: si el Admin lo propone por defecto. En etapas generales siempre es true. */
+  isDefault: boolean;
+  /** Evaluación del documento, o null si no tiene. */
+  assessmentId: string | null;
 }
 
 /** Una etapa de la ruta de inducción con los documentos que le corresponden. */
@@ -51,6 +79,8 @@ export interface RouteStage {
   id: string;
   name: string;
   order: number;
+  /** true en las etapas obligatorias para todos (1 y 2). */
+  isGeneral: boolean;
   /** Plazo de la etapa en días hábiles (null si no tiene plazo). */
   businessDays: number | null;
   documents: RouteDocument[];

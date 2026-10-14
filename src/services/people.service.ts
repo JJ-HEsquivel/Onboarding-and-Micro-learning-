@@ -47,7 +47,9 @@ export function toManagers(people: Map<string, Contacts>, managerIds: Set<string
   return [...managerIds]
     .flatMap((id) => {
       const person = people.get(id);
-      return person ? [{ id, fullName: person.fullname ?? '' }] : [];
+      return person
+        ? [{ id, fullName: person.fullname ?? '', jobTitle: person.jsi_jobtitle ?? '', areaId: person._jsi_area_value ?? null }]
+        : [];
     })
     .sort((a, b) => a.fullName.localeCompare(b.fullName));
 }

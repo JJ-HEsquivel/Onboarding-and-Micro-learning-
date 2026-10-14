@@ -1,0 +1,3199 @@
+{
+  "source": "Prototipo https://jj-hesquivel.github.io/System-onboarding-/ (js/data.js)",
+  "areas": [
+    {
+      "code": "ENG",
+      "name": "Engineering"
+    },
+    {
+      "code": "QA",
+      "name": "Quality Control"
+    },
+    {
+      "code": "PMO",
+      "name": "Project Management"
+    },
+    {
+      "code": "HR",
+      "name": "People & Culture"
+    },
+    {
+      "code": "FIN",
+      "name": "Finance"
+    },
+    {
+      "code": "IT",
+      "name": "IT & Infrastructure"
+    }
+  ],
+  "categories": [
+    "Seguridad de la Información",
+    "Gestión de Activos y TI",
+    "Datos y Privacidad",
+    "Ingeniería",
+    "Calidad",
+    "Gestión de Proyectos",
+    "Personas",
+    "Compras y Activos Fijos",
+    "Finanzas",
+    "Infraestructura"
+  ],
+  "stages": [
+    {
+      "key": "ETP-1",
+      "name": "Etapa 1 · Políticas Fundamentales",
+      "order": 1,
+      "businessDays": 5,
+      "scope": "General",
+      "areas": []
+    },
+    {
+      "key": "ETP-2",
+      "name": "Etapa 2 · Políticas Fundamentales",
+      "order": 2,
+      "businessDays": 5,
+      "scope": "General",
+      "areas": []
+    },
+    {
+      "key": "ETP-3-ENG",
+      "name": "Etapa 3 · Documentación específica: Engineering",
+      "order": 3,
+      "businessDays": 5,
+      "scope": "AreaSpecific",
+      "areas": [
+        "ENG"
+      ]
+    },
+    {
+      "key": "ETP-3-QA",
+      "name": "Etapa 3 · Documentación específica: Quality Control",
+      "order": 3,
+      "businessDays": 5,
+      "scope": "AreaSpecific",
+      "areas": [
+        "QA"
+      ]
+    },
+    {
+      "key": "ETP-3-PMO",
+      "name": "Etapa 3 · Documentación específica: Project Management",
+      "order": 3,
+      "businessDays": 5,
+      "scope": "AreaSpecific",
+      "areas": [
+        "PMO"
+      ]
+    },
+    {
+      "key": "ETP-3-HR",
+      "name": "Etapa 3 · Documentación específica: People & Culture",
+      "order": 3,
+      "businessDays": 5,
+      "scope": "AreaSpecific",
+      "areas": [
+        "HR"
+      ]
+    },
+    {
+      "key": "ETP-3-FIN",
+      "name": "Etapa 3 · Documentación específica: Finance",
+      "order": 3,
+      "businessDays": 5,
+      "scope": "AreaSpecific",
+      "areas": [
+        "FIN"
+      ]
+    },
+    {
+      "key": "ETP-3-IT",
+      "name": "Etapa 3 · Documentación específica: IT & Infrastructure",
+      "order": 3,
+      "businessDays": 5,
+      "scope": "AreaSpecific",
+      "areas": [
+        "IT"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "code": "POL-TI-001",
+      "title": "BYOD Computadores - Política (ESP-ENG)",
+      "stage": "ETP-1",
+      "category": "Gestión de Activos y TI",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "Enterprise Information Security",
+      "pages": 3,
+      "minutes": 8,
+      "isDefault": true,
+      "updatedOn": "2026-07-01",
+      "summary": "Condiciones para usar equipos personales (Bring Your Own Device) en actividades laborales, cifrado mínimo requerido y responsabilidades del colaborador sobre el equipo.",
+      "sections": [
+        {
+          "title": "1. Alcance",
+          "body": "Aplica a todo colaborador que utilice una computadora personal para conectarse a sistemas o datos de la organización."
+        },
+        {
+          "title": "2. Requisitos mínimos",
+          "body": "El equipo debe contar con cifrado de disco, antivirus actualizado y bloqueo automático de pantalla antes de conectarse a cualquier recurso corporativo."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Qué medida es obligatoria antes de conectar una computadora personal (BYOD) a sistemas corporativos?",
+          "options": [
+            "Cifrado de disco y bloqueo automático de pantalla activados",
+            "Ninguna, basta con tener antivirus",
+            "Solo avisar a IT por correo",
+            "Instalar cualquier antivirus gratuito"
+          ],
+          "correct": 0,
+          "explanation": "BYOD Computadores exige cifrado de disco, antivirus actualizado y bloqueo automático antes de conectarse."
+        },
+        {
+          "text": "¿A quién aplica la política BYOD de computadores?",
+          "options": [
+            "Solo a los managers",
+            "Solo a Engineering",
+            "A nadie, es opcional",
+            "A todo colaborador que use una computadora personal para conectarse a sistemas o datos de la organización"
+          ],
+          "correct": 3,
+          "explanation": "Aplica a todo colaborador que use su computadora personal para fines laborales."
+        },
+        {
+          "text": "¿Qué debe tener activado el equipo personal antes de acceder a recursos corporativos?",
+          "options": [
+            "Solo el wifi",
+            "Un fondo de pantalla corporativo",
+            "Antivirus actualizado",
+            "El modo avión"
+          ],
+          "correct": 2,
+          "explanation": "El antivirus actualizado es uno de los requisitos mínimos de BYOD."
+        },
+        {
+          "text": "¿Quién es responsable del equipo personal usado para trabajar?",
+          "options": [
+            "IT, siempre",
+            "El colaborador dueño del equipo",
+            "El cliente",
+            "Nadie"
+          ],
+          "correct": 1,
+          "explanation": "La política define responsabilidades del colaborador sobre su equipo."
+        },
+        {
+          "text": "Si su computadora personal no tiene cifrado de disco, ¿puede conectarse a sistemas corporativos?",
+          "options": [
+            "No, primero debe cumplir los requisitos mínimos",
+            "Sí, por poco tiempo",
+            "Solo los viernes",
+            "Sí, si usa VPN"
+          ],
+          "correct": 0,
+          "explanation": "Sin cifrado de disco no se cumple el requisito mínimo para conectarse."
+        }
+      ]
+    },
+    {
+      "code": "POL-TI-002",
+      "title": "BYOD Tablets y dispositivos móviles - Política (ESP-ENG)",
+      "stage": "ETP-1",
+      "category": "Gestión de Activos y TI",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "Enterprise Information Security",
+      "pages": 1,
+      "minutes": 4,
+      "isDefault": true,
+      "updatedOn": "2026-07-01",
+      "summary": "Extiende los lineamientos de BYOD a tablets y dispositivos móviles personales usados para correo, chat o acceso a sistemas corporativos.",
+      "sections": [
+        {
+          "title": "1. Dispositivos cubiertos",
+          "body": "Tablets y smartphones personales usados para correo corporativo, aplicaciones de mensajería de trabajo o MFA."
+        },
+        {
+          "title": "2. Medidas obligatorias",
+          "body": "PIN o biometría activados, actualización del sistema operativo al día y posibilidad de borrado remoto en caso de pérdida o robo."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Qué medidas exige la política para tablets y smartphones personales?",
+          "options": [
+            "Ninguna",
+            "PIN o biometría, sistema operativo al día y borrado remoto",
+            "Solo una funda protectora",
+            "Desactivar el correo"
+          ],
+          "correct": 1,
+          "explanation": "Se exige PIN o biometría, actualizaciones al día y posibilidad de borrado remoto."
+        },
+        {
+          "text": "¿Qué dispositivos cubre esta política?",
+          "options": [
+            "Tablets y smartphones personales usados para correo, mensajería de trabajo o MFA",
+            "Solo laptops corporativas",
+            "Impresoras",
+            "Servidores"
+          ],
+          "correct": 0,
+          "explanation": "Cubre los dispositivos móviles personales usados para fines laborales."
+        },
+        {
+          "text": "¿Para qué sirve el borrado remoto en un dispositivo móvil personal?",
+          "options": [
+            "Para liberar espacio",
+            "Para actualizar apps",
+            "No tiene uso",
+            "Para proteger la información si el equipo se pierde o es robado"
+          ],
+          "correct": 3,
+          "explanation": "El borrado remoto protege la información corporativa ante pérdida o robo."
+        },
+        {
+          "text": "Usa su celular personal para el MFA corporativo. ¿Aplica esta política?",
+          "options": [
+            "No, solo aplica a tablets",
+            "Solo si es de la empresa",
+            "Sí, el MFA es un uso laboral cubierto",
+            "Solo fuera de horario"
+          ],
+          "correct": 2,
+          "explanation": "Los dispositivos usados para MFA están cubiertos."
+        },
+        {
+          "text": "¿Qué debe hacer con el sistema operativo de su tablet usada para trabajo?",
+          "options": [
+            "Nunca actualizarlo",
+            "Mantenerlo al día",
+            "Desinstalarlo",
+            "Actualizarlo solo si IT lo pide por escrito"
+          ],
+          "correct": 1,
+          "explanation": "La política exige mantener el sistema operativo actualizado."
+        }
+      ]
+    },
+    {
+      "code": "POL-TI-003",
+      "title": "Control de Software y Hardware - Política (ESP-ENG)",
+      "stage": "ETP-1",
+      "category": "Gestión de Activos y TI",
+      "version": "1.0",
+      "criticality": "Medium",
+      "owner": "Enterprise Information Security",
+      "pages": 2,
+      "minutes": 6,
+      "isDefault": true,
+      "updatedOn": "2026-07-01",
+      "summary": "Reglas para la instalación, licenciamiento e inventario del software y hardware entregado o autorizado por la organización.",
+      "sections": [
+        {
+          "title": "1. Instalación de software",
+          "body": "Solo puede instalarse software aprobado por IT; cualquier excepción requiere solicitud formal y justificación."
+        },
+        {
+          "title": "2. Inventario de hardware",
+          "body": "Todo equipo asignado queda registrado a nombre del colaborador y debe devolverse en las condiciones entregadas al finalizar la relación laboral."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Quién puede instalar software en un equipo corporativo?",
+          "options": [
+            "Cualquier colaborador, sin restricciones",
+            "Solo el área de Finanzas",
+            "Solo software aprobado por IT, o con solicitud formal",
+            "Solo los managers"
+          ],
+          "correct": 2,
+          "explanation": "Solo se instala software aprobado por IT, salvo excepción justificada."
+        },
+        {
+          "text": "¿Qué pasa con el hardware asignado al finalizar la relación laboral?",
+          "options": [
+            "Se lo queda el colaborador",
+            "Debe devolverse en las condiciones entregadas",
+            "Se desecha",
+            "Se transfiere a un compañero sin aviso"
+          ],
+          "correct": 1,
+          "explanation": "Todo equipo asignado se devuelve en las condiciones entregadas."
+        },
+        {
+          "text": "Necesita una herramienta que no está aprobada por IT. ¿Qué corresponde?",
+          "options": [
+            "Presentar una solicitud formal con justificación",
+            "Instalarla y avisar después",
+            "Pedirle a un compañero que la instale",
+            "Usar una versión portable"
+          ],
+          "correct": 0,
+          "explanation": "Las excepciones requieren solicitud formal y justificación."
+        },
+        {
+          "text": "¿A nombre de quién queda registrado el hardware asignado?",
+          "options": [
+            "Del área de IT",
+            "Del proveedor",
+            "De nadie",
+            "Del colaborador que lo recibe"
+          ],
+          "correct": 3,
+          "explanation": "Todo equipo asignado queda registrado a nombre del colaborador."
+        },
+        {
+          "text": "¿Qué regula la política de Control de Software y Hardware?",
+          "options": [
+            "Solo el horario de trabajo",
+            "Los viajes",
+            "La instalación, el licenciamiento y el inventario de software y hardware",
+            "Las vacaciones"
+          ],
+          "correct": 2,
+          "explanation": "Cubre instalación, licenciamiento e inventario."
+        }
+      ]
+    },
+    {
+      "code": "POL-SEG-004",
+      "title": "Etiquetado de Datos e Información - Política",
+      "stage": "ETP-1",
+      "category": "Seguridad de la Información",
+      "version": "1.0",
+      "criticality": "Medium",
+      "owner": "Enterprise Information Security",
+      "pages": 4,
+      "minutes": 10,
+      "isDefault": true,
+      "updatedOn": "2026-07-01",
+      "summary": "Define cómo clasificar y etiquetar documentos e información según su nivel de sensibilidad, para que cualquier persona sepa cómo debe tratarlos.",
+      "sections": [
+        {
+          "title": "1. Niveles de clasificación",
+          "body": "La información se clasifica en Pública, Interna, Confidencial y Restringida, y debe llevar la etiqueta visible en el encabezado del documento."
+        },
+        {
+          "title": "2. Responsabilidad del etiquetado",
+          "body": "Quien crea o recibe un documento es responsable de clasificarlo correctamente antes de compartirlo, incluso internamente."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Qué debe hacer un colaborador con un documento que clasifica como Confidencial?",
+          "options": [
+            "No es necesario etiquetarlo si es de uso interno",
+            "Solo etiquetarlo si sale de la empresa",
+            "Etiquetarlo solo si lo pide el cliente",
+            "Etiquetarlo visiblemente con su nivel de clasificación"
+          ],
+          "correct": 3,
+          "explanation": "Todo documento debe llevar visible su nivel de clasificación."
+        },
+        {
+          "text": "¿Cuáles son los niveles de clasificación de la información?",
+          "options": [
+            "Alta y baja",
+            "Secreta y no secreta",
+            "Pública, Interna, Confidencial y Restringida",
+            "No existen niveles"
+          ],
+          "correct": 2,
+          "explanation": "La información se clasifica en Pública, Interna, Confidencial y Restringida."
+        },
+        {
+          "text": "¿Dónde debe ir visible la etiqueta de clasificación?",
+          "options": [
+            "En el nombre del archivo solamente",
+            "En el encabezado del documento",
+            "En un correo aparte",
+            "No tiene que ser visible"
+          ],
+          "correct": 1,
+          "explanation": "La etiqueta debe ir visible en el encabezado."
+        },
+        {
+          "text": "¿Quién debe clasificar un documento antes de compartirlo?",
+          "options": [
+            "Quien lo crea o lo recibe",
+            "Solo el área legal",
+            "El cliente",
+            "IT"
+          ],
+          "correct": 0,
+          "explanation": "Quien crea o recibe un documento es responsable de clasificarlo."
+        },
+        {
+          "text": "¿Debe clasificarse un documento que solo se compartirá internamente?",
+          "options": [
+            "No, solo los externos",
+            "Solo si es largo",
+            "Solo si tiene datos financieros",
+            "Sí, incluso internamente"
+          ],
+          "correct": 3,
+          "explanation": "La clasificación aplica también a lo que se comparte internamente."
+        }
+      ]
+    },
+    {
+      "code": "POL-OPS-005",
+      "title": "Uso correcto de bienes y servicios de la organización - Política",
+      "stage": "ETP-1",
+      "category": "Gestión de Activos y TI",
+      "version": "1.0",
+      "criticality": "Medium",
+      "owner": "Enterprise Information Security",
+      "pages": 5,
+      "minutes": 12,
+      "isDefault": true,
+      "updatedOn": "2026-07-01",
+      "summary": "Establece el uso adecuado de los bienes, herramientas y servicios provistos por la organización para fines laborales.",
+      "sections": [
+        {
+          "title": "1. Uso previsto",
+          "body": "Los bienes y servicios entregados son para uso laboral; el uso personal ocasional debe ser razonable y no interferir con el trabajo."
+        },
+        {
+          "title": "2. Uso indebido",
+          "body": "El uso indebido reiterado de bienes o servicios corporativos puede derivar en medidas disciplinarias."
+        }
+      ],
+      "questions": [
+        {
+          "text": "Los bienes y servicios entregados por la organización son principalmente para:",
+          "options": [
+            "Uso laboral, con uso personal ocasional razonable",
+            "Uso personal ilimitado",
+            "Reventa autorizada",
+            "Uso exclusivo fuera de horario"
+          ],
+          "correct": 0,
+          "explanation": "Son para fines laborales, con tolerancia razonable de uso personal ocasional."
+        },
+        {
+          "text": "¿Qué puede ocurrir ante el uso indebido reiterado de bienes corporativos?",
+          "options": [
+            "Nada",
+            "Un premio",
+            "Solo un aviso verbal sin registro",
+            "Medidas disciplinarias"
+          ],
+          "correct": 3,
+          "explanation": "El uso indebido reiterado puede derivar en medidas disciplinarias."
+        },
+        {
+          "text": "¿El uso personal ocasional de una laptop corporativa está permitido?",
+          "options": [
+            "Nunca",
+            "Sí, sin límites",
+            "Sí, si es razonable y no interfiere con el trabajo",
+            "Solo para juegos"
+          ],
+          "correct": 2,
+          "explanation": "Se tolera el uso personal ocasional razonable."
+        },
+        {
+          "text": "¿Para qué se entregan principalmente los bienes y servicios de la organización?",
+          "options": [
+            "Para uso familiar",
+            "Para fines laborales",
+            "Para venderlos",
+            "Para préstamos a terceros"
+          ],
+          "correct": 1,
+          "explanation": "Los bienes y servicios son para uso laboral."
+        },
+        {
+          "text": "Un colaborador usa repetidamente el vehículo corporativo para fines personales. ¿Qué puede pasar?",
+          "options": [
+            "Una medida disciplinaria por uso indebido reiterado",
+            "Nada",
+            "Un ascenso",
+            "Una devolución de gastos"
+          ],
+          "correct": 0,
+          "explanation": "El uso indebido reiterado puede derivar en medidas disciplinarias."
+        }
+      ]
+    },
+    {
+      "code": "POL-TI-006",
+      "title": "Software permitido - Política (ESP - ENG)",
+      "stage": "ETP-1",
+      "category": "Gestión de Activos y TI",
+      "version": "1.0",
+      "criticality": "Medium",
+      "owner": "Enterprise Information Security",
+      "pages": 2,
+      "minutes": 6,
+      "isDefault": true,
+      "updatedOn": "2026-07-01",
+      "summary": "Lista y criterios del software autorizado para uso en equipos corporativos, y el procedimiento para solicitar software no incluido en el catálogo.",
+      "sections": [
+        {
+          "title": "1. Catálogo autorizado",
+          "body": "El catálogo de software permitido se publica y actualiza por IT; solo ese software puede instalarse sin aprobación adicional."
+        },
+        {
+          "title": "2. Solicitud de excepciones",
+          "body": "Cualquier software fuera del catálogo requiere solicitud formal con justificación de negocio y aprobación de IT."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Qué software puede instalarse sin aprobación adicional?",
+          "options": [
+            "Cualquiera, mientras sea gratuito",
+            "Únicamente el que está en el catálogo autorizado",
+            "Cualquiera si se justifica después",
+            "Solo el sistema operativo"
+          ],
+          "correct": 1,
+          "explanation": "Solo el software del catálogo autorizado por IT."
+        },
+        {
+          "text": "¿Qué se necesita para usar software fuera del catálogo?",
+          "options": [
+            "Solicitud formal con justificación de negocio y aprobación de IT",
+            "Nada",
+            "La recomendación de un compañero",
+            "Instalarlo y avisar luego"
+          ],
+          "correct": 0,
+          "explanation": "Las excepciones requieren solicitud formal y aprobación de IT."
+        },
+        {
+          "text": "¿Quién publica y actualiza el catálogo de software permitido?",
+          "options": [
+            "Cada colaborador",
+            "El cliente",
+            "Recursos Humanos",
+            "IT"
+          ],
+          "correct": 3,
+          "explanation": "El catálogo lo publica y actualiza IT."
+        },
+        {
+          "text": "¿Qué debe incluir la solicitud de un software fuera del catálogo?",
+          "options": [
+            "Nada en particular",
+            "El precio de mercado solamente",
+            "Una justificación de negocio",
+            "La opinión de un amigo"
+          ],
+          "correct": 2,
+          "explanation": "Toda excepción requiere justificación de negocio."
+        },
+        {
+          "text": "Un software gratuito no está en el catálogo. ¿Puede instalarlo libremente?",
+          "options": [
+            "Sí, por ser gratuito",
+            "No, igual requiere solicitud y aprobación de IT",
+            "Sí, si es de código abierto",
+            "Sí, si lo desinstala luego"
+          ],
+          "correct": 1,
+          "explanation": "Que sea gratuito no lo exime del catálogo."
+        }
+      ]
+    },
+    {
+      "code": "POL-SEG-007",
+      "title": "Seguridad de la Información - Política (ESP - ENG)",
+      "stage": "ETP-1",
+      "category": "Seguridad de la Información",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "Enterprise Information Security",
+      "pages": 3,
+      "minutes": 8,
+      "isDefault": true,
+      "updatedOn": "2026-07-01",
+      "summary": "Principios generales de seguridad de la información: confidencialidad, integridad y disponibilidad, y el canal para reportar incidentes.",
+      "sections": [
+        {
+          "title": "1. Principios",
+          "body": "Toda la información de la organización y de sus clientes debe protegerse en confidencialidad, integridad y disponibilidad."
+        },
+        {
+          "title": "2. Reporte de incidentes",
+          "body": "Todo incidente o sospecha de incidente se reporta al canal de seguridad dentro de las 24 horas siguientes a su detección; el reporte oportuno no es motivo de sanción."
+        }
+      ],
+      "questions": [
+        {
+          "text": "Ante un incidente de seguridad de la información, ¿en qué plazo debe reportarse?",
+          "options": [
+            "No es obligatorio reportarlo",
+            "Solo si afecta a un cliente",
+            "Dentro de las 24 horas siguientes a su detección",
+            "En la siguiente reunión de equipo"
+          ],
+          "correct": 2,
+          "explanation": "Todo incidente o sospecha se reporta dentro de las 24 horas."
+        },
+        {
+          "text": "¿Qué principios protege la política de seguridad de la información?",
+          "options": [
+            "Velocidad y costo",
+            "Confidencialidad, integridad y disponibilidad",
+            "Solo la confidencialidad",
+            "Ninguno"
+          ],
+          "correct": 1,
+          "explanation": "La información se protege en confidencialidad, integridad y disponibilidad."
+        },
+        {
+          "text": "¿Reportar a tiempo un incidente puede ser motivo de sanción?",
+          "options": [
+            "No, el reporte oportuno no es motivo de sanción",
+            "Sí, siempre",
+            "Depende del área",
+            "Solo si fue un error propio"
+          ],
+          "correct": 0,
+          "explanation": "El reporte oportuno nunca es motivo de sanción."
+        },
+        {
+          "text": "Sospecha que su cuenta fue comprometida, pero no está seguro. ¿Qué hace?",
+          "options": [
+            "Espera a confirmarlo",
+            "Cambia la contraseña y no avisa",
+            "Lo comenta en el almuerzo",
+            "Lo reporta igual: también se reportan las sospechas"
+          ],
+          "correct": 3,
+          "explanation": "Se reportan los incidentes y también las sospechas."
+        },
+        {
+          "text": "¿Qué información protege la política de seguridad?",
+          "options": [
+            "Solo la del cliente",
+            "Solo la financiera",
+            "La de la organización y la de sus clientes",
+            "Solo la pública"
+          ],
+          "correct": 2,
+          "explanation": "Protege la información de la organización y de sus clientes."
+        }
+      ]
+    },
+    {
+      "code": "POL-DAT-008",
+      "title": "Inteligencia Artificial - Política (ESP-ENG)",
+      "stage": "ETP-2",
+      "category": "Datos y Privacidad",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "Enterprise Information Security",
+      "pages": 3,
+      "minutes": 8,
+      "isDefault": true,
+      "updatedOn": "2026-07-15",
+      "summary": "Qué herramientas de IA están autorizadas, qué información no puede ingresarse en ellas y cómo debe revisarse el contenido que generan.",
+      "sections": [
+        {
+          "title": "1. Herramientas autorizadas",
+          "body": "Solo pueden usarse herramientas de IA del catálogo corporativo, con cuenta corporativa; está prohibido el uso de cuentas personales para tareas laborales."
+        },
+        {
+          "title": "2. Información que no puede compartirse",
+          "body": "Nunca debe ingresarse código de cliente bajo NDA, datos personales, credenciales ni información clasificada como Confidencial o Restringida en una herramienta de IA."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Qué información NO puede ingresarse en una herramienta de Inteligencia Artificial?",
+          "options": [
+            "Documentación pública de la empresa",
+            "Un temario interno",
+            "Un texto ya publicado",
+            "Código de cliente bajo NDA, datos personales o información Restringida"
+          ],
+          "correct": 3,
+          "explanation": "Está prohibido ingresar código bajo NDA, datos personales, credenciales o información clasificada."
+        },
+        {
+          "text": "¿Puede usarse una cuenta personal de una herramienta de IA para tareas laborales?",
+          "options": [
+            "Sí, si es la misma herramienta",
+            "Sí, fuera de horario",
+            "No, solo cuentas corporativas del catálogo autorizado",
+            "Solo si el proyecto lo permite"
+          ],
+          "correct": 2,
+          "explanation": "Solo herramientas del catálogo corporativo, con cuenta corporativa."
+        },
+        {
+          "text": "¿Qué debe hacerse con el contenido que genera una herramienta de IA?",
+          "options": [
+            "Publicarlo directamente",
+            "Revisarlo por una persona antes de usarlo",
+            "Borrarlo siempre",
+            "Enviarlo al cliente sin cambios"
+          ],
+          "correct": 1,
+          "explanation": "Todo resultado generado por IA debe ser revisado."
+        },
+        {
+          "text": "¿Puede ingresar credenciales de acceso en una herramienta de IA?",
+          "options": [
+            "No, nunca",
+            "Sí, si es corporativa",
+            "Solo las de prueba",
+            "Solo cifradas"
+          ],
+          "correct": 0,
+          "explanation": "Las credenciales nunca se ingresan en herramientas de IA."
+        },
+        {
+          "text": "¿Cuál de estas herramientas de IA puede usar para el trabajo?",
+          "options": [
+            "Cualquiera popular",
+            "La que recomiende un cliente",
+            "Cualquiera gratuita",
+            "Las del catálogo corporativo con cuenta corporativa"
+          ],
+          "correct": 3,
+          "explanation": "Solo las del catálogo corporativo autorizado."
+        }
+      ]
+    },
+    {
+      "code": "POL-SEG-009",
+      "title": "Protección de Contraseñas - Política (ESP - ENG)",
+      "stage": "ETP-2",
+      "category": "Seguridad de la Información",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "Enterprise Information Security",
+      "pages": 1,
+      "minutes": 4,
+      "isDefault": true,
+      "updatedOn": "2026-07-15",
+      "summary": "Requisitos mínimos de las contraseñas corporativas, uso obligatorio del gestor de contraseñas y prohibición de compartirlas.",
+      "sections": [
+        {
+          "title": "1. Requisitos mínimos",
+          "body": "Las contraseñas deben tener al menos 14 caracteres, combinar mayúsculas, minúsculas, números y símbolos, y renovarse periódicamente."
+        },
+        {
+          "title": "2. Prohibición de compartir",
+          "body": "Compartir credenciales está prohibido incluso de forma temporal o entre compañeros de confianza."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Cuál es uno de los requisitos mínimos de una contraseña corporativa?",
+          "options": [
+            "Al menos 14 caracteres combinando mayúsculas, minúsculas, números y símbolos",
+            "6 caracteres numéricos",
+            "El nombre de usuario repetido",
+            "No tiene requisitos"
+          ],
+          "correct": 0,
+          "explanation": "Las contraseñas requieren al menos 14 caracteres con combinación de tipos."
+        },
+        {
+          "text": "¿Se pueden compartir credenciales con un compañero de confianza?",
+          "options": [
+            "Sí, temporalmente",
+            "Sí, si es del mismo equipo",
+            "Solo por chat",
+            "No, está prohibido incluso de forma temporal"
+          ],
+          "correct": 3,
+          "explanation": "Compartir credenciales está prohibido siempre."
+        },
+        {
+          "text": "¿Cómo deben gestionarse las contraseñas corporativas?",
+          "options": [
+            "En una libreta",
+            "En un archivo de texto en el escritorio",
+            "Con el gestor de contraseñas corporativo",
+            "Memorizando una sola para todo"
+          ],
+          "correct": 2,
+          "explanation": "Es obligatorio usar el gestor de contraseñas corporativo."
+        },
+        {
+          "text": "¿Las contraseñas corporativas deben renovarse?",
+          "options": [
+            "Nunca",
+            "Sí, periódicamente",
+            "Solo si las olvida",
+            "Solo al cambiar de equipo"
+          ],
+          "correct": 1,
+          "explanation": "Las contraseñas se renuevan periódicamente."
+        },
+        {
+          "text": "Un compañero le pide su contraseña para terminar una tarea urgente. ¿Qué hace?",
+          "options": [
+            "No la comparte; él debe pedir su propio acceso",
+            "Se la da por esta vez",
+            "Se la dicta por teléfono",
+            "Le presta su sesión abierta"
+          ],
+          "correct": 0,
+          "explanation": "Compartir credenciales está prohibido incluso de forma temporal."
+        }
+      ]
+    },
+    {
+      "code": "POL-DAT-010",
+      "title": "Protección y Privacidad de Datos e Información - Política (ESP - ENG)",
+      "stage": "ETP-2",
+      "category": "Datos y Privacidad",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "Enterprise Information Security",
+      "pages": 4,
+      "minutes": 10,
+      "isDefault": true,
+      "updatedOn": "2026-07-15",
+      "summary": "Principios para proteger datos personales y de clientes: minimización, base legal de tratamiento y manejo de solicitudes de titulares.",
+      "sections": [
+        {
+          "title": "1. Datos personales",
+          "body": "Solo se recopilan los datos personales estrictamente necesarios para la finalidad declarada, y se conservan solo el tiempo necesario."
+        },
+        {
+          "title": "2. Solicitudes de titulares",
+          "body": "Toda solicitud de acceso, corrección o eliminación de datos personales se canaliza al equipo de privacidad dentro de los plazos establecidos."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Qué datos personales pueden recopilarse?",
+          "options": [
+            "Todos los disponibles",
+            "Solo los estrictamente necesarios para la finalidad declarada",
+            "Los que pida cualquier área",
+            "Ninguno"
+          ],
+          "correct": 1,
+          "explanation": "Rige el principio de minimización: solo lo estrictamente necesario."
+        },
+        {
+          "text": "¿A dónde se canaliza una solicitud de acceso o eliminación de datos personales?",
+          "options": [
+            "Al equipo de privacidad, dentro de los plazos establecidos",
+            "Se ignora",
+            "Al cliente",
+            "Se responde informalmente"
+          ],
+          "correct": 0,
+          "explanation": "Toda solicitud de titulares se canaliza al equipo de privacidad."
+        },
+        {
+          "text": "¿Por cuánto tiempo se conservan los datos personales?",
+          "options": [
+            "Para siempre",
+            "Un año fijo",
+            "Hasta que alguien los borre",
+            "Solo el tiempo necesario para su finalidad"
+          ],
+          "correct": 3,
+          "explanation": "Los datos se conservan solo el tiempo necesario."
+        },
+        {
+          "text": "¿Qué principio describe recopilar solo lo estrictamente necesario?",
+          "options": [
+            "Maximización",
+            "Publicidad",
+            "Minimización",
+            "Retención"
+          ],
+          "correct": 2,
+          "explanation": "Es el principio de minimización."
+        },
+        {
+          "text": "Un cliente pide que se eliminen sus datos personales. ¿Qué hace?",
+          "options": [
+            "Los borra usted mismo de inmediato",
+            "Canaliza la solicitud al equipo de privacidad",
+            "Ignora el pedido",
+            "Le responde que no es posible"
+          ],
+          "correct": 1,
+          "explanation": "Las solicitudes de titulares se canalizan al equipo de privacidad."
+        }
+      ]
+    },
+    {
+      "code": "POL-SEG-011",
+      "title": "Uso de internet - Política (ESP - ENG)",
+      "stage": "ETP-2",
+      "category": "Seguridad de la Información",
+      "version": "1.0",
+      "criticality": "Medium",
+      "owner": "Enterprise Information Security",
+      "pages": 2,
+      "minutes": 6,
+      "isDefault": true,
+      "updatedOn": "2026-07-15",
+      "summary": "Uso aceptable de la conexión a internet corporativa, sitios y descargas restringidas, y monitoreo de tráfico.",
+      "sections": [
+        {
+          "title": "1. Uso aceptable",
+          "body": "La conexión corporativa es para fines laborales; el uso personal ocasional es tolerado si no compromete la seguridad ni el rendimiento de la red."
+        },
+        {
+          "title": "2. Contenido restringido",
+          "body": "Está prohibido acceder a contenido ilegal, descargar software no autorizado o eludir los controles de seguridad de la red."
+        }
+      ],
+      "questions": [
+        {
+          "text": "El uso personal ocasional de la conexión a internet corporativa es:",
+          "options": [
+            "Está totalmente prohibido",
+            "Solo para managers",
+            "Tolerado si no compromete la seguridad ni el rendimiento de la red",
+            "Requiere aprobación cada vez"
+          ],
+          "correct": 2,
+          "explanation": "Se tolera un uso personal ocasional razonable."
+        },
+        {
+          "text": "¿Qué está prohibido hacer con la conexión corporativa?",
+          "options": [
+            "Leer el correo",
+            "Eludir los controles de seguridad o descargar software no autorizado",
+            "Usar el navegador",
+            "Consultar documentación"
+          ],
+          "correct": 1,
+          "explanation": "Está prohibido eludir controles o descargar software no autorizado."
+        },
+        {
+          "text": "¿Para qué es principalmente la conexión a internet corporativa?",
+          "options": [
+            "Para fines laborales",
+            "Para entretenimiento",
+            "Para descargas personales",
+            "Para minería de criptomonedas"
+          ],
+          "correct": 0,
+          "explanation": "La conexión corporativa es para fines laborales."
+        },
+        {
+          "text": "¿El tráfico de la red corporativa puede ser monitoreado?",
+          "options": [
+            "No, nunca",
+            "Solo de los managers",
+            "Solo los fines de semana",
+            "Sí, la política contempla el monitoreo de tráfico"
+          ],
+          "correct": 3,
+          "explanation": "El documento incluye el monitoreo de tráfico."
+        },
+        {
+          "text": "¿Puede acceder a contenido ilegal desde la red corporativa si es fuera de horario?",
+          "options": [
+            "Sí, fuera de horario",
+            "Sí, con VPN personal",
+            "No, está prohibido siempre",
+            "Solo desde el celular"
+          ],
+          "correct": 2,
+          "explanation": "El contenido ilegal está prohibido en todo momento."
+        }
+      ]
+    },
+    {
+      "code": "POL-DAT-012",
+      "title": "Uso de dispositivos de almacenamiento - Política (ESP-ENG)",
+      "stage": "ETP-2",
+      "category": "Datos y Privacidad",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "Technology and Transformation",
+      "pages": 1,
+      "minutes": 4,
+      "isDefault": true,
+      "updatedOn": "2026-07-15",
+      "summary": "Condiciones para el uso de USB, discos externos y otros medios de almacenamiento removibles con información corporativa.",
+      "sections": [
+        {
+          "title": "1. Dispositivos permitidos",
+          "body": "Solo pueden usarse dispositivos de almacenamiento cifrados y previamente autorizados por IT para transportar información corporativa."
+        },
+        {
+          "title": "2. Información Restringida",
+          "body": "La información clasificada como Restringida no puede copiarse a dispositivos de almacenamiento personales bajo ninguna circunstancia."
+        }
+      ],
+      "questions": [
+        {
+          "text": "Un colaborador quiere copiar información Restringida a un USB personal. ¿Es correcto?",
+          "options": [
+            "Sí, si el USB tiene contraseña",
+            "Sí, solo por esta vez",
+            "Depende del tamaño",
+            "No, la información Restringida no puede copiarse a dispositivos personales"
+          ],
+          "correct": 3,
+          "explanation": "La información Restringida nunca se copia a dispositivos personales."
+        },
+        {
+          "text": "¿Qué dispositivos de almacenamiento pueden usarse con información corporativa?",
+          "options": [
+            "Cualquiera",
+            "Los que regalen en eventos",
+            "Solo los cifrados y autorizados por IT",
+            "Ninguno, nunca"
+          ],
+          "correct": 2,
+          "explanation": "Solo dispositivos cifrados y previamente autorizados por IT."
+        },
+        {
+          "text": "¿Quién autoriza los dispositivos de almacenamiento que pueden usarse?",
+          "options": [
+            "Cada colaborador",
+            "IT",
+            "El proveedor",
+            "El cliente"
+          ],
+          "correct": 1,
+          "explanation": "Los dispositivos deben estar autorizados por IT."
+        },
+        {
+          "text": "¿Qué característica deben tener los USB usados con información corporativa?",
+          "options": [
+            "Estar cifrados",
+            "Ser de color corporativo",
+            "Tener más de 64 GB",
+            "Ser nuevos"
+          ],
+          "correct": 0,
+          "explanation": "Solo se usan dispositivos cifrados."
+        },
+        {
+          "text": "¿Puede copiar información Interna a un USB cifrado y autorizado por IT?",
+          "options": [
+            "No, nunca",
+            "Solo si es Restringida",
+            "Solo en papel",
+            "Sí, porque cumple las condiciones de la política"
+          ],
+          "correct": 3,
+          "explanation": "Con dispositivo cifrado y autorizado se cumple la política (salvo información Restringida en dispositivos personales)."
+        }
+      ]
+    },
+    {
+      "code": "POL-ING-013",
+      "title": "Desarrollo Seguro - Política",
+      "stage": "ETP-3-ENG",
+      "category": "Ingeniería",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "Enterprise Information Security",
+      "pages": 2,
+      "minutes": 6,
+      "isDefault": true,
+      "updatedOn": "2026-08-01",
+      "summary": "Prácticas mínimas de seguridad que debe seguir el equipo de Ingeniería al diseñar, construir y desplegar software.",
+      "sections": [
+        {
+          "title": "1. Principios de diseño",
+          "body": "El software se diseña bajo el principio de mínimo privilegio y validando toda entrada de datos proveniente del usuario o de sistemas externos."
+        },
+        {
+          "title": "2. Gestión de dependencias",
+          "body": "Las librerías de terceros se revisan por vulnerabilidades conocidas antes de incorporarse, y se mantienen actualizadas conforme al calendario de parches."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Bajo qué principio debe diseñarse el software según Desarrollo Seguro?",
+          "options": [
+            "Mínimo privilegio, validando toda entrada de datos",
+            "Máximo privilegio para simplificar el desarrollo",
+            "Sin restricciones de acceso en ambientes de prueba",
+            "Confiar en la validación del cliente"
+          ],
+          "correct": 0,
+          "explanation": "Desarrollo Seguro exige diseñar bajo el principio de mínimo privilegio, validando toda entrada de datos."
+        },
+        {
+          "text": "¿Qué debe hacerse con las librerías de terceros antes de incorporarlas a un proyecto?",
+          "options": [
+            "Nada, se agregan directamente",
+            "Solo revisarlas si el cliente lo pide",
+            "Revisarlas una vez al año",
+            "Revisarlas por vulnerabilidades conocidas"
+          ],
+          "correct": 3,
+          "explanation": "Las dependencias de terceros se revisan por vulnerabilidades antes de incorporarse."
+        },
+        {
+          "text": "¿Qué entradas deben validarse según Desarrollo Seguro?",
+          "options": [
+            "Solo las del administrador",
+            "Ninguna",
+            "Toda entrada del usuario o de sistemas externos",
+            "Solo las numéricas"
+          ],
+          "correct": 2,
+          "explanation": "Se valida toda entrada de datos."
+        },
+        {
+          "text": "¿Cómo se mantienen las librerías de terceros?",
+          "options": [
+            "Nunca se actualizan",
+            "Actualizadas conforme al calendario de parches",
+            "Solo al final del proyecto",
+            "Las actualiza el cliente"
+          ],
+          "correct": 1,
+          "explanation": "Se mantienen actualizadas según el calendario de parches."
+        },
+        {
+          "text": "¿En qué etapas aplica Desarrollo Seguro?",
+          "options": [
+            "Al diseñar, construir y desplegar software",
+            "Solo en producción",
+            "Solo en pruebas",
+            "Solo en la documentación"
+          ],
+          "correct": 0,
+          "explanation": "Aplica a diseño, construcción y despliegue."
+        }
+      ]
+    },
+    {
+      "code": "POL-ING-014",
+      "title": "Customer Engineering Confidential Information - Policy",
+      "stage": "ETP-3-ENG",
+      "category": "Ingeniería",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "Engineering",
+      "pages": 3,
+      "minutes": 8,
+      "isDefault": true,
+      "updatedOn": "2026-08-01",
+      "summary": "Cómo tratar la información confidencial de clientes a la que accede el equipo de Ingeniería: código, arquitectura, datos de producción y comunicaciones del proyecto.",
+      "sections": [
+        {
+          "title": "1. Alcance de la confidencialidad",
+          "body": "La información confidencial de un cliente no puede mencionarse, mostrarse ni divulgarse fuera del equipo del proyecto sin autorización escrita."
+        },
+        {
+          "title": "2. Publicaciones y redes sociales",
+          "body": "No se publican capturas, nombres de proyecto ni detalles técnicos de un cliente en redes sociales o portafolios personales sin autorización."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Puede publicar una captura del código de un cliente en su portafolio personal?",
+          "options": [
+            "Sí, es su trabajo",
+            "No, sin autorización escrita del cliente",
+            "Sí, si borra el logo del cliente",
+            "Solo si ya finalizó el proyecto"
+          ],
+          "correct": 1,
+          "explanation": "Toda divulgación de detalles del proyecto de un cliente requiere autorización escrita."
+        },
+        {
+          "text": "¿Hasta cuándo se mantiene la confidencialidad de la información de un cliente?",
+          "options": [
+            "De forma indefinida salvo autorización escrita",
+            "Solo mientras dura el proyecto",
+            "Un mes después del cierre",
+            "No aplica si ya no está en el proyecto"
+          ],
+          "correct": 0,
+          "explanation": "La confidencialidad se mantiene más allá del proyecto, salvo autorización escrita."
+        },
+        {
+          "text": "¿Con quién puede compartirse la información confidencial de un cliente?",
+          "options": [
+            "Con cualquier colega",
+            "En redes sociales",
+            "Con otros clientes",
+            "Solo con el equipo del proyecto, salvo autorización escrita"
+          ],
+          "correct": 3,
+          "explanation": "Solo dentro del equipo del proyecto sin autorización escrita."
+        },
+        {
+          "text": "¿Puede mencionar el nombre del proyecto de un cliente en su perfil profesional?",
+          "options": [
+            "Sí, siempre",
+            "Sí, si ya terminó",
+            "No, sin autorización escrita",
+            "Sí, si no pone el logo"
+          ],
+          "correct": 2,
+          "explanation": "Nombres de proyecto requieren autorización escrita."
+        },
+        {
+          "text": "¿Qué información del cliente cubre esta política?",
+          "options": [
+            "Solo el contrato",
+            "Código, arquitectura, datos de producción y comunicaciones del proyecto",
+            "Solo los correos",
+            "Solo las facturas"
+          ],
+          "correct": 1,
+          "explanation": "Cubre código, arquitectura, datos y comunicaciones."
+        }
+      ]
+    },
+    {
+      "code": "PRO-ING-017",
+      "title": "Gestión de Código Fuente y Repositorios - Procedimiento",
+      "stage": "ETP-3-ENG",
+      "category": "Ingeniería",
+      "version": "1.0",
+      "criticality": "Medium",
+      "owner": "Engineering",
+      "pages": 3,
+      "minutes": 7,
+      "isDefault": false,
+      "updatedOn": "2026-08-01",
+      "summary": "Reglas para crear repositorios, proteger ramas principales y revisar código antes de integrarlo.",
+      "sections": [
+        {
+          "title": "1. Ramas protegidas",
+          "body": "La rama principal está protegida: todo cambio entra por pull request con al menos una revisión aprobada."
+        },
+        {
+          "title": "2. Secretos en el código",
+          "body": "Nunca se suben credenciales, llaves ni tokens al repositorio; se usan las bóvedas de secretos corporativas."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Cómo se integra un cambio a la rama principal?",
+          "options": [
+            "Con un push directo",
+            "Enviando el archivo por correo",
+            "Por pull request con al menos una revisión aprobada",
+            "Solo el líder puede subir cambios sin revisión"
+          ],
+          "correct": 2,
+          "explanation": "La rama principal solo recibe cambios por pull request revisado."
+        },
+        {
+          "text": "¿Dónde deben guardarse los tokens y credenciales de un proyecto?",
+          "options": [
+            "En el repositorio, en un archivo de configuración",
+            "En la bóveda de secretos corporativa",
+            "En un documento compartido",
+            "En el README"
+          ],
+          "correct": 1,
+          "explanation": "Los secretos nunca se suben al repositorio; se guardan en la bóveda corporativa."
+        },
+        {
+          "text": "¿Cuántas revisiones aprobadas necesita como mínimo un pull request a la rama principal?",
+          "options": [
+            "Al menos una",
+            "Ninguna",
+            "Diez",
+            "Solo la del autor"
+          ],
+          "correct": 0,
+          "explanation": "Se requiere al menos una revisión aprobada."
+        },
+        {
+          "text": "Subió por error un token al repositorio. ¿Qué es lo correcto?",
+          "options": [
+            "Dejarlo, nadie lo verá",
+            "Cambiar el nombre del archivo",
+            "Hacer el repositorio privado y olvidarlo",
+            "Tratarlo como incidente: revocarlo y moverlo a la bóveda"
+          ],
+          "correct": 3,
+          "explanation": "Los secretos nunca deben estar en el repositorio."
+        },
+        {
+          "text": "¿Qué protege la regla de ramas protegidas?",
+          "options": [
+            "El rendimiento del servidor",
+            "Los correos",
+            "La rama principal frente a cambios sin revisión",
+            "Las licencias"
+          ],
+          "correct": 2,
+          "explanation": "Evita cambios sin revisión en la rama principal."
+        }
+      ]
+    },
+    {
+      "code": "PRO-ING-018",
+      "title": "Ambientes y Despliegues a Producción - Procedimiento",
+      "stage": "ETP-3-ENG",
+      "category": "Ingeniería",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "Engineering",
+      "pages": 4,
+      "minutes": 9,
+      "isDefault": false,
+      "updatedOn": "2026-08-01",
+      "summary": "Cómo se promueven los cambios entre ambientes y qué aprobaciones se necesitan para desplegar en producción.",
+      "sections": [
+        {
+          "title": "1. Promoción entre ambientes",
+          "body": "Todo cambio pasa por desarrollo, pruebas y preproducción antes de llegar a producción."
+        },
+        {
+          "title": "2. Ventanas de despliegue",
+          "body": "Los despliegues a producción se hacen en ventanas acordadas con el cliente y con un plan de reversión documentado."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Qué debe existir antes de un despliegue a producción?",
+          "options": [
+            "Nada, si el cambio es pequeño",
+            "Solo la aprobación verbal del equipo",
+            "Un correo al cliente después del despliegue",
+            "Un plan de reversión documentado y la ventana acordada"
+          ],
+          "correct": 3,
+          "explanation": "Todo despliegue requiere ventana acordada y plan de reversión."
+        },
+        {
+          "text": "¿Por qué ambientes pasa un cambio antes de producción?",
+          "options": [
+            "Directo a producción",
+            "Solo pruebas",
+            "Desarrollo, pruebas y preproducción",
+            "Solo preproducción"
+          ],
+          "correct": 2,
+          "explanation": "La promoción estándar es desarrollo → pruebas → preproducción → producción."
+        },
+        {
+          "text": "¿Con quién se acuerdan las ventanas de despliegue a producción?",
+          "options": [
+            "Con nadie",
+            "Con el cliente",
+            "Solo con el equipo de QA",
+            "Con el proveedor de nube"
+          ],
+          "correct": 1,
+          "explanation": "Las ventanas se acuerdan con el cliente."
+        },
+        {
+          "text": "¿Qué es un plan de reversión?",
+          "options": [
+            "Los pasos para volver al estado anterior si el despliegue falla",
+            "Un plan de vacaciones",
+            "Una lista de tareas pendientes",
+            "Un contrato"
+          ],
+          "correct": 0,
+          "explanation": "Permite revertir si el despliegue falla."
+        },
+        {
+          "text": "¿Puede desplegar un cambio urgente directamente a producción saltando ambientes?",
+          "options": [
+            "Sí, si es urgente",
+            "Sí, de noche",
+            "Sí, si lo hace el líder",
+            "No, todo cambio pasa por los ambientes previos"
+          ],
+          "correct": 3,
+          "explanation": "La promoción entre ambientes es obligatoria."
+        }
+      ]
+    },
+    {
+      "code": "PRO-QA-019",
+      "title": "Control de Calidad de Entregables - Procedimiento",
+      "stage": "ETP-3-QA",
+      "category": "Calidad",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "Quality Control Processes",
+      "pages": 4,
+      "minutes": 9,
+      "isDefault": true,
+      "updatedOn": "2026-08-01",
+      "summary": "Criterios y pasos para verificar un entregable antes de enviarlo al cliente.",
+      "sections": [
+        {
+          "title": "1. Criterios de aceptación",
+          "body": "Todo entregable se verifica contra los criterios de aceptación acordados antes de enviarse al cliente."
+        },
+        {
+          "title": "2. Registro de la verificación",
+          "body": "La verificación se registra con el resultado, la fecha y quién la realizó, como evidencia de calidad."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Contra qué se verifica un entregable antes de enviarlo?",
+          "options": [
+            "Contra los criterios de aceptación acordados",
+            "Contra la opinión del desarrollador",
+            "Contra el entregable anterior",
+            "No requiere verificación"
+          ],
+          "correct": 0,
+          "explanation": "Los entregables se verifican contra los criterios de aceptación acordados."
+        },
+        {
+          "text": "¿Qué debe quedar registrado de la verificación?",
+          "options": [
+            "Nada",
+            "Solo el resultado si es negativo",
+            "Solo la fecha",
+            "Resultado, fecha y responsable"
+          ],
+          "correct": 3,
+          "explanation": "La verificación se registra con resultado, fecha y responsable como evidencia."
+        },
+        {
+          "text": "¿Cuándo se verifica un entregable?",
+          "options": [
+            "Después de enviarlo",
+            "Solo si el cliente reclama",
+            "Antes de enviarlo al cliente",
+            "Al final del año"
+          ],
+          "correct": 2,
+          "explanation": "La verificación se hace antes del envío."
+        },
+        {
+          "text": "¿Para qué sirve el registro de la verificación?",
+          "options": [
+            "Para nada",
+            "Como evidencia de calidad",
+            "Para calcular sueldos",
+            "Para publicidad"
+          ],
+          "correct": 1,
+          "explanation": "El registro sirve como evidencia de calidad."
+        },
+        {
+          "text": "Un entregable no cumple un criterio de aceptación. ¿Puede enviarse?",
+          "options": [
+            "No, debe corregirse y verificarse antes",
+            "Sí, igual",
+            "Sí, con una disculpa",
+            "Sí, si el plazo vence"
+          ],
+          "correct": 0,
+          "explanation": "Debe cumplir los criterios acordados antes de enviarse."
+        }
+      ]
+    },
+    {
+      "code": "PRO-QA-020",
+      "title": "Gestión de Defectos - Procedimiento",
+      "stage": "ETP-3-QA",
+      "category": "Calidad",
+      "version": "1.0",
+      "criticality": "Medium",
+      "owner": "Quality Control Processes",
+      "pages": 3,
+      "minutes": 7,
+      "isDefault": true,
+      "updatedOn": "2026-08-01",
+      "summary": "Cómo reportar, clasificar y dar seguimiento a los defectos encontrados durante las pruebas.",
+      "sections": [
+        {
+          "title": "1. Reporte de defectos",
+          "body": "Cada defecto se registra con pasos para reproducirlo, resultado esperado, resultado obtenido y evidencia."
+        },
+        {
+          "title": "2. Severidad",
+          "body": "La severidad se asigna según el impacto en el usuario; los defectos críticos se escalan el mismo día."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Qué debe incluir el reporte de un defecto?",
+          "options": [
+            "Solo un título",
+            "Pasos para reproducirlo, resultado esperado, obtenido y evidencia",
+            "El nombre del desarrollador culpable",
+            "Una captura sin descripción"
+          ],
+          "correct": 1,
+          "explanation": "Un buen reporte permite reproducir el defecto y comparar lo esperado con lo obtenido."
+        },
+        {
+          "text": "¿Cuándo se escala un defecto crítico?",
+          "options": [
+            "El mismo día",
+            "Al final del sprint",
+            "En la retrospectiva",
+            "Nunca"
+          ],
+          "correct": 0,
+          "explanation": "Los defectos críticos se escalan el mismo día en que se detectan."
+        },
+        {
+          "text": "¿Según qué se asigna la severidad de un defecto?",
+          "options": [
+            "Según quién lo encontró",
+            "Según el día",
+            "Al azar",
+            "Según el impacto en el usuario"
+          ],
+          "correct": 3,
+          "explanation": "La severidad depende del impacto en el usuario."
+        },
+        {
+          "text": "¿Qué permite el paso a paso en el reporte de un defecto?",
+          "options": [
+            "Nada",
+            "Ocultarlo",
+            "Reproducirlo",
+            "Cerrarlo sin revisar"
+          ],
+          "correct": 2,
+          "explanation": "Los pasos permiten reproducir el defecto."
+        },
+        {
+          "text": "¿Qué evidencia conviene adjuntar a un defecto?",
+          "options": [
+            "Ninguna",
+            "Capturas o registros que lo muestren",
+            "Una canción",
+            "El currículum del tester"
+          ],
+          "correct": 1,
+          "explanation": "La evidencia ayuda a entender y reproducir el defecto."
+        }
+      ]
+    },
+    {
+      "code": "GUI-QA-021",
+      "title": "Plan de Pruebas - Guía",
+      "stage": "ETP-3-QA",
+      "category": "Calidad",
+      "version": "1.0",
+      "criticality": "Medium",
+      "owner": "Quality Control Processes",
+      "pages": 3,
+      "minutes": 6,
+      "isDefault": false,
+      "updatedOn": "2026-08-01",
+      "summary": "Estructura mínima de un plan de pruebas y cuándo debe actualizarse.",
+      "sections": [
+        {
+          "title": "1. Contenido mínimo",
+          "body": "El plan de pruebas define alcance, tipos de prueba, ambientes, datos y criterios de salida."
+        },
+        {
+          "title": "2. Actualización",
+          "body": "El plan se actualiza cada vez que cambia el alcance funcional del proyecto."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Qué define un plan de pruebas?",
+          "options": [
+            "Solo las fechas",
+            "El presupuesto del proyecto",
+            "Alcance, tipos de prueba, ambientes, datos y criterios de salida",
+            "Los nombres del equipo"
+          ],
+          "correct": 2,
+          "explanation": "El plan define alcance, tipos de prueba, ambientes, datos y criterios de salida."
+        },
+        {
+          "text": "¿Cuándo se actualiza el plan de pruebas?",
+          "options": [
+            "Nunca",
+            "Cuando cambia el alcance funcional",
+            "Una vez al año",
+            "Solo al final del proyecto"
+          ],
+          "correct": 1,
+          "explanation": "El plan se mantiene vigente ante cambios de alcance."
+        },
+        {
+          "text": "¿Qué son los criterios de salida de un plan de pruebas?",
+          "options": [
+            "Las condiciones para dar por terminadas las pruebas",
+            "Las salidas de emergencia",
+            "El horario",
+            "Los costos"
+          ],
+          "correct": 0,
+          "explanation": "Definen cuándo se terminan las pruebas."
+        },
+        {
+          "text": "¿El plan de pruebas define los ambientes y datos a usar?",
+          "options": [
+            "No",
+            "Solo los datos",
+            "Solo los ambientes",
+            "Sí"
+          ],
+          "correct": 3,
+          "explanation": "Incluye ambientes y datos."
+        },
+        {
+          "text": "Cambia el alcance funcional del proyecto. ¿Qué pasa con el plan de pruebas?",
+          "options": [
+            "Se mantiene igual",
+            "Se elimina",
+            "Se actualiza",
+            "Se envía al cliente sin cambios"
+          ],
+          "correct": 2,
+          "explanation": "El plan se actualiza ante cambios de alcance."
+        }
+      ]
+    },
+    {
+      "code": "GUI-QA-022",
+      "title": "Automatización de Pruebas - Lineamientos",
+      "stage": "ETP-3-QA",
+      "category": "Calidad",
+      "version": "1.0",
+      "criticality": "Low",
+      "owner": "Quality Control Processes",
+      "pages": 4,
+      "minutes": 8,
+      "isDefault": false,
+      "updatedOn": "2026-08-01",
+      "summary": "Qué conviene automatizar, cómo se organizan los scripts y cómo se integran al pipeline.",
+      "sections": [
+        {
+          "title": "1. Qué automatizar",
+          "body": "Se priorizan pruebas repetitivas, de regresión y de alto riesgo; las exploratorias se mantienen manuales."
+        },
+        {
+          "title": "2. Integración continua",
+          "body": "Las pruebas automatizadas se ejecutan en el pipeline en cada integración a la rama principal."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Qué pruebas se priorizan para automatizar?",
+          "options": [
+            "Las exploratorias",
+            "Ninguna",
+            "Solo las de interfaz",
+            "Las repetitivas, de regresión y de alto riesgo"
+          ],
+          "correct": 3,
+          "explanation": "Se automatiza lo repetitivo, la regresión y lo de alto riesgo."
+        },
+        {
+          "text": "¿Cuándo se ejecutan las pruebas automatizadas?",
+          "options": [
+            "Manualmente cada mes",
+            "Solo antes de una auditoría",
+            "En el pipeline en cada integración",
+            "Cuando el cliente lo pide"
+          ],
+          "correct": 2,
+          "explanation": "Se integran al pipeline y corren en cada integración."
+        },
+        {
+          "text": "¿Qué tipo de pruebas se recomienda mantener manuales?",
+          "options": [
+            "Las de regresión",
+            "Las exploratorias",
+            "Las de alto riesgo",
+            "Las repetitivas"
+          ],
+          "correct": 1,
+          "explanation": "Las exploratorias se mantienen manuales."
+        },
+        {
+          "text": "¿Dónde se integran las pruebas automatizadas?",
+          "options": [
+            "En el pipeline de integración",
+            "En un correo",
+            "En un documento Word",
+            "En ningún lado"
+          ],
+          "correct": 0,
+          "explanation": "Se integran al pipeline."
+        },
+        {
+          "text": "¿Qué aporta automatizar la regresión?",
+          "options": [
+            "Nada",
+            "Eliminar el control de calidad",
+            "Reemplazar los requisitos",
+            "Detectar rápido si un cambio rompió algo existente"
+          ],
+          "correct": 3,
+          "explanation": "La regresión automatizada detecta roturas rápidamente."
+        }
+      ]
+    },
+    {
+      "code": "POL-QA-023",
+      "title": "Datos de Prueba y Anonimización - Política",
+      "stage": "ETP-3-QA",
+      "category": "Datos y Privacidad",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "Enterprise Information Security",
+      "pages": 2,
+      "minutes": 5,
+      "isDefault": false,
+      "updatedOn": "2026-08-01",
+      "summary": "Uso de datos en ambientes de prueba y obligación de anonimizar datos reales.",
+      "sections": [
+        {
+          "title": "1. Datos reales",
+          "body": "No se usan datos personales reales en pruebas; si es inevitable, se anonimizan antes de copiarlos."
+        },
+        {
+          "title": "2. Eliminación",
+          "body": "Los datos de prueba se eliminan al cerrar el ciclo de pruebas."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Se pueden usar datos personales reales en pruebas?",
+          "options": [
+            "No; si es inevitable, se anonimizan antes",
+            "Sí, siempre",
+            "Sí, si el ambiente es interno",
+            "Solo los fines de semana"
+          ],
+          "correct": 0,
+          "explanation": "Los datos personales reales se anonimizan antes de usarse en pruebas."
+        },
+        {
+          "text": "¿Qué se hace con los datos de prueba al cerrar el ciclo?",
+          "options": [
+            "Se conservan indefinidamente",
+            "Se envían al cliente",
+            "Se publican",
+            "Se eliminan"
+          ],
+          "correct": 3,
+          "explanation": "Los datos de prueba se eliminan al cerrar el ciclo."
+        },
+        {
+          "text": "¿Qué significa anonimizar datos de prueba?",
+          "options": [
+            "Copiarlos tal cual",
+            "Cifrar el disco",
+            "Quitar o reemplazar lo que identifica a una persona",
+            "Borrar la base completa"
+          ],
+          "correct": 2,
+          "explanation": "Anonimizar elimina la posibilidad de identificar a la persona."
+        },
+        {
+          "text": "¿Qué clasificación de criticidad tiene esta política?",
+          "options": [
+            "Baja",
+            "Alta",
+            "Ninguna",
+            "Media"
+          ],
+          "correct": 1,
+          "explanation": "Es una política de criticidad alta."
+        },
+        {
+          "text": "Terminó el ciclo de pruebas. ¿Puede guardar la base de datos de prueba \"por si acaso\"?",
+          "options": [
+            "No, los datos de prueba se eliminan al cerrar el ciclo",
+            "Sí",
+            "Sí, en su equipo personal",
+            "Sí, en un USB"
+          ],
+          "correct": 0,
+          "explanation": "Se eliminan al cerrar el ciclo."
+        }
+      ]
+    },
+    {
+      "code": "MAN-PMO-024",
+      "title": "Metodología de Gestión de Proyectos - Manual",
+      "stage": "ETP-3-PMO",
+      "category": "Gestión de Proyectos",
+      "version": "1.0",
+      "criticality": "Medium",
+      "owner": "Project Management Office",
+      "pages": 6,
+      "minutes": 12,
+      "isDefault": true,
+      "updatedOn": "2026-08-01",
+      "summary": "Fases, ceremonias y artefactos obligatorios de todo proyecto.",
+      "sections": [
+        {
+          "title": "1. Fases",
+          "body": "Todo proyecto pasa por inicio, planificación, ejecución, control y cierre."
+        },
+        {
+          "title": "2. Artefactos",
+          "body": "El acta de inicio, el cronograma y el registro de riesgos son obligatorios desde la planificación."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Qué artefactos son obligatorios desde la planificación?",
+          "options": [
+            "Ninguno",
+            "Acta de inicio, cronograma y registro de riesgos",
+            "Solo el presupuesto",
+            "Solo el organigrama"
+          ],
+          "correct": 1,
+          "explanation": "Acta de inicio, cronograma y registro de riesgos son obligatorios."
+        },
+        {
+          "text": "¿Cuál es la última fase de un proyecto?",
+          "options": [
+            "Cierre",
+            "Ejecución",
+            "Control",
+            "Planificación"
+          ],
+          "correct": 0,
+          "explanation": "La metodología termina con la fase de cierre."
+        },
+        {
+          "text": "¿Cuántas fases tiene la metodología de proyectos?",
+          "options": [
+            "Dos",
+            "Diez",
+            "Una",
+            "Cinco: inicio, planificación, ejecución, control y cierre"
+          ],
+          "correct": 3,
+          "explanation": "Son cinco fases."
+        },
+        {
+          "text": "¿En qué fase se elabora el cronograma?",
+          "options": [
+            "Cierre",
+            "Ninguna",
+            "Planificación",
+            "Después del cierre"
+          ],
+          "correct": 2,
+          "explanation": "El cronograma es obligatorio desde la planificación."
+        },
+        {
+          "text": "¿Qué documento formaliza el arranque de un proyecto?",
+          "options": [
+            "La factura",
+            "El acta de inicio",
+            "La minuta de cierre",
+            "El organigrama"
+          ],
+          "correct": 1,
+          "explanation": "El acta de inicio formaliza el arranque."
+        }
+      ]
+    },
+    {
+      "code": "PRO-PMO-025",
+      "title": "Gestión de Riesgos de Proyecto - Procedimiento",
+      "stage": "ETP-3-PMO",
+      "category": "Gestión de Proyectos",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "Project Management Office",
+      "pages": 3,
+      "minutes": 7,
+      "isDefault": true,
+      "updatedOn": "2026-08-01",
+      "summary": "Cómo identificar, valorar y dar seguimiento a los riesgos de un proyecto.",
+      "sections": [
+        {
+          "title": "1. Identificación",
+          "body": "Los riesgos se identifican desde el inicio y se registran con probabilidad, impacto y responsable."
+        },
+        {
+          "title": "2. Seguimiento",
+          "body": "El registro de riesgos se revisa en cada reunión de seguimiento con el cliente."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Con qué datos se registra un riesgo?",
+          "options": [
+            "Solo el nombre",
+            "Solo la fecha",
+            "Probabilidad, impacto y responsable",
+            "El costo total del proyecto"
+          ],
+          "correct": 2,
+          "explanation": "Cada riesgo se registra con probabilidad, impacto y responsable."
+        },
+        {
+          "text": "¿Cada cuánto se revisa el registro de riesgos?",
+          "options": [
+            "Nunca",
+            "En cada reunión de seguimiento",
+            "Al cerrar el proyecto",
+            "Una vez al año"
+          ],
+          "correct": 1,
+          "explanation": "Se revisa en cada reunión de seguimiento."
+        },
+        {
+          "text": "¿Desde cuándo se identifican los riesgos de un proyecto?",
+          "options": [
+            "Desde el inicio",
+            "Al final",
+            "Cuando ocurren",
+            "Nunca"
+          ],
+          "correct": 0,
+          "explanation": "Se identifican desde el inicio."
+        },
+        {
+          "text": "¿Qué significa asignar un responsable a un riesgo?",
+          "options": [
+            "Culpar a alguien",
+            "Nada",
+            "Informar al cliente",
+            "Que alguien hace su seguimiento y su plan de respuesta"
+          ],
+          "correct": 3,
+          "explanation": "El responsable da seguimiento al riesgo."
+        },
+        {
+          "text": "¿Dónde se revisa el registro de riesgos?",
+          "options": [
+            "En la fiesta de fin de año",
+            "En privado",
+            "En las reuniones de seguimiento con el cliente",
+            "No se revisa"
+          ],
+          "correct": 2,
+          "explanation": "Se revisa en cada reunión de seguimiento."
+        }
+      ]
+    },
+    {
+      "code": "GUI-PMO-026",
+      "title": "Comunicación con Clientes - Guía",
+      "stage": "ETP-3-PMO",
+      "category": "Gestión de Proyectos",
+      "version": "1.0",
+      "criticality": "Medium",
+      "owner": "Project Management Office",
+      "pages": 2,
+      "minutes": 5,
+      "isDefault": false,
+      "updatedOn": "2026-08-01",
+      "summary": "Canales, frecuencia y registro de la comunicación formal con el cliente.",
+      "sections": [
+        {
+          "title": "1. Canales formales",
+          "body": "Los acuerdos con el cliente se confirman por escrito en los canales corporativos."
+        },
+        {
+          "title": "2. Minutas",
+          "body": "Cada reunión con el cliente genera una minuta con acuerdos, responsables y fechas."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Cómo se confirma un acuerdo con el cliente?",
+          "options": [
+            "De palabra",
+            "Por mensaje personal",
+            "No es necesario confirmarlo",
+            "Por escrito en canales corporativos"
+          ],
+          "correct": 3,
+          "explanation": "Los acuerdos se confirman por escrito en canales corporativos."
+        },
+        {
+          "text": "¿Qué genera cada reunión con el cliente?",
+          "options": [
+            "Nada",
+            "Una factura",
+            "Una minuta con acuerdos, responsables y fechas",
+            "Un nuevo contrato"
+          ],
+          "correct": 2,
+          "explanation": "Toda reunión deja minuta con acuerdos, responsables y fechas."
+        },
+        {
+          "text": "¿Por qué canal se confirman los acuerdos con el cliente?",
+          "options": [
+            "WhatsApp personal",
+            "Canales corporativos, por escrito",
+            "De palabra",
+            "Redes sociales"
+          ],
+          "correct": 1,
+          "explanation": "Por escrito en canales corporativos."
+        },
+        {
+          "text": "¿Qué debe registrar una minuta?",
+          "options": [
+            "Acuerdos, responsables y fechas",
+            "Solo la fecha",
+            "El menú del almuerzo",
+            "Solo los asistentes"
+          ],
+          "correct": 0,
+          "explanation": "Acuerdos, responsables y fechas."
+        },
+        {
+          "text": "Acordó un cambio con el cliente en una llamada. ¿Qué hace después?",
+          "options": [
+            "Nada",
+            "Espera que el cliente lo recuerde",
+            "Lo comenta en un pasillo",
+            "Lo confirma por escrito"
+          ],
+          "correct": 3,
+          "explanation": "Todo acuerdo se confirma por escrito."
+        }
+      ]
+    },
+    {
+      "code": "REG-HR-027",
+      "title": "Reglamento Interno de Trabajo",
+      "stage": "ETP-3-HR",
+      "category": "Personas",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "People & Culture",
+      "pages": 8,
+      "minutes": 15,
+      "isDefault": true,
+      "updatedOn": "2026-08-01",
+      "summary": "Derechos, obligaciones, jornada y régimen disciplinario de los colaboradores.",
+      "sections": [
+        {
+          "title": "1. Jornada laboral",
+          "body": "La jornada, los descansos y el registro de asistencia se rigen por lo establecido en este reglamento."
+        },
+        {
+          "title": "2. Régimen disciplinario",
+          "body": "Las faltas se clasifican en leves, graves y muy graves, con un procedimiento de descargo para cada caso."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Cómo se clasifican las faltas en el reglamento?",
+          "options": [
+            "Leves, graves y muy graves",
+            "No se clasifican",
+            "Solo graves",
+            "Por área"
+          ],
+          "correct": 0,
+          "explanation": "Las faltas se clasifican en leves, graves y muy graves."
+        },
+        {
+          "text": "¿Qué garantiza el procedimiento disciplinario?",
+          "options": [
+            "Nada",
+            "Un despido inmediato",
+            "Una multa automática",
+            "Un descargo para el colaborador"
+          ],
+          "correct": 3,
+          "explanation": "Cada caso incluye un procedimiento de descargo."
+        },
+        {
+          "text": "¿Qué regula el Reglamento Interno de Trabajo?",
+          "options": [
+            "Solo los viajes",
+            "Los precios",
+            "Derechos, obligaciones, jornada y régimen disciplinario",
+            "Las campañas de marketing"
+          ],
+          "correct": 2,
+          "explanation": "Regula derechos, obligaciones, jornada y disciplina."
+        },
+        {
+          "text": "¿Qué se rige por este reglamento además de la jornada?",
+          "options": [
+            "El clima",
+            "Los descansos y el registro de asistencia",
+            "El tráfico",
+            "El código de los sistemas"
+          ],
+          "correct": 1,
+          "explanation": "Incluye descansos y registro de asistencia."
+        },
+        {
+          "text": "¿Antes de aplicar una sanción, qué derecho tiene el colaborador?",
+          "options": [
+            "Presentar su descargo",
+            "Ninguno",
+            "Elegir la sanción",
+            "Cambiar de área"
+          ],
+          "correct": 0,
+          "explanation": "El procedimiento incluye un descargo."
+        }
+      ]
+    },
+    {
+      "code": "POL-HR-028",
+      "title": "Confidencialidad de Datos del Personal - Política",
+      "stage": "ETP-3-HR",
+      "category": "Datos y Privacidad",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "People & Culture",
+      "pages": 2,
+      "minutes": 5,
+      "isDefault": true,
+      "updatedOn": "2026-08-01",
+      "summary": "Cómo se protege la información personal, salarial y médica de los colaboradores.",
+      "sections": [
+        {
+          "title": "1. Acceso restringido",
+          "body": "Solo el personal autorizado de People & Culture accede a legajos, salarios e información médica."
+        },
+        {
+          "title": "2. Compartir información",
+          "body": "La información del personal no se comparte con terceros ni con otras áreas sin base legal o consentimiento."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Quién accede a salarios e información médica?",
+          "options": [
+            "Cualquier manager",
+            "Solo personal autorizado de People & Culture",
+            "Todo el equipo",
+            "El cliente"
+          ],
+          "correct": 1,
+          "explanation": "El acceso está restringido al personal autorizado de People & Culture."
+        },
+        {
+          "text": "¿Se puede compartir el legajo de un colaborador con otra área?",
+          "options": [
+            "No, sin base legal o consentimiento",
+            "Sí, siempre",
+            "Sí, si lo pide un manager",
+            "Solo por correo"
+          ],
+          "correct": 0,
+          "explanation": "Se requiere base legal o consentimiento."
+        },
+        {
+          "text": "¿Qué tipo de información protege esta política?",
+          "options": [
+            "Solo el nombre",
+            "Solo la de clientes",
+            "La pública",
+            "Personal, salarial y médica de los colaboradores"
+          ],
+          "correct": 3,
+          "explanation": "Protege información personal, salarial y médica."
+        },
+        {
+          "text": "Un manager le pide el salario de un colaborador de otra área. ¿Qué hace?",
+          "options": [
+            "Se lo da",
+            "Se lo envía por chat",
+            "No lo comparte sin base legal o consentimiento",
+            "Lo publica"
+          ],
+          "correct": 2,
+          "explanation": "Se requiere base legal o consentimiento."
+        },
+        {
+          "text": "¿Quiénes acceden a los legajos del personal?",
+          "options": [
+            "Todos",
+            "Solo personal autorizado de People & Culture",
+            "Los clientes",
+            "Los proveedores"
+          ],
+          "correct": 1,
+          "explanation": "Solo personal autorizado."
+        }
+      ]
+    },
+    {
+      "code": "PRO-HR-029",
+      "title": "Reclutamiento y Selección - Procedimiento",
+      "stage": "ETP-3-HR",
+      "category": "Personas",
+      "version": "1.0",
+      "criticality": "Medium",
+      "owner": "People & Culture",
+      "pages": 4,
+      "minutes": 8,
+      "isDefault": false,
+      "updatedOn": "2026-08-01",
+      "summary": "Etapas del proceso de selección y criterios para evitar sesgos.",
+      "sections": [
+        {
+          "title": "1. Etapas",
+          "body": "El proceso incluye requisición aprobada, publicación, entrevistas estructuradas y oferta formal."
+        },
+        {
+          "title": "2. Criterios objetivos",
+          "body": "Las decisiones se basan en criterios definidos para el puesto, evitando sesgos por género, edad u origen."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Con qué se inicia un proceso de selección?",
+          "options": [
+            "Con la oferta",
+            "Con la entrevista final",
+            "Con una requisición aprobada",
+            "Con el contrato"
+          ],
+          "correct": 2,
+          "explanation": "Todo proceso parte de una requisición aprobada."
+        },
+        {
+          "text": "¿En qué se basan las decisiones de selección?",
+          "options": [
+            "En la afinidad personal",
+            "En criterios definidos para el puesto",
+            "En la edad",
+            "En recomendaciones informales"
+          ],
+          "correct": 1,
+          "explanation": "Se usan criterios objetivos definidos para el puesto."
+        },
+        {
+          "text": "¿Qué tipo de entrevistas indica el procedimiento?",
+          "options": [
+            "Estructuradas",
+            "Improvisadas",
+            "Solo por chat",
+            "Ninguna"
+          ],
+          "correct": 0,
+          "explanation": "Las entrevistas son estructuradas."
+        },
+        {
+          "text": "¿Con qué termina el proceso de selección?",
+          "options": [
+            "Con una llamada informal",
+            "Con un correo sin firma",
+            "Con el primer día",
+            "Con una oferta formal"
+          ],
+          "correct": 3,
+          "explanation": "Termina con una oferta formal."
+        },
+        {
+          "text": "¿Puede descartarse a un candidato por su edad?",
+          "options": [
+            "Sí",
+            "Solo si es muy joven",
+            "No, las decisiones evitan sesgos por edad, género u origen",
+            "Depende del puesto"
+          ],
+          "correct": 2,
+          "explanation": "El procedimiento prohíbe esos sesgos."
+        }
+      ]
+    },
+    {
+      "code": "PRO-HR-030",
+      "title": "Onboarding y Offboarding - Procedimiento",
+      "stage": "ETP-3-HR",
+      "category": "Personas",
+      "version": "1.0",
+      "criticality": "Medium",
+      "owner": "People & Culture",
+      "pages": 3,
+      "minutes": 6,
+      "isDefault": false,
+      "updatedOn": "2026-08-01",
+      "summary": "Pasos para la incorporación y la salida de colaboradores, incluidos accesos y activos.",
+      "sections": [
+        {
+          "title": "1. Incorporación",
+          "body": "El ingreso incluye alta de accesos, entrega de activos y asignación de la ruta de inducción."
+        },
+        {
+          "title": "2. Salida",
+          "body": "En la salida se revocan los accesos el último día y se recuperan todos los activos asignados."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Cuándo se revocan los accesos de quien deja la empresa?",
+          "options": [
+            "Un mes después",
+            "Nunca",
+            "Cuando lo pida el cliente",
+            "El último día"
+          ],
+          "correct": 3,
+          "explanation": "Los accesos se revocan el último día."
+        },
+        {
+          "text": "¿Qué incluye la incorporación?",
+          "options": [
+            "Solo el contrato",
+            "Solo la tarjeta de ingreso",
+            "Accesos, activos y ruta de inducción",
+            "Nada"
+          ],
+          "correct": 2,
+          "explanation": "El ingreso incluye accesos, activos y la ruta de inducción."
+        },
+        {
+          "text": "¿Qué se recupera cuando un colaborador deja la empresa?",
+          "options": [
+            "Nada",
+            "Todos los activos asignados",
+            "Solo la credencial",
+            "Solo el uniforme"
+          ],
+          "correct": 1,
+          "explanation": "Se recuperan todos los activos asignados."
+        },
+        {
+          "text": "¿Qué se asigna al nuevo colaborador durante el onboarding?",
+          "options": [
+            "La ruta de inducción, accesos y activos",
+            "Un escritorio solamente",
+            "Un bono",
+            "Nada"
+          ],
+          "correct": 0,
+          "explanation": "Incluye ruta de inducción, accesos y activos."
+        },
+        {
+          "text": "¿Por qué los accesos se revocan el último día?",
+          "options": [
+            "Por costumbre",
+            "Para ahorrar licencias únicamente",
+            "No es necesario",
+            "Para evitar accesos indebidos tras la salida"
+          ],
+          "correct": 3,
+          "explanation": "Evita accesos indebidos después de la salida."
+        }
+      ]
+    },
+    {
+      "code": "MAN-ADM-015",
+      "title": "Gestión de Activos Fijos - Manual",
+      "stage": "ETP-3-FIN",
+      "category": "Compras y Activos Fijos",
+      "version": "1.0",
+      "criticality": "Medium",
+      "owner": "Procurement and Asset Control",
+      "pages": 15,
+      "minutes": 32,
+      "isDefault": true,
+      "updatedOn": "2026-08-01",
+      "summary": "Procedimiento para el alta, transferencia, mantenimiento y baja de activos fijos, incluyendo responsabilidades del custodio del activo.",
+      "sections": [
+        {
+          "title": "1. Alta y custodia",
+          "body": "Todo activo fijo se registra a nombre de un custodio responsable, quien debe reportar cualquier daño, pérdida o cambio de ubicación."
+        },
+        {
+          "title": "2. Baja de activos",
+          "body": "La baja de un activo requiere el formulario correspondiente y la aprobación del área de Procurement and Asset Control."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Quién es responsable de reportar daños o pérdida de un activo fijo asignado?",
+          "options": [
+            "El custodio del activo",
+            "Procurement, sin intervención del colaborador",
+            "Nadie, se detecta en el inventario",
+            "Solo el manager"
+          ],
+          "correct": 0,
+          "explanation": "El custodio debe reportar daños, pérdidas o cambios de ubicación."
+        },
+        {
+          "text": "¿Qué se necesita para dar de baja un activo fijo?",
+          "options": [
+            "Dejar de usarlo",
+            "Una llamada a TI",
+            "Ningún trámite",
+            "El formulario y la aprobación de Procurement and Asset Control"
+          ],
+          "correct": 3,
+          "explanation": "La baja requiere formulario y aprobación formal."
+        },
+        {
+          "text": "Cambió de oficina con su laptop asignada. ¿Qué debe hacer?",
+          "options": [
+            "Nada",
+            "Venderla",
+            "Reportar el cambio de ubicación del activo",
+            "Prestarla"
+          ],
+          "correct": 2,
+          "explanation": "El custodio reporta cambios de ubicación."
+        },
+        {
+          "text": "¿Qué etapas del activo fijo cubre el manual?",
+          "options": [
+            "Solo la compra",
+            "Alta, transferencia, mantenimiento y baja",
+            "Solo la baja",
+            "Solo el inventario"
+          ],
+          "correct": 1,
+          "explanation": "Cubre todo el ciclo del activo."
+        },
+        {
+          "text": "¿Qué área aprueba la baja de un activo?",
+          "options": [
+            "Procurement and Asset Control",
+            "Marketing",
+            "El colaborador",
+            "El cliente"
+          ],
+          "correct": 0,
+          "explanation": "La aprueba Procurement and Asset Control."
+        }
+      ]
+    },
+    {
+      "code": "MAN-ADM-016",
+      "title": "Compra de bienes y servicios - Manual (ESP-ENG)",
+      "stage": "ETP-3-FIN",
+      "category": "Compras y Activos Fijos",
+      "version": "1.0",
+      "criticality": "Medium",
+      "owner": "Procurement and Asset Control",
+      "pages": 22,
+      "minutes": 45,
+      "isDefault": true,
+      "updatedOn": "2026-08-01",
+      "summary": "Procedimiento y niveles de aprobación requeridos para solicitar la compra de bienes o la contratación de servicios.",
+      "sections": [
+        {
+          "title": "1. Solicitud de compra",
+          "body": "Toda compra se inicia con una solicitud formal que indica el bien o servicio, el monto estimado y la justificación de negocio."
+        },
+        {
+          "title": "2. Niveles de aprobación",
+          "body": "El monto de la compra determina cuántos niveles de aprobación se requieren antes de emitir la orden de compra."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Con qué debe iniciarse toda solicitud de compra?",
+          "options": [
+            "Con la orden de compra",
+            "Con una solicitud formal con bien, monto y justificación",
+            "Con la entrega del proveedor",
+            "No se requiere si el monto es bajo"
+          ],
+          "correct": 1,
+          "explanation": "Toda compra inicia con una solicitud formal justificada."
+        },
+        {
+          "text": "¿Qué determina cuántos niveles de aprobación necesita una compra?",
+          "options": [
+            "El monto de la compra",
+            "El proveedor",
+            "El día de la semana",
+            "El área solicitante"
+          ],
+          "correct": 0,
+          "explanation": "Los niveles de aprobación dependen del monto."
+        },
+        {
+          "text": "¿Qué se emite después de obtener las aprobaciones requeridas?",
+          "options": [
+            "Una factura",
+            "Un despido",
+            "Nada",
+            "La orden de compra"
+          ],
+          "correct": 3,
+          "explanation": "Con las aprobaciones se emite la orden de compra."
+        },
+        {
+          "text": "¿Qué información incluye la solicitud de compra?",
+          "options": [
+            "Solo el proveedor",
+            "Solo el color",
+            "Bien o servicio, monto estimado y justificación",
+            "Nada"
+          ],
+          "correct": 2,
+          "explanation": "Incluye bien, monto estimado y justificación."
+        },
+        {
+          "text": "Una compra de monto alto, ¿requiere más o menos aprobaciones que una de monto bajo?",
+          "options": [
+            "Menos",
+            "Más niveles de aprobación",
+            "Las mismas, siempre",
+            "Ninguna"
+          ],
+          "correct": 1,
+          "explanation": "El monto determina los niveles de aprobación."
+        }
+      ]
+    },
+    {
+      "code": "PRO-FIN-031",
+      "title": "Rendición de Gastos y Viáticos - Procedimiento",
+      "stage": "ETP-3-FIN",
+      "category": "Finanzas",
+      "version": "1.0",
+      "criticality": "Medium",
+      "owner": "Finance",
+      "pages": 3,
+      "minutes": 6,
+      "isDefault": false,
+      "updatedOn": "2026-08-01",
+      "summary": "Plazos y comprobantes requeridos para rendir gastos de viaje y viáticos.",
+      "sections": [
+        {
+          "title": "1. Plazo",
+          "body": "Los gastos se rinden dentro de los 5 días hábiles posteriores al regreso del viaje."
+        },
+        {
+          "title": "2. Comprobantes",
+          "body": "Cada gasto debe respaldarse con factura o comprobante válido a nombre de la empresa."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿En qué plazo se rinden los gastos de viaje?",
+          "options": [
+            "Cuando se pueda",
+            "Al final del año",
+            "Dentro de 5 días hábiles del regreso",
+            "Antes del viaje"
+          ],
+          "correct": 2,
+          "explanation": "El plazo es de 5 días hábiles posteriores al regreso."
+        },
+        {
+          "text": "¿Qué respalda cada gasto rendido?",
+          "options": [
+            "Una explicación verbal",
+            "Factura o comprobante válido a nombre de la empresa",
+            "Una foto del lugar",
+            "Nada"
+          ],
+          "correct": 1,
+          "explanation": "Cada gasto se respalda con comprobante válido."
+        },
+        {
+          "text": "¿A nombre de quién deben estar los comprobantes de gasto?",
+          "options": [
+            "De la empresa",
+            "Del colaborador",
+            "Del hotel",
+            "De nadie"
+          ],
+          "correct": 0,
+          "explanation": "Los comprobantes deben estar a nombre de la empresa."
+        },
+        {
+          "text": "Regresó de un viaje el lunes. ¿Hasta cuándo puede rendir?",
+          "options": [
+            "Hasta fin de año",
+            "Cuando quiera",
+            "El mismo día únicamente",
+            "Dentro de 5 días hábiles"
+          ],
+          "correct": 3,
+          "explanation": "El plazo es de 5 días hábiles."
+        },
+        {
+          "text": "Perdió la factura de una comida del viaje. ¿Qué implica?",
+          "options": [
+            "Nada",
+            "Se aprueba igual",
+            "Ese gasto no queda respaldado con comprobante válido",
+            "Se duplica el reembolso"
+          ],
+          "correct": 2,
+          "explanation": "Cada gasto debe tener comprobante válido."
+        }
+      ]
+    },
+    {
+      "code": "PRO-FIN-032",
+      "title": "Facturación y Cobranzas - Procedimiento",
+      "stage": "ETP-3-FIN",
+      "category": "Finanzas",
+      "version": "1.0",
+      "criticality": "Medium",
+      "owner": "Finance",
+      "pages": 4,
+      "minutes": 8,
+      "isDefault": false,
+      "updatedOn": "2026-08-01",
+      "summary": "Emisión de facturas a clientes y seguimiento de cobros vencidos.",
+      "sections": [
+        {
+          "title": "1. Emisión",
+          "body": "Las facturas se emiten solo contra hitos aceptados por el cliente y registrados en el sistema."
+        },
+        {
+          "title": "2. Cobros vencidos",
+          "body": "Los cobros vencidos se gestionan a los 15 días con aviso al responsable de la cuenta."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Contra qué se emite una factura al cliente?",
+          "options": [
+            "Contra una estimación",
+            "Contra el presupuesto anual",
+            "Cuando el equipo lo decide",
+            "Contra hitos aceptados y registrados"
+          ],
+          "correct": 3,
+          "explanation": "Solo se factura contra hitos aceptados y registrados."
+        },
+        {
+          "text": "¿Cuándo se gestiona un cobro vencido?",
+          "options": [
+            "Al año",
+            "Nunca",
+            "A los 15 días, avisando al responsable de la cuenta",
+            "Al día siguiente sin aviso"
+          ],
+          "correct": 2,
+          "explanation": "A los 15 días se gestiona con aviso al responsable."
+        },
+        {
+          "text": "¿Puede facturarse un hito que el cliente todavía no aceptó?",
+          "options": [
+            "Sí",
+            "No, solo hitos aceptados y registrados",
+            "Sí, a fin de mes",
+            "Sí, si es urgente"
+          ],
+          "correct": 1,
+          "explanation": "Solo se factura contra hitos aceptados."
+        },
+        {
+          "text": "¿A quién se avisa cuando un cobro vence?",
+          "options": [
+            "Al responsable de la cuenta",
+            "A nadie",
+            "A todo el personal",
+            "Al proveedor"
+          ],
+          "correct": 0,
+          "explanation": "Se avisa al responsable de la cuenta."
+        },
+        {
+          "text": "¿Dónde debe estar registrado un hito antes de facturarlo?",
+          "options": [
+            "En una nota personal",
+            "En una pizarra",
+            "En ningún lado",
+            "En el sistema"
+          ],
+          "correct": 3,
+          "explanation": "Los hitos se registran en el sistema."
+        }
+      ]
+    },
+    {
+      "code": "POL-FIN-033",
+      "title": "Control Presupuestario - Política",
+      "stage": "ETP-3-FIN",
+      "category": "Finanzas",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "Finance",
+      "pages": 3,
+      "minutes": 6,
+      "isDefault": false,
+      "updatedOn": "2026-08-01",
+      "summary": "Cómo se aprueba, ejecuta y controla el presupuesto de cada área.",
+      "sections": [
+        {
+          "title": "1. Aprobación",
+          "body": "El presupuesto anual de cada área se aprueba antes del inicio del ejercicio."
+        },
+        {
+          "title": "2. Desvíos",
+          "body": "Todo desvío mayor al 10% requiere justificación y aprobación de Finance."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Qué requiere un desvío presupuestario mayor al 10%?",
+          "options": [
+            "Justificación y aprobación de Finance",
+            "Nada",
+            "Solo avisar al equipo",
+            "Reducir el personal"
+          ],
+          "correct": 0,
+          "explanation": "Los desvíos mayores al 10% requieren justificación y aprobación."
+        },
+        {
+          "text": "¿Cuándo se aprueba el presupuesto anual?",
+          "options": [
+            "Al final del año",
+            "Cuando se agota",
+            "Nunca",
+            "Antes del inicio del ejercicio"
+          ],
+          "correct": 3,
+          "explanation": "Se aprueba antes del inicio del ejercicio."
+        },
+        {
+          "text": "¿Qué porcentaje de desvío requiere justificación y aprobación?",
+          "options": [
+            "1%",
+            "50%",
+            "Más del 10%",
+            "Ninguno"
+          ],
+          "correct": 2,
+          "explanation": "Los desvíos mayores al 10%."
+        },
+        {
+          "text": "¿Quién aprueba los desvíos presupuestarios relevantes?",
+          "options": [
+            "El cliente",
+            "Finance",
+            "Cualquier colaborador",
+            "Marketing"
+          ],
+          "correct": 1,
+          "explanation": "Requieren aprobación de Finance."
+        },
+        {
+          "text": "¿De qué es responsable cada área respecto de su presupuesto?",
+          "options": [
+            "De ejecutarlo y controlarlo según lo aprobado",
+            "De nada",
+            "Solo de gastarlo",
+            "De ocultarlo"
+          ],
+          "correct": 0,
+          "explanation": "Cada área ejecuta y controla su presupuesto."
+        }
+      ]
+    },
+    {
+      "code": "PRO-FIN-034",
+      "title": "Pagos a Proveedores - Procedimiento",
+      "stage": "ETP-3-FIN",
+      "category": "Finanzas",
+      "version": "1.0",
+      "criticality": "Medium",
+      "owner": "Finance",
+      "pages": 3,
+      "minutes": 6,
+      "isDefault": false,
+      "updatedOn": "2026-08-01",
+      "summary": "Requisitos y calendario para pagar a proveedores.",
+      "sections": [
+        {
+          "title": "1. Requisitos",
+          "body": "Un pago requiere orden de compra, conformidad de recepción y factura válida."
+        },
+        {
+          "title": "2. Calendario",
+          "body": "Los pagos se procesan en los ciclos quincenales definidos por Finance."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Qué requiere un pago a proveedor?",
+          "options": [
+            "Solo la factura",
+            "Orden de compra, conformidad de recepción y factura",
+            "La aprobación verbal del área",
+            "Nada"
+          ],
+          "correct": 1,
+          "explanation": "Se requieren orden de compra, conformidad y factura."
+        },
+        {
+          "text": "¿Cada cuánto se procesan los pagos?",
+          "options": [
+            "En ciclos quincenales",
+            "Diariamente",
+            "Una vez al año",
+            "Cuando el proveedor llama"
+          ],
+          "correct": 0,
+          "explanation": "Los pagos se procesan en ciclos quincenales."
+        },
+        {
+          "text": "¿Qué documento acredita que el bien o servicio fue recibido?",
+          "options": [
+            "La cotización",
+            "El correo de bienvenida",
+            "El contrato laboral",
+            "La conformidad de recepción"
+          ],
+          "correct": 3,
+          "explanation": "La conformidad de recepción acredita la entrega."
+        },
+        {
+          "text": "Un proveedor pide que se le pague fuera de ciclo. ¿Qué corresponde?",
+          "options": [
+            "Pagarle de inmediato",
+            "Pagarle en efectivo",
+            "Respetar los ciclos quincenales definidos por Finance",
+            "Ignorarlo"
+          ],
+          "correct": 2,
+          "explanation": "Los pagos se procesan en los ciclos definidos."
+        },
+        {
+          "text": "¿Puede pagarse una factura sin orden de compra?",
+          "options": [
+            "Sí",
+            "No, se requiere orden de compra",
+            "Sí, si es pequeña",
+            "Sí, si el proveedor es conocido"
+          ],
+          "correct": 1,
+          "explanation": "La orden de compra es requisito."
+        }
+      ]
+    },
+    {
+      "code": "PRO-IT-035",
+      "title": "Gestión de Accesos - Procedimiento",
+      "stage": "ETP-3-IT",
+      "category": "Infraestructura",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "IT & Infrastructure",
+      "pages": 3,
+      "minutes": 7,
+      "isDefault": true,
+      "updatedOn": "2026-08-01",
+      "summary": "Alta, modificación y revocación de accesos a sistemas corporativos.",
+      "sections": [
+        {
+          "title": "1. Solicitud",
+          "body": "Todo acceso se otorga con solicitud aprobada por el manager del colaborador y bajo mínimo privilegio."
+        },
+        {
+          "title": "2. Revisión periódica",
+          "body": "Los accesos privilegiados se revisan cada trimestre y se revocan los que ya no se usan."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Bajo qué criterio se otorgan los accesos?",
+          "options": [
+            "Todos los accesos para todos",
+            "Según la antigüedad",
+            "Solicitud aprobada y mínimo privilegio",
+            "Sin aprobación"
+          ],
+          "correct": 2,
+          "explanation": "Los accesos requieren aprobación y siguen el mínimo privilegio."
+        },
+        {
+          "text": "¿Cada cuánto se revisan los accesos privilegiados?",
+          "options": [
+            "Nunca",
+            "Cada trimestre",
+            "Cada cinco años",
+            "Solo ante un incidente"
+          ],
+          "correct": 1,
+          "explanation": "Se revisan trimestralmente."
+        },
+        {
+          "text": "¿Quién aprueba la solicitud de acceso de un colaborador?",
+          "options": [
+            "Su manager",
+            "Él mismo",
+            "El cliente",
+            "Nadie"
+          ],
+          "correct": 0,
+          "explanation": "El manager del colaborador aprueba la solicitud."
+        },
+        {
+          "text": "¿Qué se hace con los accesos privilegiados que ya no se usan?",
+          "options": [
+            "Se conservan",
+            "Se comparten",
+            "Se duplican",
+            "Se revocan"
+          ],
+          "correct": 3,
+          "explanation": "Los accesos sin uso se revocan."
+        },
+        {
+          "text": "¿Qué significa mínimo privilegio?",
+          "options": [
+            "Dar todos los permisos",
+            "No dar permisos",
+            "Dar solo los permisos necesarios para la tarea",
+            "Dar permisos de administrador a todos"
+          ],
+          "correct": 2,
+          "explanation": "Solo lo necesario para la tarea."
+        }
+      ]
+    },
+    {
+      "code": "PRO-IT-036",
+      "title": "Gestión de Incidentes de TI - Procedimiento",
+      "stage": "ETP-3-IT",
+      "category": "Infraestructura",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "IT & Infrastructure",
+      "pages": 3,
+      "minutes": 7,
+      "isDefault": true,
+      "updatedOn": "2026-08-01",
+      "summary": "Registro, priorización y resolución de incidentes de infraestructura.",
+      "sections": [
+        {
+          "title": "1. Registro",
+          "body": "Todo incidente se registra en la mesa de ayuda con impacto, urgencia y servicio afectado."
+        },
+        {
+          "title": "2. Prioridad crítica",
+          "body": "Los incidentes críticos se atienden de inmediato y se informan al cliente afectado."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Dónde se registra un incidente de TI?",
+          "options": [
+            "En un chat personal",
+            "No se registra",
+            "En una hoja de papel",
+            "En la mesa de ayuda con impacto y urgencia"
+          ],
+          "correct": 3,
+          "explanation": "Todo incidente se registra en la mesa de ayuda."
+        },
+        {
+          "text": "¿Cómo se atiende un incidente crítico?",
+          "options": [
+            "Al día siguiente",
+            "En la próxima ventana",
+            "De inmediato e informando al cliente",
+            "Solo si hay tiempo"
+          ],
+          "correct": 2,
+          "explanation": "Se atiende de inmediato y se informa al cliente."
+        },
+        {
+          "text": "¿Qué datos se registran en un incidente de TI?",
+          "options": [
+            "Solo la hora",
+            "Impacto, urgencia y servicio afectado",
+            "El nombre del culpable",
+            "Nada"
+          ],
+          "correct": 1,
+          "explanation": "Se registran impacto, urgencia y servicio afectado."
+        },
+        {
+          "text": "¿A quién se informa un incidente crítico?",
+          "options": [
+            "Al cliente afectado",
+            "A nadie",
+            "A la prensa",
+            "Solo al proveedor"
+          ],
+          "correct": 0,
+          "explanation": "Se informa al cliente afectado."
+        },
+        {
+          "text": "Un servidor crítico se cae. ¿Cuándo debe atenderse?",
+          "options": [
+            "Mañana",
+            "En la próxima ventana mensual",
+            "Cuando haya tiempo",
+            "De inmediato"
+          ],
+          "correct": 3,
+          "explanation": "Los incidentes críticos se atienden de inmediato."
+        }
+      ]
+    },
+    {
+      "code": "POL-IT-037",
+      "title": "Respaldo y Recuperación - Política",
+      "stage": "ETP-3-IT",
+      "category": "Infraestructura",
+      "version": "1.0",
+      "criticality": "High",
+      "owner": "IT & Infrastructure",
+      "pages": 2,
+      "minutes": 5,
+      "isDefault": false,
+      "updatedOn": "2026-08-01",
+      "summary": "Frecuencia de respaldos y pruebas de recuperación.",
+      "sections": [
+        {
+          "title": "1. Frecuencia",
+          "body": "Los sistemas críticos se respaldan diariamente y los respaldos se guardan cifrados fuera del sitio."
+        },
+        {
+          "title": "2. Pruebas",
+          "body": "La recuperación se prueba al menos cada seis meses."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Con qué frecuencia se respaldan los sistemas críticos?",
+          "options": [
+            "Diariamente",
+            "Mensualmente",
+            "Una vez al año",
+            "Nunca"
+          ],
+          "correct": 0,
+          "explanation": "Los sistemas críticos se respaldan a diario."
+        },
+        {
+          "text": "¿Cada cuánto se prueba la recuperación?",
+          "options": [
+            "Nunca",
+            "Cada diez años",
+            "Solo tras un desastre",
+            "Al menos cada seis meses"
+          ],
+          "correct": 3,
+          "explanation": "La recuperación se prueba al menos semestralmente."
+        },
+        {
+          "text": "¿Dónde se guardan los respaldos?",
+          "options": [
+            "En el mismo servidor",
+            "En un USB personal",
+            "Cifrados y fuera del sitio",
+            "En el escritorio"
+          ],
+          "correct": 2,
+          "explanation": "Se guardan cifrados fuera del sitio."
+        },
+        {
+          "text": "¿Por qué se prueba la recuperación?",
+          "options": [
+            "Por trámite",
+            "Para asegurar que los respaldos realmente sirven",
+            "Para ocupar tiempo",
+            "No se prueba"
+          ],
+          "correct": 1,
+          "explanation": "Probar garantiza que el respaldo sea recuperable."
+        },
+        {
+          "text": "¿Qué sistemas se respaldan diariamente?",
+          "options": [
+            "Los sistemas críticos",
+            "Ninguno",
+            "Solo las impresoras",
+            "Solo los correos personales"
+          ],
+          "correct": 0,
+          "explanation": "Los sistemas críticos se respaldan a diario."
+        }
+      ]
+    },
+    {
+      "code": "PRO-IT-038",
+      "title": "Gestión de Cambios en Infraestructura - Procedimiento",
+      "stage": "ETP-3-IT",
+      "category": "Infraestructura",
+      "version": "1.0",
+      "criticality": "Medium",
+      "owner": "IT & Infrastructure",
+      "pages": 3,
+      "minutes": 6,
+      "isDefault": false,
+      "updatedOn": "2026-08-01",
+      "summary": "Aprobación y registro de cambios en servidores, redes y servicios.",
+      "sections": [
+        {
+          "title": "1. Aprobación",
+          "body": "Todo cambio en infraestructura productiva pasa por el comité de cambios con análisis de impacto."
+        },
+        {
+          "title": "2. Registro",
+          "body": "Cada cambio queda registrado con fecha, responsable y resultado."
+        }
+      ],
+      "questions": [
+        {
+          "text": "¿Qué requiere un cambio en infraestructura productiva?",
+          "options": [
+            "Nada",
+            "Aprobación del comité con análisis de impacto",
+            "Solo hacerlo de noche",
+            "Aviso posterior"
+          ],
+          "correct": 1,
+          "explanation": "Pasa por el comité de cambios con análisis de impacto."
+        },
+        {
+          "text": "¿Qué se registra de cada cambio?",
+          "options": [
+            "Fecha, responsable y resultado",
+            "Nada",
+            "Solo el costo",
+            "Solo el servidor"
+          ],
+          "correct": 0,
+          "explanation": "Se registra fecha, responsable y resultado."
+        },
+        {
+          "text": "¿Qué análisis acompaña a un cambio en infraestructura productiva?",
+          "options": [
+            "Ninguno",
+            "Un análisis de precios",
+            "Una encuesta",
+            "Un análisis de impacto"
+          ],
+          "correct": 3,
+          "explanation": "Se presenta un análisis de impacto."
+        },
+        {
+          "text": "¿Qué cambios pasan por el comité de cambios?",
+          "options": [
+            "Ninguno",
+            "Solo los de oficina",
+            "Todo cambio en infraestructura productiva",
+            "Solo los de software de escritorio"
+          ],
+          "correct": 2,
+          "explanation": "Todo cambio productivo pasa por el comité."
+        },
+        {
+          "text": "Aplicó un cambio de red. ¿Qué debe quedar registrado?",
+          "options": [
+            "Nada",
+            "Fecha, responsable y resultado",
+            "Solo que fue exitoso",
+            "Solo el costo"
+          ],
+          "correct": 1,
+          "explanation": "Se registran fecha, responsable y resultado."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+# Saltos de línea LF en el repositorio y en la copia de trabajo (evita mezclar CRLF/LF en Windows)
+* text=auto eol=lf
+*.png binary
+*.svg text eol=lf

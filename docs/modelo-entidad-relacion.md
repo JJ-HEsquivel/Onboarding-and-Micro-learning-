@@ -49,6 +49,7 @@ erDiagram
     jsi_area ||--o{ contact : "jsi_area"
     contact |o--o{ contact : "jsi_manager"
     contact ||--o{ jsi_roleassignment : "jsi_person"
+    contact |o--o{ jsi_roleassignment : "jsi_assignedby"
     contact ||--o{ jsi_onboarding : "jsi_employee"
     contact |o--o{ jsi_onboarding : "jsi_validator"
     contact |o--o{ jsi_onboarding : "jsi_registeredby"
@@ -179,6 +180,7 @@ erDiagram
         uuid jsi_roleassignmentid PK
         string jsi_name
         uuid jsi_person FK
+        uuid jsi_assignedby FK
     }
     jsi_onboarding {
         uuid jsi_onboardingid PK
@@ -258,6 +260,7 @@ erDiagram
 | `jsi_area` | `contact` | `jsi_area` | `jsi_area_contact` | Sí |
 | `contact` | `contact` | `jsi_manager` | `jsi_contact_manager_contact` | No |
 | `contact` | `jsi_roleassignment` | `jsi_person` | `jsi_contact_roleassignment` | Sí |
+| `contact` | `jsi_roleassignment` | `jsi_assignedby` | `jsi_contact_roleassignment_assignedby` | No |
 | `contact` | `jsi_onboarding` | `jsi_employee` | `jsi_contact_onboarding` | Sí |
 | `contact` | `jsi_onboarding` | `jsi_validator` | `jsi_contact_onboarding_validator` | No |
 | `contact` | `jsi_onboarding` | `jsi_registeredby` | `jsi_contact_onboarding_registeredby` | No |
@@ -367,6 +370,8 @@ A policy/manual document that is part of the onboarding program.
 | `jsi_updatedon` | Updated On | Fecha | No |  |
 | `jsi_owningdepartment` | Owning Department | Texto (1 línea) | No | máx. 100 car. |
 | `jsi_summary` | Summary | Texto multilínea | No |  |
+| `jsi_content` | Content | Texto multilínea | No | Texto para el lector: "## Título" + párrafo por sección |
+| `jsi_isdefault` | Default In Route | Sí/No | No | Etapa 3: el Admin lo propone por defecto · por defecto: Sí |
 | `jsi_file` | File | Archivo | No |  |
 
 **Tablas que dependen de esta (relaciones 1:N):**
@@ -426,7 +431,7 @@ An assessment, usually one per Stage, optionally ad-hoc per Document.
 | `jsi_title` | Title | Texto (columna principal) | Auto |  |
 | `jsi_stage` | Stage | Lookup (FK) | No | → `jsi_stage` · relación `jsi_stage_assessment` |
 | `jsi_document` | Document | Lookup (FK) | No | → `jsi_document` · relación `jsi_document_assessment` |
-| `jsi_origin` | Origin | Choice | Sí | 100000000=Stage, 100000001=DocumentUpdate, 100000002=Campaign, 100000003=Manual |
+| `jsi_type` | Type | Choice | Sí | 100000000=Document, 100000001=DocumentUpdate, 100000002=Campaign, 100000003=Manual |
 | `jsi_durationminutes` | Duration Minutes | Entero | No |  |
 | `jsi_passingscore` | Passing Score | Entero | Sí |  |
 | `jsi_maxattempts` | Max Attempts | Entero | Sí |  |
@@ -547,6 +552,9 @@ One attempt taken against an Assessment Assignment.
 | `jsi_score` | Score | Entero | No |  |
 | `jsi_takenon` | Taken On | Fecha y hora | No |  |
 | `jsi_durationseconds` | Duration Seconds | Entero | No |  |
+| `jsi_correctcount` | Correct Count | Entero | No |  |
+| `jsi_questioncount` | Question Count | Entero | No |  |
+| `jsi_passed` | Passed | Sí/No | No | por defecto: No |
 
 **Tablas que dependen de esta (relaciones 1:N):**
 
@@ -667,6 +675,9 @@ Audit trail of a reading confirmation or assessment result.
 | `jsi_version` | Version | Texto (1 línea) | No | máx. 10 car. |
 | `jsi_date` | Date | Fecha y hora | No |  |
 | `jsi_hash` | Hash | Texto (1 línea) | No | máx. 128 car. |
+| `jsi_type` | Type | Choice | Sí | 100000000=ReadingConfirmation, 100000001=AssessmentPassed, 100000002=AssessmentFailed, 100000003=RoleChange |
+| `jsi_result` | Result | Texto (1 línea) | No | máx. 100 car. |
+| `jsi_description` | Description | Texto (1 línea) | No | máx. 300 car. |
 
 ### 4.20 Gap — `jsi_gap`
 
@@ -733,6 +744,8 @@ A role held by a person in the app. Una persona puede tener varios roles a la ve
 | `jsi_startdate` | Start Date | Fecha | No |  |
 | `jsi_enddate` | End Date | Fecha | No |  |
 | `jsi_isactive` | Is Active | Sí/No | No | Yes/No · por defecto: Sí |
+| `jsi_jobtitle` | Job Title | Texto (1 línea) | No | Cargo con el que tuvo el rol · máx. 100 car. |
+| `jsi_assignedby` | Assigned By | Lookup (FK) | No | → `contact` · relación `jsi_contact_roleassignment_assignedby` (Administrador que lo ascendió) |
 
 ### 4.23 Onboarding — `jsi_onboarding`
 

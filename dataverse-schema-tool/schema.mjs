@@ -122,6 +122,10 @@ export const TABLES = [
       { schemaName: 'jsi_UpdatedOn', type: 'DateOnly', displayName: 'Updated On', requiredLevel: OPTIONAL },
       { schemaName: 'jsi_OwningDepartment', type: 'String', displayName: 'Owning Department', maxLength: 100, requiredLevel: OPTIONAL },
       { schemaName: 'jsi_Summary', type: 'Memo', displayName: 'Summary', maxLength: 2000, requiredLevel: OPTIONAL },
+      // Texto del documento para el lector de la app. Formato: "## Título de sección" + párrafo.
+      { schemaName: 'jsi_Content', type: 'Memo', displayName: 'Content', maxLength: 100000, requiredLevel: OPTIONAL },
+      // Etapa 3: el Admin propone los documentos "por defecto"; el Manager suma o quita los demás.
+      { schemaName: 'jsi_IsDefault', type: 'Boolean', displayName: 'Default In Route', trueLabel: 'Yes', falseLabel: 'No', defaultValue: true },
       { schemaName: 'jsi_File', type: 'File', displayName: 'File', requiredLevel: OPTIONAL },
     ],
   },
@@ -163,7 +167,7 @@ export const TABLES = [
     columns: [
       { schemaName: 'jsi_Stage', type: 'Lookup', displayName: 'Stage', requiredLevel: OPTIONAL, target: 'jsi_Stage', relationshipSchemaName: 'jsi_stage_assessment' },
       { schemaName: 'jsi_Document', type: 'Lookup', displayName: 'Document', requiredLevel: OPTIONAL, target: 'jsi_Document', relationshipSchemaName: 'jsi_document_assessment' },
-      { schemaName: 'jsi_Origin', type: 'Picklist', displayName: 'Origin', requiredLevel: REQUIRED, options: choice(['Stage', 'DocumentUpdate', 'Campaign', 'Manual']) },
+      { schemaName: 'jsi_Type', type: 'Picklist', displayName: 'Type', requiredLevel: REQUIRED, options: choice(['Document', 'DocumentUpdate', 'Campaign', 'Manual']) },
       { schemaName: 'jsi_DurationMinutes', type: 'Integer', displayName: 'Duration Minutes', requiredLevel: OPTIONAL },
       { schemaName: 'jsi_PassingScore', type: 'Integer', displayName: 'Passing Score', requiredLevel: REQUIRED },
       { schemaName: 'jsi_MaxAttempts', type: 'Integer', displayName: 'Max Attempts', requiredLevel: REQUIRED },
@@ -216,6 +220,8 @@ export const TABLES = [
       { schemaName: 'jsi_StartDate', type: 'DateOnly', displayName: 'Start Date', requiredLevel: OPTIONAL },
       { schemaName: 'jsi_EndDate', type: 'DateOnly', displayName: 'End Date', requiredLevel: OPTIONAL },
       { schemaName: 'jsi_IsActive', type: 'Boolean', displayName: 'Is Active', trueLabel: 'Yes', falseLabel: 'No', defaultValue: true },
+      { schemaName: 'jsi_JobTitle', type: 'String', displayName: 'Job Title', maxLength: 100, requiredLevel: OPTIONAL },
+      { schemaName: 'jsi_AssignedBy', type: 'Lookup', displayName: 'Assigned By', requiredLevel: OPTIONAL, target: 'contact', relationshipSchemaName: 'jsi_contact_roleassignment_assignedby' },
     ],
   },
   {
@@ -289,6 +295,9 @@ export const TABLES = [
       { schemaName: 'jsi_Score', type: 'Integer', displayName: 'Score', requiredLevel: OPTIONAL },
       { schemaName: 'jsi_TakenOn', type: 'DateTime', displayName: 'Taken On', requiredLevel: OPTIONAL },
       { schemaName: 'jsi_DurationSeconds', type: 'Integer', displayName: 'Duration Seconds', requiredLevel: OPTIONAL },
+      { schemaName: 'jsi_CorrectCount', type: 'Integer', displayName: 'Correct Count', requiredLevel: OPTIONAL },
+      { schemaName: 'jsi_QuestionCount', type: 'Integer', displayName: 'Question Count', requiredLevel: OPTIONAL },
+      { schemaName: 'jsi_Passed', type: 'Boolean', displayName: 'Passed', trueLabel: 'Yes', falseLabel: 'No', defaultValue: false },
     ],
   },
   {
@@ -380,6 +389,9 @@ export const TABLES = [
       { schemaName: 'jsi_Version', type: 'String', displayName: 'Version', maxLength: 10, requiredLevel: OPTIONAL },
       { schemaName: 'jsi_Date', type: 'DateTime', displayName: 'Date', requiredLevel: OPTIONAL },
       { schemaName: 'jsi_Hash', type: 'String', displayName: 'Hash', maxLength: 128, requiredLevel: OPTIONAL },
+      { schemaName: 'jsi_Type', type: 'Picklist', displayName: 'Type', requiredLevel: REQUIRED, options: choice(['ReadingConfirmation', 'AssessmentPassed', 'AssessmentFailed', 'RoleChange']) },
+      { schemaName: 'jsi_Result', type: 'String', displayName: 'Result', maxLength: 100, requiredLevel: OPTIONAL },
+      { schemaName: 'jsi_Description', type: 'String', displayName: 'Description', maxLength: 300, requiredLevel: OPTIONAL },
     ],
   },
   {
@@ -426,4 +438,5 @@ export const REMOVED_COLUMNS = [
   { table: 'contact', column: 'jsi_progressstatus', reason: 'Ahora es jsi_onboarding.jsi_progressstatus' },
   { table: 'contact', column: 'jsi_risklevel', reason: 'Ahora es jsi_onboarding.jsi_risklevel' },
   { table: 'contact', column: 'jsi_userrole', reason: 'Reemplazada por la tabla jsi_roleassignment' },
+  { table: 'jsi_assessment', column: 'jsi_origin', reason: 'Reemplazada por jsi_assessment.jsi_type' },
 ];

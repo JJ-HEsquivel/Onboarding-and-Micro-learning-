@@ -71,11 +71,10 @@ export function CollaboratorsTable({ collaborators, loading, hasCollaborators, o
               <td>{c.managerName}</td>
               <td className="nowrap">{formatDate(c.hireDate)}</td>
               <td>
-                {c.documentsRead}/{c.documentsTotal}
+                {c.documentsApproved}/{c.documentsTotal}
               </td>
-              {/* TODO: promedio de comprensión cuando existan intentos de evaluación (jsi_assessmentattempt). */}
-              <td>—</td>
-              <td>{c.documentsTotal - c.documentsRead}</td>
+              <td>{c.averageScore === null ? '—' : `${c.averageScore}%`}</td>
+              <td>{c.documentsTotal - c.documentsApproved}</td>
               <td>
                 <CollaboratorStatusBadge status={c.status} />
               </td>

@@ -1,6 +1,6 @@
 /**
  * Colaboradores: personas (contact) con el rol Collaborator activo, junto con su
- * inducción más reciente (jsi_onboarding) y el avance de sus documentos.
+ * inducción más reciente (jsi_onboarding) y el avance real de su ruta.
  */
 import { ContactsService } from '@/generated/services/ContactsService';
 import { Jsi_roleassignmentsService } from '@/generated/services/Jsi_roleassignmentsService';
@@ -16,17 +16,11 @@ import {
   VALIDATION_STATUS,
 } from '@/shared/constants/choices';
 import { daysBetween } from '@/shared/lib/dates';
-import type {
-  Area,
-  Collaborator,
-  CollaboratorStatus,
-  Manager,
-  NewCollaboratorInput,
-  RouteStage,
-} from '@/shared/types/onboarding';
+import type { Area, Collaborator, Manager, NewCollaboratorInput, RouteStage } from '@/shared/types/onboarding';
 import { listAreas } from './areas.service';
 import { ACTIVE_RECORDS, bind, fetchAll, unwrap } from './dataverse';
 import { getPeopleById, getPersonIdsWithRole, toManagers } from './people.service';
+import { loadRouteEntries, progressOf } from './route.service';
 
 // Los tipos generados exigen columnas de sistema (ownerid, statecode...) que Dataverse
 // completa solo; por eso los registros nuevos se construyen con estos tipos.
@@ -35,34 +29,12 @@ type NewRoleRecord = Parameters<typeof Jsi_roleassignmentsService.create>[0];
 type NewOnboardingRecord = Parameters<typeof Jsi_onboardingsService.create>[0];
 type NewAssignmentRecord = Parameters<typeof Jsi_documentassignmentsService.create>[0];
 
-function toStatus(onboarding: Jsi_onboardings | undefined): CollaboratorStatus {
-  if (!onboarding) return 'notStarted';
-  if (onboarding.jsi_validationstatus === VALIDATION_STATUS.PendingValidation) return 'pendingValidation';
-  switch (onboarding.jsi_progressstatus) {
-    case PROGRESS_STATUS.InProgress:
-      return 'inProgress';
-    case PROGRESS_STATUS.Overdue:
-      return 'overdue';
-    case PROGRESS_STATUS.Completed:
-      return 'completed';
-    default:
-      return 'notStarted';
-  }
-}
-
 /** La inducción más reciente de cada persona (clave: contactid). */
-async function getLatestOnboardings(): Promise<Map<string, Jsi_onboardings>> {
+export async function getLatestOnboardings(): Promise<Map<string, Jsi_onboardings>> {
   const onboardings = await fetchAll(
     (o) => Jsi_onboardingsService.getAll(o),
     {
-      select: [
-        'jsi_onboardingid',
-        '_jsi_employee_value',
-        'jsi_validationstatus',
-        'jsi_progressstatus',
-        'jsi_startdate',
-        'jsi_completedon',
-      ],
+      select: ['jsi_onboardingid', '_jsi_employee_value', 'jsi_validationstatus', 'jsi_startdate', 'jsi_completedon'],
       filter: ACTIVE_RECORDS,
       orderBy: ['createdon desc'],
     },
@@ -78,73 +50,59 @@ async function getLatestOnboardings(): Promise<Map<string, Jsi_onboardings>> {
   return latest;
 }
 
-/** Documentos asignados y leídos por inducción (clave: jsi_onboardingid). */
-async function getDocumentProgress(): Promise<Map<string, { total: number; read: number }>> {
-  const assignments = await fetchAll(
-    (o) => Jsi_documentassignmentsService.getAll(o),
-    { select: ['_jsi_onboarding_value', 'jsi_status'], filter: ACTIVE_RECORDS },
-    'Leer asignaciones de documentos',
-  );
-
-  const progress = new Map<string, { total: number; read: number }>();
-  for (const assignment of assignments) {
-    const onboardingId = assignment._jsi_onboarding_value;
-    if (!onboardingId) continue;
-    const entry = progress.get(onboardingId) ?? { total: 0, read: 0 };
-    entry.total++;
-    if (assignment.jsi_status === ASSIGNMENT_STATUS.Read) entry.read++;
-    progress.set(onboardingId, entry);
-  }
-  return progress;
-}
-
 export interface CollaboratorsOverview {
   collaborators: Collaborator[];
   areas: Area[];
   managers: Manager[];
 }
 
-/** Todo lo que necesita la pantalla de colaboradores, en una sola llamada. */
-export async function loadCollaboratorsOverview(): Promise<CollaboratorsOverview> {
-  const [people, collaboratorIds, managerIds, areas, onboardings, progress] = await Promise.all([
+/**
+ * Colaboradores activos con su avance. Si se indica managerId, solo los de su equipo.
+ * Incluye las áreas y los managers (para filtros y selectores).
+ */
+export async function loadCollaboratorsOverview(managerId?: string): Promise<CollaboratorsOverview> {
+  const [people, collaboratorIds, managerIds, areas, onboardings] = await Promise.all([
     getPeopleById(),
     getPersonIdsWithRole(ROLE.Collaborator),
     getPersonIdsWithRole(ROLE.Manager),
     listAreas(),
     getLatestOnboardings(),
-    getDocumentProgress(),
   ]);
-
+  const routes = await loadRouteEntries();
   const areaNames = new Map(areas.map((area) => [area.id, area.name]));
 
   const collaborators = [...collaboratorIds].flatMap((personId): Collaborator[] => {
     const person = people.get(personId);
     if (!person) return [];
+    const personManagerId = person._jsi_manager_value ?? null;
+    if (managerId && personManagerId !== managerId) return [];
 
     const areaId = person._jsi_area_value ?? null;
-    const managerId = person._jsi_manager_value ?? null;
     const onboarding = onboardings.get(personId);
-    const documents = onboarding ? progress.get(onboarding.jsi_onboardingid) : undefined;
-    const status = toStatus(onboarding);
+    const progress = progressOf(onboarding ? (routes.get(onboarding.jsi_onboardingid) ?? []) : []);
+    const isPending = onboarding?.jsi_validationstatus === VALIDATION_STATUS.PendingValidation;
 
     return [
       {
         id: personId,
         fullName: person.fullname ?? '',
+        email: person.emailaddress1 ?? '',
         jobTitle: person.jsi_jobtitle ?? '',
         areaId,
         areaName: (areaId && areaNames.get(areaId)) || '—',
-        managerId,
-        managerName: (managerId && people.get(managerId)?.fullname) || '—',
+        managerId: personManagerId,
+        managerName: (personManagerId && people.get(personManagerId)?.fullname) || '—',
         hireDate: person.jsi_hiredate ?? null,
         onboardingId: onboarding?.jsi_onboardingid ?? null,
-        status,
+        status: isPending ? 'pendingValidation' : progress.status,
+        risk: isPending ? 'low' : progress.risk,
+        documentsTotal: progress.total,
+        documentsApproved: progress.approved,
+        averageScore: progress.averageScore,
         closingDays:
-          status === 'completed' && onboarding?.jsi_startdate && onboarding.jsi_completedon
+          progress.status === 'completed' && onboarding?.jsi_startdate && onboarding.jsi_completedon
             ? daysBetween(onboarding.jsi_startdate, onboarding.jsi_completedon)
             : null,
-        documentsTotal: documents?.total ?? 0,
-        documentsRead: documents?.read ?? 0,
       },
     ];
   });
@@ -171,7 +129,8 @@ async function isEmailRegistered(email: string): Promise<boolean> {
  * 1. Crea la persona (contact).
  * 2. Le asigna el rol Collaborator (jsi_roleassignment).
  * 3. Crea su inducción inicial, pendiente de validación por su manager (jsi_onboarding).
- * 4. Le asigna los documentos de la ruta de su área, en estado Pending (jsi_documentassignment).
+ * 4. Le asigna los documentos de la ruta propuesta, en estado Pending (jsi_documentassignment).
+ *    Los exámenes se crean recién cuando el Manager valida la ruta.
  *
  * Antes de crear nada verifica que el correo no esté registrado.
  * @param registeredById contactid del Administrador que registra (se le muestra al Manager).
@@ -212,6 +171,7 @@ export async function registerCollaborator(
         jsi_role: ROLE.Collaborator,
         jsi_isactive: true,
         jsi_startdate: input.hireDate,
+        jsi_jobtitle: input.jobTitle.trim(),
       } as NewRoleRecord),
       'Asignar rol de colaborador',
     );
@@ -243,7 +203,7 @@ export async function registerCollaborator(
             'jsi_Stage@odata.bind': bind('jsi_stages', stage.id),
             'jsi_Onboarding@odata.bind': bind('jsi_onboardings', onboardingId),
             jsi_status: ASSIGNMENT_STATUS.Pending,
-            jsi_source: 'Ruta propuesta por área',
+            jsi_source: 'Propuesto por el Administrador',
           }) as NewAssignmentRecord,
       ),
     );

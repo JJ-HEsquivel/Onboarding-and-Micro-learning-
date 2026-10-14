@@ -11,6 +11,8 @@
     "create": "node create-tables.mjs",
     "remove-columns:dry-run": "node remove-columns.mjs --dry-run",
     "remove-columns": "node remove-columns.mjs",
+    "reset:dry-run": "node reset-data.mjs --dry-run",
+    "reset": "node reset-data.mjs",
     "seed:dry-run": "node seed-data.mjs --dry-run",
     "seed": "node seed-data.mjs"
   },

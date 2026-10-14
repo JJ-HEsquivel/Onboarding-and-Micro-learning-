@@ -1,4 +1,5 @@
 import {
+  Award,
   Bell,
   ChartLine,
   FileText,
@@ -14,6 +15,7 @@ import { ROLE } from '@/shared/constants/choices';
 import type { RoleModule } from '@/shared/types/navigation';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import AdminCollaboratorsPage from './pages/collaborators/AdminCollaboratorsPage';
+import AdminManagersPage from './pages/managers/AdminManagersPage';
 import AdminDocumentsPage from './pages/AdminDocumentsPage';
 import AdminLearningPathsPage from './pages/AdminLearningPathsPage';
 import AdminAssessmentsPage from './pages/AdminAssessmentsPage';
@@ -33,7 +35,8 @@ export const adminModule: RoleModule = {
       title: 'Operación',
       items: [
         { path: 'panel', label: 'Panel general', icon: House, page: AdminDashboardPage },
-        { path: 'colaboradores', label: 'Colaboradores', icon: Users, page: AdminCollaboratorsPage, badge: 3 },
+        { path: 'colaboradores', label: 'Colaboradores', icon: Users, page: AdminCollaboratorsPage },
+        { path: 'managers', label: 'Managers y ascensos', icon: Award, page: AdminManagersPage },
         { path: 'documentos', label: 'Documentos', icon: FileText, page: AdminDocumentsPage },
         { path: 'rutas', label: 'Rutas de aprendizaje', icon: Route, page: AdminLearningPathsPage },
       ],

@@ -142,44 +142,6 @@
           "x-ms-schema-name": "jsi_MaxAttempts",
           "required": true
         },
-        "jsi_origin": {
-          "type": "string",
-          "title": "Origin",
-          "x-ms-dataverse-attribute": "jsi_origin",
-          "x-ms-dataverse-type": "PicklistType",
-          "x-ms-schema-name": "jsi_Origin",
-          "required": true,
-          "enum": [
-            "Stage",
-            "DocumentUpdate",
-            "Campaign",
-            "Manual"
-          ],
-          "x-ms-enum-values": [
-            100000000,
-            100000001,
-            100000002,
-            100000003
-          ],
-          "Color": [
-            null,
-            null,
-            null,
-            null
-          ],
-          "x-ms-optionsetmetadataid": "4fdc594e-7abe-f111-a05b-00224837cd6c",
-          "x-ms-isGlobal": false,
-          "x-ms-optionsetdisplayname": "Origin",
-          "x-ms-optionSetType": "Picklist"
-        },
-        "jsi_originname": {
-          "type": "string",
-          "title": "jsi_originname",
-          "x-ms-dataverse-attribute": "jsi_originname",
-          "x-ms-dataverse-type": "VirtualType",
-          "x-ms-schema-name": "jsi_originName",
-          "x-ms-read-only": true
-        },
         "jsi_passingscore": {
           "type": "string",
           "title": "Passing Score",
@@ -212,6 +174,44 @@
           "x-ms-schema-name": "jsi_Title",
           "x-ms-dataverse-primary-name": true,
           "maxLength": 200
+        },
+        "jsi_type": {
+          "type": "string",
+          "title": "Type",
+          "x-ms-dataverse-attribute": "jsi_type",
+          "x-ms-dataverse-type": "PicklistType",
+          "x-ms-schema-name": "jsi_Type",
+          "required": true,
+          "enum": [
+            "Document",
+            "DocumentUpdate",
+            "Campaign",
+            "Manual"
+          ],
+          "x-ms-enum-values": [
+            100000000,
+            100000001,
+            100000002,
+            100000003
+          ],
+          "Color": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "56da6e18-ddc7-f111-a05a-00224837cd6c",
+          "x-ms-isGlobal": false,
+          "x-ms-optionsetdisplayname": "Type",
+          "x-ms-optionSetType": "Picklist"
+        },
+        "jsi_typename": {
+          "type": "string",
+          "title": "jsi_typename",
+          "x-ms-dataverse-attribute": "jsi_typename",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "jsi_typeName",
+          "x-ms-read-only": true
         },
         "modifiedby": {
           "type": "string",
@@ -391,8 +391,8 @@
         "createdonbehalfbyyominame",
         "jsi_assessmentid",
         "jsi_maxattempts",
-        "jsi_origin",
         "jsi_passingscore",
+        "jsi_type",
         "modifiedbyyominame",
         "modifiedonbehalfbyyominame",
         "organizationidname",

@@ -1,0 +1,45 @@
+{
+  "description": "Personas base del sistema. reset-data.mjs NO las borra y seed-data.mjs las crea o actualiza (se buscan por correo). Áreas por código (ver catalog.json).",
+  "people": [
+    {
+      "firstName": "Juan Jose",
+      "lastName": "Ezequiel",
+      "email": "202111354@est.umss.edu",
+      "jobTitle": "Onboarding Administrator",
+      "area": "ENG",
+      "roles": ["Administrator"]
+    },
+    {
+      "firstName": "Marcelo",
+      "lastName": "Antezana",
+      "email": "marcelo.antezana@jalasoft.com",
+      "jobTitle": "Quality Control Processes Lead",
+      "area": "QA",
+      "roles": ["Administrator"]
+    },
+    {
+      "firstName": "Iván",
+      "lastName": "Suárez",
+      "email": "ivan.suarez@jalasoft.com",
+      "jobTitle": "Engineering Manager",
+      "area": "ENG",
+      "roles": ["Manager"]
+    },
+    {
+      "firstName": "Gabriela",
+      "lastName": "Rocha",
+      "email": "gabriela.rocha@jalasoft.com",
+      "jobTitle": "Quality Control Manager",
+      "area": "QA",
+      "roles": ["Manager"]
+    },
+    {
+      "firstName": "Sofía",
+      "lastName": "Terceros",
+      "email": "sofia.terceros@jalasoft.com",
+      "jobTitle": "PMO Manager",
+      "area": "PMO",
+      "roles": ["Manager"]
+    }
+  ]
+}

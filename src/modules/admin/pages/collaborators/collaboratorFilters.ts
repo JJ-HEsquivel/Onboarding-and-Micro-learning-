@@ -30,15 +30,17 @@ export function filterCollaborators(collaborators: Collaborator[], filters: Coll
 export function exportCollaboratorsCsv(collaborators: Collaborator[]): void {
   downloadCsv(
     `colaboradores-${todayIso()}.csv`,
-    ['Colaborador', 'Área', 'Cargo', 'Manager', 'Ingreso', 'Documentos leídos', 'Documentos asignados', 'Estado'],
+    ['Colaborador', 'Correo', 'Área', 'Cargo', 'Manager', 'Ingreso', 'Documentos aprobados', 'Documentos asignados', 'Promedio', 'Estado'],
     collaborators.map((c) => [
       c.fullName,
+      c.email,
       c.areaName,
       c.jobTitle,
       c.managerName,
       formatDate(c.hireDate),
-      c.documentsRead,
+      c.documentsApproved,
       c.documentsTotal,
+      c.averageScore === null ? '' : `${c.averageScore}%`,
       COLLABORATOR_STATUS[c.status].label,
     ]),
   );

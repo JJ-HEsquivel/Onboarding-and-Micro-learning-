@@ -18,8 +18,11 @@ export interface Jsi_assessmentattemptsBase {
   jsi_assessmentattemptid: string;
   "jsi_Assignment@odata.bind": string;
   jsi_attemptnumber: number;
+  jsi_correctcount?: number;
   jsi_durationseconds?: number;
   jsi_name?: string;
+  jsi_passed?: boolean;
+  jsi_questioncount?: number;
   jsi_score?: number;
   jsi_takenon?: string;
   overriddencreatedon?: string;
@@ -38,6 +41,7 @@ export interface Jsi_assessmentattempts extends Jsi_assessmentattemptsBase {
   createdonbehalfbyname?: string;
   createdonbehalfbyyominame: string;
   jsi_assignmentname?: string;
+  jsi_passedname?: string;
   modifiedbyname?: string;
   modifiedbyyominame: string;
   modifiedon?: string;

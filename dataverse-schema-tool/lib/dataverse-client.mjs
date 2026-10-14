@@ -64,7 +64,9 @@ export async function connect(dataverseUrl) {
 
   return async function api(method, path, body, extraHeaders = {}) {
     for (let attempt = 1; attempt <= 5; attempt++) {
-      const res = await fetch(`${base}/${path}`, {
+      // Acepta rutas relativas ("contacts?...") o la URL completa de @odata.nextLink.
+      const url = path.startsWith('http') ? path : `${base}/${path}`;
+      const res = await fetch(url, {
         method,
         headers: {
           Authorization: `Bearer ${token}`,

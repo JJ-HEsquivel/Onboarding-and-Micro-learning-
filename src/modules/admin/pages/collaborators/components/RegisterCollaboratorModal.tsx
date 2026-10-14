@@ -8,7 +8,7 @@ import { useAsync } from '@/shared/hooks/useAsync';
 import { todayIso } from '@/shared/lib/dates';
 import type { Area, Manager, NewCollaboratorInput } from '@/shared/types/onboarding';
 import { registerCollaborator } from '@/services/collaborators.service';
-import { buildProposedRoute, loadOnboardingCatalog } from '@/services/onboardingRoute.service';
+import { buildAreaRoute, filterRoute, loadOnboardingCatalog, proposedDocumentIds } from '@/services/onboardingRoute.service';
 import { ProposedRoute } from './ProposedRoute';
 
 interface RegisterCollaboratorModalProps {
@@ -40,26 +40,34 @@ function validate(form: NewCollaboratorInput): FormErrors {
   return errors;
 }
 
+/** Manager sugerido para un área: el primero que gestiona esa área, si hay alguno. */
+const suggestedManager = (managers: Manager[], areaId: string) => managers.find((m) => m.areaId === areaId)?.id;
+
 export function RegisterCollaboratorModal({ areas, managers, onClose, onRegistered }: RegisterCollaboratorModalProps) {
   const admin = useCurrentUser();
   const catalog = useAsync(loadOnboardingCatalog);
-  const [form, setForm] = useState<NewCollaboratorInput>(() => ({
-    firstName: '',
-    lastName: '',
-    email: '',
-    jobTitle: '',
-    areaId: areas[0]?.id ?? '',
-    managerId: managers.length === 1 ? managers[0].id : '',
-    hireDate: todayIso(),
-  }));
+  const [form, setForm] = useState<NewCollaboratorInput>(() => {
+    const areaId = areas[0]?.id ?? '';
+    return {
+      firstName: '',
+      lastName: '',
+      email: '',
+      jobTitle: '',
+      areaId,
+      managerId: suggestedManager(managers, areaId) ?? (managers.length === 1 ? managers[0].id : ''),
+      hireDate: todayIso(),
+    };
+  });
   const [showErrors, setShowErrors] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const route = useMemo(
-    () => (catalog.data && form.areaId ? buildProposedRoute(catalog.data, form.areaId) : []),
+  // Todas las etapas del área y, dentro de ellas, los documentos que el Admin propone.
+  const areaRoute = useMemo(
+    () => (catalog.data && form.areaId ? buildAreaRoute(catalog.data, form.areaId) : []),
     [catalog.data, form.areaId],
   );
+  const proposedIds = useMemo(() => proposedDocumentIds(areaRoute), [areaRoute]);
   const errors = showErrors ? validate(form) : {};
   const managerName = managers.find((manager) => manager.id === form.managerId)?.fullName;
 
@@ -80,7 +88,7 @@ export function RegisterCollaboratorModal({ areas, managers, onClose, onRegister
     setSubmitting(true);
     setSubmitError(null);
     try {
-      await registerCollaborator(form, route, admin.id);
+      await registerCollaborator(form, filterRoute(areaRoute, proposedIds), admin.id);
       onRegistered(`${form.firstName.trim()} ${form.lastName.trim()}`);
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : String(error));
@@ -105,7 +113,7 @@ export function RegisterCollaboratorModal({ areas, managers, onClose, onRegister
       }
     >
       <form id={FORM_ID} className="register-form" onSubmit={handleSubmit} noValidate>
-        <div className="register-form__grid">
+        <div className="form-grid">
           <FormField label="Nombres" htmlFor="firstName" error={errors.firstName}>
             <input
               id="firstName"
@@ -162,7 +170,11 @@ export function RegisterCollaboratorModal({ areas, managers, onClose, onRegister
               className="input"
               value={form.areaId}
               aria-invalid={Boolean(errors.areaId)}
-              onChange={(event) => updateField('areaId', event.target.value)}
+              onChange={(event) => {
+                const areaId = event.target.value;
+                // Al cambiar de área se sugiere el Manager de esa área (si hay uno).
+                setForm((prev) => ({ ...prev, areaId, managerId: suggestedManager(managers, areaId) ?? prev.managerId }));
+              }}
             >
               {areas.length === 0 && <option value="">No hay áreas registradas</option>}
               {areas.map((area) => (
@@ -195,6 +207,7 @@ export function RegisterCollaboratorModal({ areas, managers, onClose, onRegister
               {managers.map((manager) => (
                 <option key={manager.id} value={manager.id}>
                   {manager.fullName}
+                  {manager.jobTitle ? ` · ${manager.jobTitle}` : ''}
                 </option>
               ))}
             </select>
@@ -215,7 +228,7 @@ export function RegisterCollaboratorModal({ areas, managers, onClose, onRegister
         {catalog.error ? (
           <Alert tone="danger">No se pudo cargar la ruta de inducción: {catalog.error.message}</Alert>
         ) : (
-          <ProposedRoute stages={route} loading={catalog.loading} />
+          <ProposedRoute stages={areaRoute} proposedIds={proposedIds} loading={catalog.loading} />
         )}
 
         <Alert tone="warning">

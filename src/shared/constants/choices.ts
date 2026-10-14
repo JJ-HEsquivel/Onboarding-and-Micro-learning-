@@ -13,6 +13,9 @@ import type {
 import type { Jsi_stagesjsi_scope } from '@/generated/models/Jsi_stagesModel';
 import type { Jsi_documentsjsi_criticality, Jsi_documentsjsi_status } from '@/generated/models/Jsi_documentsModel';
 import type { Jsi_documentassignmentsjsi_status } from '@/generated/models/Jsi_documentassignmentsModel';
+import type { Jsi_assessmentsjsi_type } from '@/generated/models/Jsi_assessmentsModel';
+import type { Jsi_assessmentassignmentsjsi_status } from '@/generated/models/Jsi_assessmentassignmentsModel';
+import type { Jsi_evidencesjsi_type } from '@/generated/models/Jsi_evidencesModel';
 
 /** jsi_roleassignment.jsi_role */
 export const ROLE = {
@@ -75,3 +78,27 @@ export const ASSIGNMENT_STATUS = {
   Pending: 100000000,
   Read: 100000001,
 } as const satisfies Record<string, Jsi_documentassignmentsjsi_status>;
+
+/** jsi_assessment.jsi_type */
+export const ASSESSMENT_TYPE = {
+  Document: 100000000,
+  DocumentUpdate: 100000001,
+  Campaign: 100000002,
+  Manual: 100000003,
+} as const satisfies Record<string, Jsi_assessmentsjsi_type>;
+
+/** jsi_assessmentassignment.jsi_status: estado del examen de un documento para una persona. */
+export const EXAM_STATUS = {
+  Locked: 100000000,
+  Pending: 100000001,
+  Passed: 100000002,
+  Failed: 100000003,
+} as const satisfies Record<string, Jsi_assessmentassignmentsjsi_status>;
+
+/** jsi_evidence.jsi_type */
+export const EVIDENCE_TYPE = {
+  ReadingConfirmation: 100000000,
+  AssessmentPassed: 100000001,
+  AssessmentFailed: 100000002,
+  RoleChange: 100000003,
+} as const satisfies Record<string, Jsi_evidencesjsi_type>;
