@@ -29,8 +29,10 @@ export interface Jsi_documentsBase {
   importsequencenumber?: number;
   "jsi_Category@odata.bind"?: string;
   jsi_code: string;
+  jsi_content?: string;
   jsi_criticality: Jsi_documentsjsi_criticality;
   jsi_documentid: string;
+  jsi_isdefault?: boolean;
   jsi_mandatory?: boolean;
   jsi_owningdepartment?: string;
   jsi_pagecount?: number;
@@ -58,6 +60,7 @@ export interface Jsi_documents extends Jsi_documentsBase {
   jsi_criticalityname?: string;
   jsi_file?: string;
   jsi_file_name?: string;
+  jsi_isdefaultname?: string;
   jsi_mandatoryname?: string;
   jsi_stagename?: string;
   jsi_statusname?: string;

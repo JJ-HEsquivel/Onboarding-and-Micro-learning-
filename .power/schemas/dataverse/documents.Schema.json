@@ -104,6 +104,14 @@
           "required": true,
           "maxLength": 30
         },
+        "jsi_content": {
+          "type": "string",
+          "title": "Content",
+          "x-ms-dataverse-attribute": "jsi_content",
+          "x-ms-dataverse-type": "MemoType",
+          "x-ms-schema-name": "jsi_Content",
+          "maxLength": 100000
+        },
         "jsi_criticality": {
           "type": "string",
           "title": "Criticality",
@@ -165,6 +173,37 @@
           "x-ms-schema-name": "jsi_File_Name",
           "x-ms-read-only": true,
           "maxLength": 200
+        },
+        "jsi_isdefault": {
+          "type": "string",
+          "title": "Default In Route",
+          "x-ms-dataverse-attribute": "jsi_isdefault",
+          "x-ms-dataverse-type": "BooleanType",
+          "x-ms-schema-name": "jsi_IsDefault",
+          "enum": [
+            "No",
+            "Yes"
+          ],
+          "x-ms-enum-values": [
+            0,
+            1
+          ],
+          "Color": [
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "4bda6e18-ddc7-f111-a05a-00224837cd6c",
+          "x-ms-isGlobal": false,
+          "x-ms-optionsetdisplayname": "Default In Route",
+          "x-ms-optionSetType": "Boolean"
+        },
+        "jsi_isdefaultname": {
+          "type": "string",
+          "title": "jsi_isdefaultname",
+          "x-ms-dataverse-attribute": "jsi_isdefaultname",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "jsi_isdefaultName",
+          "x-ms-read-only": true
         },
         "jsi_mandatory": {
           "type": "string",

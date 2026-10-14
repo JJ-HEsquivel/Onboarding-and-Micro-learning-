@@ -21,8 +21,10 @@ export type Jsi_roleassignmentsstatuscode = keyof typeof Jsi_roleassignmentsstat
 
 export interface Jsi_roleassignmentsBase {
   importsequencenumber?: number;
+  "jsi_AssignedBy@odata.bind"?: string;
   jsi_enddate?: string;
   jsi_isactive?: boolean;
+  jsi_jobtitle?: string;
   jsi_name?: string;
   "jsi_Person@odata.bind": string;
   jsi_role: Jsi_roleassignmentsjsi_role;
@@ -41,6 +43,8 @@ export interface Jsi_roleassignments extends Jsi_roleassignmentsBase {
   createdon?: string;
   createdonbehalfbyname?: string;
   createdonbehalfbyyominame: string;
+  jsi_assignedbyname?: string;
+  jsi_assignedbyyominame?: string;
   jsi_isactivename?: string;
   jsi_personname?: string;
   jsi_personyominame?: string;
@@ -58,6 +62,8 @@ export interface Jsi_roleassignments extends Jsi_roleassignmentsBase {
   _createdby_value?: string;
   createdonbehalfby?: object;
   _createdonbehalfby_value?: string;
+  jsi_assignedby?: object;
+  _jsi_assignedby_value?: string;
   jsi_person?: object;
   _jsi_person_value?: string;
   modifiedby?: object;

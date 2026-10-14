@@ -188,7 +188,8 @@ Si necesitas agregar una tabla o columna nueva más adelante, edítala en
 |---|---|
 | `npm run dry-run` / `npm run create` | Crea tablas, columnas y relaciones que falten (nunca borra) |
 | `npm run remove-columns:dry-run` / `npm run remove-columns` | Borra las columnas listadas en `REMOVED_COLUMNS` (schema.mjs) |
-| `npm run seed:dry-run` / `npm run seed` | Carga catálogos (áreas, etapas, documentos) y personas iniciales |
+| `npm run reset:dry-run` / `npm run reset` | Borra los datos de inducción y el catálogo, conservando áreas y personas base (pide escribir REINICIAR) |
+| `npm run seed:dry-run` / `npm run seed` | Carga el catálogo de `data/catalog.json` y las personas de `data/people.json` |
 
 Archivos:
 - `lib/dataverse-client.mjs`: inicio de sesión y llamadas a la Web API, compartido por los scripts.
@@ -216,3 +217,22 @@ npm run remove-columns
 npm run seed:dry-run
 npm run seed
 ```
+
+## 12. Datos base y reinicio
+
+Los datos base están en archivos, no en el código:
+
+- `data/catalog.json`: 6 áreas, 10 categorías, 8 etapas (Etapas 1 y 2 generales y una Etapa 3 por
+  área), 38 documentos con su contenido y 5 preguntas por documento. Tomado del prototipo.
+- `data/people.json`: las personas que siempre deben existir (2 administradores y 3 managers).
+
+Para dejar el sistema "como recién instalado" (sin colaboradores ni avances):
+
+```powershell
+npm run reset:dry-run     # muestra cuántos registros borraría
+npm run reset             # pide escribir REINICIAR
+npm run seed              # vuelve a cargar catálogo y personas base
+```
+
+`reset` conserva las áreas y a las personas de `people.json`; borra todo lo demás (inducciones,
+roles, asignaciones, intentos, evidencias, campañas, documentos y preguntas). No se puede deshacer.

@@ -48,3 +48,10 @@ export function addBusinessDays(startIso: string, businessDays: number): string 
   }
   return toIsoDate(date);
 }
+
+/** Suma días corridos a una fecha de solo día. */
+export function addCalendarDays(startIso: string, days: number): string {
+  const date = parseIsoDate(startIso) ?? new Date();
+  date.setDate(date.getDate() + days);
+  return toIsoDate(date);
+}

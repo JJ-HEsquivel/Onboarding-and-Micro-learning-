@@ -29,6 +29,7 @@ export interface Jsi_assessmentassignmentsBase {
   jsi_duedate?: string;
   "jsi_Employee@odata.bind": string;
   jsi_name?: string;
+  "jsi_Onboarding@odata.bind"?: string;
   jsi_resolvedon?: string;
   jsi_score?: number;
   jsi_status: Jsi_assessmentassignmentsjsi_status;
@@ -51,6 +52,7 @@ export interface Jsi_assessmentassignments extends Jsi_assessmentassignmentsBase
   jsi_campaigndeliveryname?: string;
   jsi_employeename?: string;
   jsi_employeeyominame?: string;
+  jsi_onboardingname?: string;
   jsi_statusname?: string;
   modifiedbyname?: string;
   modifiedbyyominame: string;
@@ -73,6 +75,8 @@ export interface Jsi_assessmentassignments extends Jsi_assessmentassignmentsBase
   _jsi_campaigndelivery_value?: string;
   jsi_employee?: object;
   _jsi_employee_value?: string;
+  jsi_onboarding?: object;
+  _jsi_onboarding_value?: string;
   modifiedby?: object;
   _modifiedby_value?: string;
   modifiedonbehalfby?: object;

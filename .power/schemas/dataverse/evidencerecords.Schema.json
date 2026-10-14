@@ -102,6 +102,14 @@
           "x-ms-dataverse-type": "DateTimeType",
           "x-ms-schema-name": "jsi_Date"
         },
+        "jsi_description": {
+          "type": "string",
+          "title": "Description",
+          "x-ms-dataverse-attribute": "jsi_description",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "jsi_Description",
+          "maxLength": 300
+        },
         "jsi_document": {
           "type": "string",
           "title": "Document",
@@ -170,6 +178,52 @@
           "x-ms-schema-name": "jsi_Name",
           "x-ms-dataverse-primary-name": true,
           "maxLength": 200
+        },
+        "jsi_result": {
+          "type": "string",
+          "title": "Result",
+          "x-ms-dataverse-attribute": "jsi_result",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "jsi_Result",
+          "maxLength": 100
+        },
+        "jsi_type": {
+          "type": "string",
+          "title": "Type",
+          "x-ms-dataverse-attribute": "jsi_type",
+          "x-ms-dataverse-type": "PicklistType",
+          "x-ms-schema-name": "jsi_Type",
+          "required": true,
+          "enum": [
+            "ReadingConfirmation",
+            "AssessmentPassed",
+            "AssessmentFailed",
+            "RoleChange"
+          ],
+          "x-ms-enum-values": [
+            100000000,
+            100000001,
+            100000002,
+            100000003
+          ],
+          "Color": [
+            null,
+            null,
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "32d86b1e-ddc7-f111-a05a-00224837cd6c",
+          "x-ms-isGlobal": false,
+          "x-ms-optionsetdisplayname": "Type",
+          "x-ms-optionSetType": "Picklist"
+        },
+        "jsi_typename": {
+          "type": "string",
+          "title": "jsi_typename",
+          "x-ms-dataverse-attribute": "jsi_typename",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "jsi_typeName",
+          "x-ms-read-only": true
         },
         "jsi_version": {
           "type": "string",
@@ -409,6 +463,7 @@
         "createdonbehalfbyyominame",
         "jsi_employee",
         "jsi_evidenceid",
+        "jsi_type",
         "modifiedbyyominame",
         "modifiedonbehalfbyyominame",
         "ownerid",

@@ -1,361 +1,198 @@
 #!/usr/bin/env node
 // =============================================================================
 // seed-data.mjs
-// Carga los registros DEFINIDOS (catalogos y personas iniciales) en Dataverse:
-//   jsi_area, jsi_stage, jsi_stagearea, jsi_document, contact, jsi_roleassignment
+// Carga los datos BASE del sistema en Dataverse:
+//   data/catalog.json -> áreas, categorías, etapas, etapa-área, documentos
+//                        (con su contenido) y una evaluación por documento
+//                        con sus preguntas y opciones.
+//   data/people.json  -> personas base (administradores y managers) y sus roles.
 //
 // USO (dentro de la carpeta dataverse-schema-tool):
-//   node seed-data.mjs --dry-run     (solo muestra que haria, no escribe nada)
-//   node seed-data.mjs               (carga los datos de verdad)
+//   npm run seed:dry-run    (solo muestra qué haría)
+//   npm run seed            (carga los datos)
 //
-// Es IDEMPOTENTE: se puede ejecutar varias veces. Si un registro ya existe
-// (se busca por nombre o codigo) lo ACTUALIZA; si no existe lo CREA. Nunca duplica.
-// No guarda ni imprime ningun token.
+// Es IDEMPOTENTE: se puede ejecutar varias veces. Busca cada registro por su
+// nombre o código: si existe lo actualiza y si no, lo crea. Nunca duplica.
+// Para empezar de cero, ejecute antes "npm run reset".
 // =============================================================================
-import 'dotenv/config';
-import { PublicClientApplication, LogLevel } from '@azure/msal-node';
-import { execSync } from 'node:child_process';
+import fs from 'node:fs';
+import { connect, getDataverseUrl } from './lib/dataverse-client.mjs';
+import { createDataStore, q } from './lib/dataverse-data.mjs';
 
-// =============================================================================
-// ===================  DATOS A CARGAR (edita aqui si hace falta)  =============
-// =============================================================================
-
-// Valores de los Choice (segun schema.mjs)
+// Valores de las columnas Choice (ver schema.mjs)
 const SCOPE = { General: 100000000, AreaSpecific: 100000001 };
 const CRITICALITY = { High: 100000000, Medium: 100000001, Low: 100000002 };
-const DOC_STATUS = { Current: 100000000, Updated: 100000001, Draft: 100000002 };
-
-// --- Areas: nombres tomados del panel "Estado de la induccion por area" -------
-// OJO: el "code" NO viene en tus documentos; es obligatorio en la tabla, asi que
-// puse una abreviatura. Cambiala aqui si tu empresa usa otros codigos.
-const AREAS = [
-  { name: 'Engineering',         code: 'ENG' },
-  { name: 'Quality Control',     code: 'QC'  },
-  { name: 'Project Management',  code: 'PM'  },
-  { name: 'People & Culture',    code: 'PC'  },
-  { name: 'Finance',             code: 'FIN' },
-  { name: 'IT & Infrastructure', code: 'ITI' },
-];
-
-// --- Etapas: segun el PDF "Contenido Jala Connections" y el modal ------------
-const STAGES = [
-  { key: 's1',    name: 'Etapa 1 · Políticas Fundamentales',                   order: 1, days: 5,    scope: SCOPE.General },
-  { key: 's2',    name: 'Etapa 2 · Políticas Fundamentales',                   order: 2, days: 5,    scope: SCOPE.General },
-  { key: 's3eng', name: 'Etapa 3 · Documentación específica: Ingeniería',      order: 3, days: null, scope: SCOPE.AreaSpecific },
-  { key: 's3adm', name: 'Etapa 3 · Documentación específica: Administración',  order: 3, days: null, scope: SCOPE.AreaSpecific },
-];
-
-// --- A que areas se asigna cada etapa de tipo "AreaSpecific" ------------------
-// Ingenieria -> Engineering (el prototipo lo muestra asi).
-// Administracion -> NO esta definido en tus documentos. Dejalo vacio [] o escribe
-// los nombres exactos de areas de la lista AREAS, por ejemplo: ['Finance'].
-const ADMIN_STAGE_AREAS = [];
-const STAGE_AREAS = [
-  { stage: 's3eng', area: 'Engineering' },
-  ...ADMIN_STAGE_AREAS.map((a) => ({ stage: 's3adm', area: a })),
-];
-
-// --- Documentos --------------------------------------------------------------
-// code / title / minutos: tomados del prototipo (capturas).
-// pages / owner: tomados del Excel de documentos.
-// dot: true = el documento tiene el punto naranja en el prototipo (se carga como
-//      criticidad High; los demas como Medium). Ver nota en la guia.
-const EIS = 'Enterprise Information Security';
-const TT  = 'Technology and Transformation';
-const PAC = 'Procurement and Asset Control';
-const DOCS = [
-  // ---- Etapa 1 ----
-  { code: 'POL-TI-001',  title: 'BYOD Computadores - Política (ESP-ENG)',                                  stage: 's1', pages: 3,  min: 8,    owner: EIS, dot: true  },
-  { code: 'POL-TI-002',  title: 'BYOD Tablets y dispositivos móviles - Política (ESP-ENG)',                stage: 's1', pages: 1,  min: 4,    owner: EIS, dot: true  },
-  { code: 'POL-TI-003',  title: 'Control de Software y Hardware - Política (ESP-ENG)',                     stage: 's1', pages: 2,  min: 6,    owner: EIS, dot: false },
-  { code: 'POL-SEG-004', title: 'Etiquetado de Datos e Información - Política',                            stage: 's1', pages: 4,  min: 10,   owner: EIS, dot: false },
-  { code: 'POL-OPS-005', title: 'Uso correcto de bienes y servicios de la organización - Política',        stage: 's1', pages: 5,  min: 12,   owner: EIS, dot: false },
-  { code: 'POL-TI-006',  title: 'Software permitido - Política (ESP - ENG)',                               stage: 's1', pages: 2,  min: 6,    owner: EIS, dot: false },
-  { code: 'POL-SEG-007', title: 'Seguridad de la Información - Política (ESP - ENG)',                      stage: 's1', pages: 3,  min: 8,    owner: EIS, dot: true  },
-  // ---- Etapa 2 ----
-  { code: 'POL-DAT-008', title: 'Inteligencia Artificial - Política (ESP-ENG)',                            stage: 's2', pages: 3,  min: 8,    owner: EIS, dot: true  },
-  { code: 'POL-SEG-009', title: 'Protección de Contraseñas - Política (ESP - ENG)',                        stage: 's2', pages: 1,  min: 4,    owner: EIS, dot: true  },
-  { code: 'POL-DAT-010', title: 'Protección y Privacidad de Datos e Información - Política (ESP - ENG)',   stage: 's2', pages: 4,  min: 10,   owner: EIS, dot: true  },
-  { code: 'POL-SEG-011', title: 'Uso de internet - Política (ESP - ENG)',                                  stage: 's2', pages: 2,  min: 6,    owner: EIS, dot: false },
-  { code: 'POL-DAT-012', title: 'Uso de dispositivos de almacenamiento - Política (ESP-ENG)',              stage: 's2', pages: 1,  min: 4,    owner: TT,  dot: true  },
-  // ---- Etapa 3 · Ingenieria ----
-  { code: 'POL-ING-013', title: 'Desarrollo Seguro - Política',                                            stage: 's3eng', pages: 2, min: 6, owner: EIS,           dot: true },
-  { code: 'POL-ING-014', title: 'Customer Engineering Confidential Information - Policy',                  stage: 's3eng', pages: 3, min: 8, owner: 'Engineering', dot: true },
-  // ---- Etapa 3 · Administracion ----
-  // Estos 2 NO aparecen en el prototipo: codigo y criticidad son valores por defecto
-  // (campos obligatorios). Minutos de lectura: no definidos -> se dejan vacios.
-  { code: 'MAN-ADM-015', title: 'Gestion de activos - Manual',                                             stage: 's3adm', pages: 15, min: null, owner: PAC, dot: false },
-  { code: 'MAN-ADM-016', title: 'Compra de bienes y servicios - Manual (ESP-ENG)',                         stage: 's3adm', pages: 22, min: null, owner: PAC, dot: false },
-];
-const DOC_VERSION = '1.0';   // el prototipo muestra "v1.0"
-
-// --- Personas iniciales y sus roles -------------------------------------------
-// Solo las personas necesarias para arrancar (ej. el primer Administrador).
-// El resto se registra desde la app. Se busca por correo: no se duplican.
+const DOC_STATUS = { Current: 100000000 };
+const ASSESSMENT_TYPE = { Document: 100000000 };
 const ROLE = { Administrator: 100000000, Manager: 100000001, Collaborator: 100000002 };
-const PEOPLE = [
-  {
-    firstName: 'Juan Jose',
-    lastName: 'Ezequiel',
-    email: '202111354@est.umss.edu',
-    area: 'Engineering',
-    roles: ['Administrator'],
-  },
-  // Managers de prueba (nombres del prototipo). Cambia los correos por los reales.
-  {
-    firstName: 'Iván',
-    lastName: 'Suárez',
-    email: 'ivan.suarez@jalasoft.com',
-    jobTitle: 'Engineering Manager',
-    area: 'Engineering',
-    roles: ['Manager'],
-  },
-  {
-    firstName: 'Gabriela',
-    lastName: 'Rocha',
-    email: 'gabriela.rocha@jalasoft.com',
-    jobTitle: 'Quality Control Manager',
-    area: 'Quality Control',
-    roles: ['Manager'],
-  },
-  {
-    firstName: 'Sofía',
-    lastName: 'Terceros',
-    email: 'sofia.terceros@jalasoft.com',
-    jobTitle: 'Project Manager',
-    area: 'Project Management',
-    roles: ['Manager'],
-  },
-];
 
-// =============================================================================
-// ===================  MOTOR (no necesitas editar de aqui en adelante)  =======
-// =============================================================================
+// Reglas del programa (iguales a las de la app: src/shared/constants/program.ts)
+const PASSING_SCORE = 80;
+const MAX_ATTEMPTS = 3;
+
+const readJson = (file) => JSON.parse(fs.readFileSync(new URL(file, import.meta.url), 'utf8'));
+const catalog = readJson('./data/catalog.json');
+const { people } = readJson('./data/people.json');
+
 const DRY_RUN = process.argv.includes('--dry-run');
-const API_VERSION = 'v9.2';
-
-if (!process.env.DATAVERSE_URL) {
-  console.error('\n[ERROR] Falta DATAVERSE_URL en tu archivo .env (carpeta dataverse-schema-tool).\n');
-  process.exit(1);
-}
-const DATAVERSE_URL = process.env.DATAVERSE_URL.replace(/\/+$/, '');
-const API = `${DATAVERSE_URL}/api/data/${API_VERSION}`;
+const DATAVERSE_URL = getDataverseUrl();
 
 console.log('==================================================================');
-console.log(' Onboarding and Micro-learning · Carga de datos definidos');
+console.log(' Onboarding and Micro-learning · Carga de datos base');
 console.log(` Entorno: ${DATAVERSE_URL}`);
 console.log(` Modo:    ${DRY_RUN ? 'DRY-RUN (no se escribe nada)' : 'EJECUCION REAL'}`);
 console.log('==================================================================\n');
 
-// ---- Autenticacion (misma que create-tables.mjs) -----------------------------
-const DEFAULT_PUBLIC_CLIENT_ID = '51f81489-12ee-4a9e-aaae-a2591f45987d';
-const AUTH_MODE = (process.env.AUTH_MODE || 'device').toLowerCase();
+/** Contenido del lector: "## Título" + párrafo por cada sección. */
+const toContent = (sections) => sections.map((s) => `## ${s.title}\n${s.body}`).join('\n\n');
 
-async function getTokenWithDeviceCode() {
-  const pca = new PublicClientApplication({
-    auth: {
-      clientId: process.env.AZURE_CLIENT_ID || DEFAULT_PUBLIC_CLIENT_ID,
-      authority: `https://login.microsoftonline.com/${process.env.AZURE_TENANT_ID || 'organizations'}`,
-    },
-    system: { loggerOptions: { loggerCallback: () => {}, logLevel: LogLevel.Error } },
-  });
-  const result = await pca.acquireTokenByDeviceCode({
-    scopes: [`${DATAVERSE_URL}/user_impersonation`],
-    deviceCodeCallback: (response) => {
-      console.log('\n--- INICIO DE SESION REQUERIDO ---');
-      console.log(response.message);
-      console.log('-----------------------------------\n');
-    },
-  });
-  console.log(`Sesion iniciada como: ${result.account?.username ?? '(cuenta autenticada)'}\n`);
-  return result.accessToken;
-}
-function getTokenWithAzureCli() {
-  try {
-    const out = execSync(`az account get-access-token --resource ${DATAVERSE_URL} --query accessToken -o tsv`, {
-      encoding: 'utf-8', stdio: ['ignore', 'pipe', 'pipe'],
-    });
-    const token = out.trim();
-    if (!token) throw new Error('az no devolvio token');
-    return token;
-  } catch (e) {
-    throw new Error('No se pudo obtener el token con Azure CLI: ' + (e.stderr?.toString().trim() || e.message));
-  }
-}
-const getAccessToken = async () => (AUTH_MODE === 'azcli' ? getTokenWithAzureCli() : getTokenWithDeviceCode());
-
-// ---- HTTP --------------------------------------------------------------------
-let TOKEN = '';
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-async function api(method, path, body, extraHeaders = {}) {
-  const url = `${API}/${path}`;
-  for (let attempt = 1; attempt <= 5; attempt++) {
-    const res = await fetch(url, {
-      method,
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-        'OData-MaxVersion': '4.0',
-        'OData-Version': '4.0',
-        Accept: 'application/json',
-        ...(body ? { 'Content-Type': 'application/json; charset=utf-8' } : {}),
-        ...extraHeaders,
-      },
-      body: body ? JSON.stringify(body) : undefined,
-    });
-    if ((res.status === 429 || res.status === 503) && attempt < 5) {
-      await sleep((Number(res.headers.get('retry-after')) || 2 * attempt) * 1000);
-      continue;
-    }
-    const text = await res.text();
-    if (!res.ok) throw new Error(`${method} ${path} -> ${res.status} ${text}`);
-    return text ? JSON.parse(text) : null;
-  }
-}
-
-// ---- Metadata: nombre del entity set, columna ID y propiedades de navegacion --
-const META = {};
-async function getMeta(logical) {
-  if (META[logical]) return META[logical];
-  let def;
-  try {
-    def = await api('GET', `EntityDefinitions(LogicalName='${logical}')?$select=EntitySetName,PrimaryIdAttribute`);
-  } catch (e) {
-    if (/-> 404/.test(e.message)) {
-      throw new Error(`La tabla "${logical}" no existe en Dataverse. Ejecuta primero "npm run create" (crear tablas) y espera a que termine sin errores.`);
-    }
-    throw e;
-  }
-  const rel = await api('GET', `EntityDefinitions(LogicalName='${logical}')/ManyToOneRelationships?$select=ReferencingAttribute,ReferencingEntityNavigationPropertyName`);
-  const nav = {};
-  for (const r of rel.value) nav[r.ReferencingAttribute] = r.ReferencingEntityNavigationPropertyName;
-  META[logical] = { set: def.EntitySetName, pk: def.PrimaryIdAttribute, nav };
-  return META[logical];
-}
-
-const q = (v) => String(v).replace(/'/g, "''");
-
-// Crea o actualiza UN registro. Devuelve { id, action }.
-async function upsert(logical, filter, payload, label, lookups = []) {
-  const m = await getMeta(logical);
-  const found = await api('GET', `${m.set}?$select=${m.pk}&$filter=${encodeURIComponent(filter)}&$top=2`);
-  if (found.value.length > 1) throw new Error(`Hay mas de un registro que coincide en ${logical} (${label}). Revisa duplicados en Dataverse.`);
-  const existing = found.value[0]?.[m.pk];
-
-  if (DRY_RUN) {
-    console.log(`   ${existing ? '[existe -> se ACTUALIZARIA]' : '[no existe -> se CREARIA]    '} ${label}`);
-    return { id: existing || `dryrun-${label}`, action: existing ? 'update' : 'create' };
-  }
-
-  const body = { ...payload };
-  for (const l of lookups) {
-    const parent = await getMeta(l.target);
-    const navName = m.nav[l.attr];
-    if (!navName) throw new Error(`No se encontro la relacion de la columna ${logical}.${l.attr}. ¿Se crearon bien las relaciones (npm run create)?`);
-    body[`${navName}@odata.bind`] = `/${parent.set}(${l.id})`;
-  }
-
-  if (existing) {
-    await api('PATCH', `${m.set}(${existing})`, body, { 'If-Match': '*' });
-    console.log(`   [actualizado] ${label}`);
-    return { id: existing, action: 'update' };
-  }
-  const created = await api('POST', `${m.set}?$select=${m.pk}`, body, { Prefer: 'return=representation' });
-  console.log(`   [creado]      ${label}`);
-  return { id: created[m.pk], action: 'create' };
-}
-
-async function count(logical) {
-  const m = await getMeta(logical);
-  const r = await api('GET', `${m.set}?$select=${m.pk}&$count=true&$top=1`);
-  return r['@odata.count'];
-}
-
-// ---- Programa principal --------------------------------------------------------
 async function main() {
-  TOKEN = await getAccessToken();
+  const api = await connect(DATAVERSE_URL);
   const who = await api('GET', 'WhoAmI');
   console.log(`Conexion OK con Dataverse (UserId: ${who.UserId}).\n`);
-
-  // Validar que existan las tablas antes de empezar
-  for (const t of ['jsi_area', 'jsi_stage', 'jsi_stagearea', 'jsi_document', 'contact', 'jsi_roleassignment']) await getMeta(t);
+  const store = createDataStore(api, { dryRun: DRY_RUN });
 
   const stats = { create: 0, update: 0 };
-  const tally = (r) => { stats[r.action]++; return r; };
+  const tally = (result, label) => {
+    stats[result.action]++;
+    if (label) console.log(`   [${result.action === 'create' ? 'creado' : 'actualizado'}] ${label}`);
+    return result;
+  };
 
-  // 1) Areas
-  console.log('--- 1/5 Areas ---');
+  // 1) Áreas
+  console.log('--- 1/7 Areas ---');
   const areaId = {};
-  for (const a of AREAS) {
-    const r = tally(await upsert('jsi_area', `jsi_name eq '${q(a.name)}'`, { jsi_name: a.name, jsi_code: a.code }, a.name));
-    areaId[a.name] = r.id;
+  for (const a of catalog.areas) {
+    areaId[a.code] = tally(await store.upsert('jsi_area', `jsi_name eq '${q(a.name)}'`, { jsi_name: a.name, jsi_code: a.code }), a.name).id;
   }
 
-  // 2) Etapas
-  console.log('\n--- 2/5 Etapas ---');
+  // 2) Categorías
+  console.log('\n--- 2/7 Categorias ---');
+  const categoryId = {};
+  for (const name of catalog.categories) {
+    categoryId[name] = tally(await store.upsert('jsi_documentcategory', `jsi_name eq '${q(name)}'`, { jsi_name: name }), name).id;
+  }
+
+  // 3) Etapas y a qué áreas aplica cada etapa específica
+  console.log('\n--- 3/7 Etapas ---');
   const stageId = {};
-  for (const s of STAGES) {
-    const payload = { jsi_name: s.name, jsi_order: s.order, jsi_scope: s.scope };
-    if (s.days !== null) payload.jsi_businessdaysdeadline = s.days;
-    const r = tally(await upsert('jsi_stage', `jsi_name eq '${q(s.name)}'`, payload, s.name));
-    stageId[s.key] = r.id;
-  }
-
-  // 3) Etapa <-> Area
-  console.log('\n--- 3/5 Etapa-Area ---');
-  if (STAGE_AREAS.length === 0) console.log('   (ninguna)');
-  for (const sa of STAGE_AREAS) {
-    if (!areaId[sa.area]) throw new Error(`El area "${sa.area}" de STAGE_AREAS no esta en la lista AREAS.`);
-    const stageName = STAGES.find((s) => s.key === sa.stage).name;
-    const filter = DRY_RUN && String(stageId[sa.stage]).startsWith('dryrun')
-      ? `jsi_name eq 'dryrun-no-existe'`
-      : `_jsi_stage_value eq ${stageId[sa.stage]} and _jsi_area_value eq ${areaId[sa.area]}`;
-    tally(await upsert('jsi_stagearea', filter, {}, `${stageName}  ->  ${sa.area}`, [
-      { attr: 'jsi_stage', target: 'jsi_stage', id: stageId[sa.stage] },
-      { attr: 'jsi_area', target: 'jsi_area', id: areaId[sa.area] },
-    ]));
+  for (const s of catalog.stages) {
+    const payload = {
+      jsi_name: s.name,
+      jsi_order: s.order,
+      jsi_scope: SCOPE[s.scope],
+      jsi_businessdaysdeadline: s.businessDays,
+    };
+    stageId[s.key] = tally(await store.upsert('jsi_stage', `jsi_name eq '${q(s.name)}'`, payload), s.name).id;
+    for (const code of s.areas) {
+      const filter = DRY_RUN ? `jsi_name eq 'dryrun-no-existe'` : `_jsi_stage_value eq ${stageId[s.key]} and _jsi_area_value eq ${areaId[code]}`;
+      tally(await store.upsert('jsi_stagearea', filter, {}, [
+        { attr: 'jsi_stage', target: 'jsi_stage', id: stageId[s.key] },
+        { attr: 'jsi_area', target: 'jsi_area', id: areaId[code] },
+      ]));
+    }
   }
 
   // 4) Documentos
-  console.log('\n--- 4/5 Documentos ---');
-  for (const d of DOCS) {
+  console.log('\n--- 4/7 Documentos ---');
+  const documentId = {};
+  for (const d of catalog.documents) {
     const payload = {
       jsi_title: d.title,
       jsi_code: d.code,
-      jsi_version: DOC_VERSION,
-      jsi_criticality: d.dot ? CRITICALITY.High : CRITICALITY.Medium,
+      jsi_version: d.version,
+      jsi_criticality: CRITICALITY[d.criticality],
       jsi_status: DOC_STATUS.Current,
       jsi_mandatory: true,
+      jsi_isdefault: d.isDefault,
       jsi_pagecount: d.pages,
+      jsi_readingminutes: d.minutes,
       jsi_owningdepartment: d.owner,
+      jsi_summary: d.summary,
+      jsi_content: toContent(d.sections),
+      jsi_updatedon: d.updatedOn,
     };
-    if (d.min !== null) payload.jsi_readingminutes = d.min;
-    tally(await upsert('jsi_document', `jsi_code eq '${q(d.code)}'`, payload, `${d.code}  ${d.title}`, [
+    documentId[d.code] = tally(await store.upsert('jsi_document', `jsi_code eq '${q(d.code)}'`, payload, [
       { attr: 'jsi_stage', target: 'jsi_stage', id: stageId[d.stage] },
-    ]));
+      { attr: 'jsi_category', target: 'jsi_documentcategory', id: categoryId[d.category] },
+    ]), `${d.code}  ${d.title}`).id;
   }
 
-  // 5) Personas iniciales y sus roles
-  console.log('\n--- 5/5 Personas y roles ---');
-  for (const p of PEOPLE) {
-    if (!areaId[p.area]) throw new Error(`El area "${p.area}" de PEOPLE no esta en la lista AREAS.`);
-    const person = tally(await upsert('contact', `emailaddress1 eq '${q(p.email)}'`, {
+  // 5) Una evaluación por documento
+  console.log('\n--- 5/7 Evaluaciones (una por documento) ---');
+  const assessmentId = {};
+  for (const d of catalog.documents) {
+    const filter = DRY_RUN ? `jsi_title eq 'dryrun-no-existe'` : `_jsi_document_value eq ${documentId[d.code]} and jsi_type eq ${ASSESSMENT_TYPE.Document}`;
+    assessmentId[d.code] = tally(await store.upsert('jsi_assessment', filter, {
+      jsi_title: `Evaluación · ${d.title}`,
+      jsi_type: ASSESSMENT_TYPE.Document,
+      jsi_durationminutes: Math.max(3, Math.ceil(d.questions.length * 1.5)),
+      jsi_passingscore: PASSING_SCORE,
+      jsi_maxattempts: MAX_ATTEMPTS,
+      jsi_generatedby: 'Banco de preguntas del programa',
+      jsi_date: d.updatedOn,
+    }, [
+      { attr: 'jsi_document', target: 'jsi_document', id: documentId[d.code] },
+      { attr: 'jsi_stage', target: 'jsi_stage', id: stageId[d.stage] },
+    ])).id;
+  }
+  console.log(`   ${catalog.documents.length} evaluaciones listas.`);
+
+  // 6) Preguntas y opciones: se reemplazan completas si cambiaron
+  console.log('\n--- 6/7 Preguntas y opciones ---');
+  let replaced = 0;
+  for (const d of catalog.documents) {
+    if (DRY_RUN) continue;
+    const id = assessmentId[d.code];
+    const existing = await store.fetchAll('jsi_question', { select: ['jsi_text', 'jsi_order'], filter: `_jsi_assessment_value eq ${id}` });
+    const same = existing.length === d.questions.length
+      && d.questions.every((question, i) => existing.some((e) => e.jsi_order === i + 1 && e.jsi_text === question.text));
+    if (same) continue;
+
+    for (const old of existing) {
+      const options = await store.fetchAll('jsi_answeroption', { filter: `_jsi_question_value eq ${old.jsi_questionid}` });
+      for (const o of options) await store.remove('jsi_answeroption', o.jsi_answeroptionid);
+      await store.remove('jsi_question', old.jsi_questionid);
+    }
+    for (const [i, question] of d.questions.entries()) {
+      const questionId = await store.create('jsi_question', {
+        jsi_text: question.text,
+        jsi_explanation: question.explanation,
+        jsi_order: i + 1,
+        jsi_active: true,
+      }, [{ attr: 'jsi_assessment', target: 'jsi_assessment', id }]);
+      for (const [j, option] of question.options.entries()) {
+        await store.create('jsi_answeroption', {
+          jsi_text: option,
+          jsi_order: j + 1,
+          jsi_iscorrect: j === question.correct,
+        }, [{ attr: 'jsi_question', target: 'jsi_question', id: questionId }]);
+      }
+    }
+    replaced++;
+    console.log(`   [preguntas cargadas] ${d.code} (${d.questions.length})`);
+  }
+  if (!DRY_RUN && replaced === 0) console.log('   Todas las preguntas ya estaban al día.');
+
+  // 7) Personas base y sus roles
+  console.log('\n--- 7/7 Personas base y roles ---');
+  for (const p of people) {
+    if (!areaId[p.area]) throw new Error(`El área "${p.area}" de people.json no existe en catalog.json.`);
+    const person = tally(await store.upsert('contact', `emailaddress1 eq '${q(p.email)}'`, {
       firstname: p.firstName,
       lastname: p.lastName,
       emailaddress1: p.email,
-      ...(p.jobTitle ? { jsi_jobtitle: p.jobTitle } : {}),
-    }, `${p.firstName} ${p.lastName} <${p.email}>`, [
-      { attr: 'jsi_area', target: 'jsi_area', id: areaId[p.area] },
-    ]));
+      jsi_jobtitle: p.jobTitle,
+    }, [{ attr: 'jsi_area', target: 'jsi_area', id: areaId[p.area] }]), `${p.firstName} ${p.lastName} <${p.email}>`);
 
     for (const role of p.roles) {
-      if (ROLE[role] === undefined) throw new Error(`El rol "${role}" de PEOPLE no existe. Usa: ${Object.keys(ROLE).join(', ')}.`);
-      const filter = String(person.id).startsWith('dryrun')
-        ? `jsi_name eq 'dryrun-no-existe'`
-        : `_jsi_person_value eq ${person.id} and jsi_role eq ${ROLE[role]}`;
-      tally(await upsert('jsi_roleassignment', filter, { jsi_role: ROLE[role], jsi_isactive: true }, `   rol ${role}`, [
-        { attr: 'jsi_person', target: 'contact', id: person.id },
-      ]));
+      if (ROLE[role] === undefined) throw new Error(`El rol "${role}" no existe. Use: ${Object.keys(ROLE).join(', ')}.`);
+      const filter = DRY_RUN ? `jsi_name eq 'dryrun-no-existe'` : `_jsi_person_value eq ${person.id} and jsi_role eq ${ROLE[role]}`;
+      tally(await store.upsert('jsi_roleassignment', filter, {
+        jsi_role: ROLE[role],
+        jsi_isactive: true,
+        jsi_jobtitle: p.jobTitle,
+      }, [{ attr: 'jsi_person', target: 'contact', id: person.id }]), `   rol ${role}`);
     }
   }
 
@@ -363,20 +200,21 @@ async function main() {
   console.log('\n==================================================================');
   if (DRY_RUN) {
     console.log(` DRY-RUN finalizado. Se crearian ${stats.create} y se actualizarian ${stats.update} registros.`);
-    console.log(' No se modifico Dataverse.');
+    console.log(' (las preguntas no se simulan). No se modifico Dataverse.');
   } else {
     console.log(` Listo. Creados: ${stats.create} · Actualizados: ${stats.update}`);
-    console.log('\n Verificacion (registros que hay ahora en Dataverse):');
     const expected = {
-      jsi_area: AREAS.length,
-      jsi_stage: STAGES.length,
-      jsi_stagearea: STAGE_AREAS.length,
-      jsi_document: DOCS.length,
-      jsi_roleassignment: PEOPLE.reduce((sum, p) => sum + p.roles.length, 0),
+      jsi_area: catalog.areas.length,
+      jsi_stage: catalog.stages.length,
+      jsi_document: catalog.documents.length,
+      jsi_assessment: catalog.documents.length,
+      jsi_question: catalog.documents.reduce((sum, d) => sum + d.questions.length, 0),
+      jsi_roleassignment: people.reduce((sum, p) => sum + p.roles.length, 0),
     };
-    for (const t of Object.keys(expected)) {
-      const n = await count(t);
-      console.log(`   ${t.padEnd(20)} ${String(n).padStart(3)} registros (esperado en esta carga: ${expected[t]})${n >= expected[t] ? '  OK' : '  <-- REVISAR'}`);
+    console.log('\n Verificacion (registros que hay ahora en Dataverse):');
+    for (const [table, value] of Object.entries(expected)) {
+      const n = await store.count(table);
+      console.log(`   ${table.padEnd(20)} ${String(n).padStart(4)} (esperado: ${value})${n === value ? '  OK' : '  <-- REVISAR'}`);
     }
   }
   console.log('==================================================================');

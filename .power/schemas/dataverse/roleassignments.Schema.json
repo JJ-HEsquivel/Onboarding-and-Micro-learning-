@@ -79,6 +79,31 @@
           "x-ms-dataverse-type": "IntegerType",
           "x-ms-schema-name": "ImportSequenceNumber"
         },
+        "jsi_assignedby": {
+          "type": "string",
+          "title": "Assigned By",
+          "x-ms-dataverse-attribute": "jsi_assignedby",
+          "x-ms-dataverse-type": "LookupType",
+          "x-ms-schema-name": "jsi_AssignedBy"
+        },
+        "jsi_assignedbyname": {
+          "type": "string",
+          "title": "jsi_assignedbyname",
+          "x-ms-dataverse-attribute": "jsi_assignedbyname",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "jsi_AssignedByName",
+          "x-ms-read-only": true,
+          "maxLength": 160
+        },
+        "jsi_assignedbyyominame": {
+          "type": "string",
+          "title": "jsi_assignedbyyominame",
+          "x-ms-dataverse-attribute": "jsi_assignedbyyominame",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "jsi_AssignedByYomiName",
+          "x-ms-read-only": true,
+          "maxLength": 450
+        },
         "jsi_enddate": {
           "type": "string",
           "title": "End Date",
@@ -116,6 +141,14 @@
           "x-ms-dataverse-type": "VirtualType",
           "x-ms-schema-name": "jsi_isactiveName",
           "x-ms-read-only": true
+        },
+        "jsi_jobtitle": {
+          "type": "string",
+          "title": "Job Title",
+          "x-ms-dataverse-attribute": "jsi_jobtitle",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "jsi_JobTitle",
+          "maxLength": 100
         },
         "jsi_name": {
           "type": "string",

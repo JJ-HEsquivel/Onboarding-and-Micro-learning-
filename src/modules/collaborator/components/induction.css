@@ -1,0 +1,316 @@
+/* Estilos compartidos por las pantallas del colaborador: lector, examen y pasos de un documento. */
+
+/* ---------- Lector ---------- */
+.reader__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.reader__document {
+  max-height: min(52vh, 520px);
+  overflow-y: auto;
+  padding: 24px 28px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface-muted);
+  line-height: 1.7;
+}
+
+.reader__document h4 {
+  margin: 18px 0 6px;
+  font-size: 15px;
+}
+
+.reader__document p {
+  margin: 0 0 10px;
+}
+
+.reader__summary {
+  font-weight: 500;
+}
+
+.reader__notice {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.reader__message {
+  padding: 24px 0;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.reader__progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: auto;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.reader__progress-bar {
+  display: block;
+  width: 160px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--tone-neutral-bg);
+  overflow: hidden;
+}
+
+.reader__progress-bar span {
+  display: block;
+  height: 100%;
+  background: var(--color-primary);
+  transition: width 0.2s ease;
+}
+
+/* ---------- Resultado (lectura confirmada / examen) ---------- */
+.result-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0 16px;
+  text-align: center;
+}
+
+.result-panel h3 {
+  font-size: 18px;
+}
+
+.result-panel p {
+  max-width: 560px;
+  color: var(--color-text-muted);
+}
+
+.result-panel__icon--success {
+  color: var(--color-success);
+}
+
+.result-panel__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+  max-width: 480px;
+  margin-top: 6px;
+}
+
+.result-panel__stats div {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+
+.result-panel__stats strong {
+  font-size: 20px;
+}
+
+.result-panel__stats small {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Examen ---------- */
+.exam__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.exam__steps {
+  display: flex;
+  flex: 1;
+  gap: 6px;
+}
+
+.exam__steps span {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--tone-neutral-bg);
+}
+
+.exam__steps .is-done {
+  background: var(--color-success);
+}
+
+.exam__steps .is-current {
+  background: var(--color-primary);
+}
+
+.exam__timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--tone-info-bg);
+  color: var(--tone-info-text);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.exam__timer--low {
+  background: var(--tone-danger-bg);
+  color: var(--tone-danger-text);
+}
+
+.exam__question {
+  margin-bottom: 14px;
+  font-size: 17px;
+}
+
+.exam__options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.exam__option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.exam__option:hover:not(:disabled) {
+  border-color: var(--color-primary);
+}
+
+.exam__option--selected {
+  border-color: var(--color-primary);
+  background: var(--tone-info-bg);
+}
+
+.exam__option-key {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--tone-neutral-bg);
+  font-weight: 700;
+}
+
+.exam__option--selected .exam__option-key {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.exam__note {
+  margin-right: auto;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.exam-review__title {
+  margin: 8px 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.exam-review {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.exam-review__item {
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+
+.exam-review__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.exam-review__options {
+  margin: 8px 0 0;
+  padding-left: 22px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.exam-review__option--correct {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.exam-review__explanation {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Pasos de un documento: Lectura → Examen → Aprobado ---------- */
+.doc-steps {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.doc-steps__step {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--tone-neutral-bg);
+  color: var(--tone-neutral-text);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.doc-steps__step--done {
+  background: var(--tone-success-bg);
+  color: var(--tone-success-text);
+}
+
+.doc-steps__step--current {
+  background: var(--tone-info-bg);
+  color: var(--tone-info-text);
+}
+
+.doc-steps__line {
+  width: 10px;
+  height: 1px;
+  background: var(--color-border);
+}
+
+@media (max-width: 640px) {
+  .reader__document {
+    padding: 16px;
+  }
+
+  .reader__progress-bar {
+    width: 90px;
+  }
+
+  .result-panel__stats {
+    grid-template-columns: 1fr;
+  }
+}

@@ -171,6 +171,22 @@
           "x-ms-dataverse-primary-name": true,
           "maxLength": 200
         },
+        "jsi_onboarding": {
+          "type": "string",
+          "title": "Onboarding",
+          "x-ms-dataverse-attribute": "jsi_onboarding",
+          "x-ms-dataverse-type": "LookupType",
+          "x-ms-schema-name": "jsi_Onboarding"
+        },
+        "jsi_onboardingname": {
+          "type": "string",
+          "title": "jsi_onboardingname",
+          "x-ms-dataverse-attribute": "jsi_onboardingname",
+          "x-ms-dataverse-type": "StringType",
+          "x-ms-schema-name": "jsi_OnboardingName",
+          "x-ms-read-only": true,
+          "maxLength": 100
+        },
         "jsi_resolvedon": {
           "type": "string",
           "title": "Resolved On",

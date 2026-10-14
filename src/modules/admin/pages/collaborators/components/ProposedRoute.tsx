@@ -5,25 +5,20 @@ import { pluralize } from '@/shared/lib/format';
 import type { RouteStage } from '@/shared/types/onboarding';
 
 interface ProposedRouteProps {
+  /** Todas las etapas y documentos del área. */
   stages: RouteStage[];
+  /** Documentos que se le asignan al registrarlo. */
+  proposedIds: Set<string>;
   loading: boolean;
 }
 
-/** Lista de etapas y documentos que se asignarán al colaborador según su área. */
-export function ProposedRoute({ stages, loading }: ProposedRouteProps) {
-  const totalDocuments = stages.reduce((sum, stage) => sum + stage.documents.length, 0);
-
+/** Ruta propuesta por etapa: obligatorios, "por defecto" y opcionales que decide el Manager. */
+export function ProposedRoute({ stages, proposedIds, loading }: ProposedRouteProps) {
   return (
     <section className="proposed-route">
-      <h3 className="proposed-route__title">
-        Ruta propuesta según el área
-        {!loading && stages.length > 0 && (
-          <>
-            {' '}
-            ({pluralize(totalDocuments, 'documento', 'documentos')} en {pluralize(stages.length, 'etapa', 'etapas')} · el
-            Manager la revisará antes de activarla)
-          </>
-        )}
+      <h3 className="section-label">
+        Ruta propuesta por etapa
+        {!loading && stages.length > 0 && <> ({pluralize(proposedIds.size, 'documento', 'documentos')} · el Manager la revisará antes de activarla)</>}
       </h3>
 
       {loading && <p className="proposed-route__empty">Cargando la ruta de inducción…</p>}
@@ -32,15 +27,41 @@ export function ProposedRoute({ stages, loading }: ProposedRouteProps) {
         <p className="proposed-route__empty">El área seleccionada no tiene documentos configurados en su ruta.</p>
       )}
 
-      {stages.map((stage) => (
-        <StageGroup key={stage.id} name={stage.name} summary={pluralize(stage.documents.length, 'documento', 'documentos')}>
-          {stage.documents.map((document) => (
-            <li key={document.id}>
-              <DocumentItem document={document} actions={<Badge tone="info">Propuesto</Badge>} />
-            </li>
-          ))}
-        </StageGroup>
-      ))}
+      {stages.map((stage) => {
+        const proposedInStage = stage.documents.filter((d) => proposedIds.has(d.id)).length;
+        return (
+          <StageGroup
+            key={stage.id}
+            name={stage.name}
+            summary={
+              stage.isGeneral
+                ? `${pluralize(stage.documents.length, 'documento', 'documentos')} · obligatoria para todos`
+                : `${proposedInStage} de ${stage.documents.length} documentos del área · el Manager puede quitar o sumar`
+            }
+          >
+            {stage.documents.map((document) => {
+              const isProposed = proposedIds.has(document.id);
+              return (
+                <li key={document.id}>
+                  <DocumentItem
+                    document={document}
+                    muted={!isProposed}
+                    actions={
+                      stage.isGeneral ? (
+                        <Badge tone="info">Obligatorio</Badge>
+                      ) : isProposed ? (
+                        <Badge tone="success">Por defecto</Badge>
+                      ) : (
+                        <Badge>Opcional · decide el Manager</Badge>
+                      )
+                    }
+                  />
+                </li>
+              );
+            })}
+          </StageGroup>
+        );
+      })}
     </section>
   );
 }

@@ -114,6 +114,13 @@
           "x-ms-schema-name": "jsi_AttemptNumber",
           "required": true
         },
+        "jsi_correctcount": {
+          "type": "string",
+          "title": "Correct Count",
+          "x-ms-dataverse-attribute": "jsi_correctcount",
+          "x-ms-dataverse-type": "IntegerType",
+          "x-ms-schema-name": "jsi_CorrectCount"
+        },
         "jsi_durationseconds": {
           "type": "string",
           "title": "Duration Seconds",
@@ -129,6 +136,44 @@
           "x-ms-schema-name": "jsi_Name",
           "x-ms-dataverse-primary-name": true,
           "maxLength": 200
+        },
+        "jsi_passed": {
+          "type": "string",
+          "title": "Passed",
+          "x-ms-dataverse-attribute": "jsi_passed",
+          "x-ms-dataverse-type": "BooleanType",
+          "x-ms-schema-name": "jsi_Passed",
+          "enum": [
+            "No",
+            "Yes"
+          ],
+          "x-ms-enum-values": [
+            0,
+            1
+          ],
+          "Color": [
+            null,
+            null
+          ],
+          "x-ms-optionsetmetadataid": "27d86b1e-ddc7-f111-a05a-00224837cd6c",
+          "x-ms-isGlobal": false,
+          "x-ms-optionsetdisplayname": "Passed",
+          "x-ms-optionSetType": "Boolean"
+        },
+        "jsi_passedname": {
+          "type": "string",
+          "title": "jsi_passedname",
+          "x-ms-dataverse-attribute": "jsi_passedname",
+          "x-ms-dataverse-type": "VirtualType",
+          "x-ms-schema-name": "jsi_passedName",
+          "x-ms-read-only": true
+        },
+        "jsi_questioncount": {
+          "type": "string",
+          "title": "Question Count",
+          "x-ms-dataverse-attribute": "jsi_questioncount",
+          "x-ms-dataverse-type": "IntegerType",
+          "x-ms-schema-name": "jsi_QuestionCount"
         },
         "jsi_score": {
           "type": "string",

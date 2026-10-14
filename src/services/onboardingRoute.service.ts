@@ -1,12 +1,19 @@
 /**
  * Ruta de inducción: qué etapas y documentos le corresponden a un área.
- * Fuente: jsi_stage, jsi_stagearea, jsi_document y jsi_documentarea.
+ * Fuente: jsi_stage, jsi_stagearea, jsi_document, jsi_documentarea y jsi_assessment.
+ *
+ * Reglas del programa:
+ * - Etapas "General" (1 y 2): obligatorias para todos.
+ * - Etapa "AreaSpecific" (3): una por área. El Admin propone los documentos marcados como
+ *   "por defecto" (jsi_isdefault) y el Manager, al validar, puede quitar esos o sumar los demás.
+ * - Cada documento tiene su propia evaluación (jsi_assessment de tipo Document).
  */
 import { Jsi_stagesService } from '@/generated/services/Jsi_stagesService';
 import { Jsi_stageareasService } from '@/generated/services/Jsi_stageareasService';
 import { Jsi_documentsService } from '@/generated/services/Jsi_documentsService';
 import { Jsi_documentareasService } from '@/generated/services/Jsi_documentareasService';
-import { DOCUMENT_CRITICALITY, DOCUMENT_STATUS, STAGE_SCOPE } from '@/shared/constants/choices';
+import { Jsi_assessmentsService } from '@/generated/services/Jsi_assessmentsService';
+import { ASSESSMENT_TYPE, DOCUMENT_CRITICALITY, DOCUMENT_STATUS, STAGE_SCOPE } from '@/shared/constants/choices';
 import type { RouteDocument, RouteStage } from '@/shared/types/onboarding';
 import { addBusinessDays } from '@/shared/lib/dates';
 import { ACTIVE_RECORDS, fetchAll } from './dataverse';
@@ -44,9 +51,9 @@ function groupPairs(pairs: { key?: string; value?: string }[]): Map<string, Set<
   return map;
 }
 
-/** Lee el catálogo de etapas y documentos desde Dataverse. */
+/** Lee el catálogo de etapas, documentos y evaluaciones desde Dataverse. */
 export async function loadOnboardingCatalog(): Promise<OnboardingCatalog> {
-  const [stages, stageAreas, documents, documentAreas] = await Promise.all([
+  const [stages, stageAreas, documents, documentAreas, assessments] = await Promise.all([
     fetchAll(
       (o) => Jsi_stagesService.getAll(o),
       { select: ['jsi_stageid', 'jsi_name', 'jsi_order', 'jsi_scope', 'jsi_businessdaysdeadline'], filter: ACTIVE_RECORDS },
@@ -60,7 +67,16 @@ export async function loadOnboardingCatalog(): Promise<OnboardingCatalog> {
     fetchAll(
       (o) => Jsi_documentsService.getAll(o),
       {
-        select: ['jsi_documentid', 'jsi_code', 'jsi_title', 'jsi_version', 'jsi_readingminutes', 'jsi_criticality', '_jsi_stage_value'],
+        select: [
+          'jsi_documentid',
+          'jsi_code',
+          'jsi_title',
+          'jsi_version',
+          'jsi_readingminutes',
+          'jsi_criticality',
+          'jsi_isdefault',
+          '_jsi_stage_value',
+        ],
         // Los borradores no se asignan a nadie.
         filter: `${ACTIVE_RECORDS} and jsi_status ne ${DOCUMENT_STATUS.Draft}`,
       },
@@ -71,7 +87,16 @@ export async function loadOnboardingCatalog(): Promise<OnboardingCatalog> {
       { select: ['_jsi_document_value', '_jsi_area_value'], filter: ACTIVE_RECORDS },
       'Leer documentos por área',
     ),
+    fetchAll(
+      (o) => Jsi_assessmentsService.getAll(o),
+      { select: ['jsi_assessmentid', '_jsi_document_value'], filter: `${ACTIVE_RECORDS} and jsi_type eq ${ASSESSMENT_TYPE.Document}` },
+      'Leer evaluaciones',
+    ),
   ]);
+
+  const assessmentByDocument = new Map(
+    assessments.flatMap((a) => (a._jsi_document_value ? [[a._jsi_document_value, a.jsi_assessmentid] as const] : [])),
+  );
 
   return {
     stages: stages.map((s) => ({
@@ -92,6 +117,8 @@ export async function loadOnboardingCatalog(): Promise<OnboardingCatalog> {
           version: d.jsi_version,
           readingMinutes: d.jsi_readingminutes ?? null,
           isCritical: d.jsi_criticality === DOCUMENT_CRITICALITY.High,
+          isDefault: d.jsi_isdefault ?? true,
+          assessmentId: assessmentByDocument.get(d.jsi_documentid) ?? null,
         },
       })),
     stageAreas: groupPairs(stageAreas.map((sa) => ({ key: sa._jsi_stage_value, value: sa._jsi_area_value }))),
@@ -110,43 +137,39 @@ function documentsOfStage(catalog: OnboardingCatalog, stageId: string): RouteDoc
     .sort((a, b) => a.code.localeCompare(b.code));
 }
 
-function toRouteStage(stage: CatalogStage, documents: RouteDocument[]): RouteStage {
-  return { id: stage.id, name: stage.name, order: stage.order, businessDays: stage.businessDays, documents };
-}
-
 /**
- * Calcula la ruta propuesta para un área (función pura, sin acceso a Dataverse).
- *
- * Reglas:
- * - Una etapa "General" aplica a todas las áreas.
- * - Una etapa "AreaSpecific" aplica solo a las áreas vinculadas en jsi_stagearea.
- * - Un documento aplica si su etapa aplica y, cuando tiene áreas en jsi_documentarea,
- *   si el área está entre ellas.
- * - Las etapas sin documentos no se muestran.
+ * Todas las etapas que aplican a un área, con TODOS sus documentos (función pura).
+ * Es lo que ve el Admin al registrar y el Manager al validar.
  */
-export function buildProposedRoute(catalog: OnboardingCatalog, areaId: string): RouteStage[] {
+export function buildAreaRoute(catalog: OnboardingCatalog, areaId: string): RouteStage[] {
   const appliesToArea = (areas: Set<string> | undefined) => areas?.has(areaId) ?? false;
 
   return sortStages(catalog.stages)
     .filter((stage) => stage.isGeneral || appliesToArea(catalog.stageAreas.get(stage.id)))
-    .map((stage) =>
-      toRouteStage(
-        stage,
-        documentsOfStage(catalog, stage.id).filter(
-          (doc) => !catalog.documentAreas.has(doc.id) || appliesToArea(catalog.documentAreas.get(doc.id)),
-        ),
+    .map((stage) => ({
+      id: stage.id,
+      name: stage.name,
+      order: stage.order,
+      isGeneral: stage.isGeneral,
+      businessDays: stage.businessDays,
+      documents: documentsOfStage(catalog, stage.id).filter(
+        (doc) => !catalog.documentAreas.has(doc.id) || appliesToArea(catalog.documentAreas.get(doc.id)),
       ),
-    )
+    }))
     .filter((stage) => stage.documents.length > 0);
 }
 
-/**
- * Todas las etapas con todos sus documentos, sin filtrar por área.
- * Lo usa el Manager para sumar documentos de otras etapas específicas.
- */
-export function buildFullCatalog(catalog: OnboardingCatalog): RouteStage[] {
-  return sortStages(catalog.stages)
-    .map((stage) => toRouteStage(stage, documentsOfStage(catalog, stage.id)))
+/** Documentos que el Admin propone: todos los de las etapas generales y los "por defecto" de la Etapa 3. */
+export function proposedDocumentIds(areaRoute: RouteStage[]): Set<string> {
+  return new Set(
+    areaRoute.flatMap((stage) => stage.documents.filter((d) => stage.isGeneral || d.isDefault).map((d) => d.id)),
+  );
+}
+
+/** La ruta reducida a los documentos indicados (las etapas que quedan vacías se quitan). */
+export function filterRoute(route: RouteStage[], documentIds: Set<string>): RouteStage[] {
+  return route
+    .map((stage) => ({ ...stage, documents: stage.documents.filter((d) => documentIds.has(d.id)) }))
     .filter((stage) => stage.documents.length > 0);
 }
 

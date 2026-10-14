@@ -7,23 +7,31 @@ import { Button } from '@/shared/components/Button';
 import { DocumentItem } from '@/shared/components/DocumentItem';
 import { StageGroup } from '@/shared/components/StageGroup';
 import { formatDate } from '@/shared/lib/dates';
-import { getInitials, pluralize } from '@/shared/lib/format';
-import type { RouteStage } from '@/shared/types/onboarding';
-import { confirmOnboarding, type PendingOnboarding } from '@/services/validation.service';
+import { getInitials } from '@/shared/lib/format';
+import { confirmOnboarding, validateSelection, type PendingOnboarding } from '@/services/validation.service';
 
 interface PendingValidationCardProps {
   pending: PendingOnboarding;
-  /** Todas las etapas con todos sus documentos. */
-  catalog: RouteStage[];
   onConfirmed: (fullName: string) => void;
 }
 
-/** Un colaborador por validar: sus datos y la lista de documentos para tildar o destildar. */
-export function PendingValidationCard({ pending, catalog, onConfirmed }: PendingValidationCardProps) {
-  const [selected, setSelected] = useState(() => new Set(pending.assignedDocuments.keys()));
+/**
+ * Un colaborador por validar: sus datos y su ruta por etapa.
+ * Las Etapas 1 y 2 son fijas; en la Etapa 3 del área se tilda o destilda.
+ */
+export function PendingValidationCard({ pending, onConfirmed }: PendingValidationCardProps) {
+  const { collaborator, areaRoute } = pending;
+  // Solo se guarda la selección de la Etapa 3: las etapas generales van siempre completas.
+  const [selected, setSelected] = useState(() => {
+    const areaDocuments = areaRoute.filter((s) => !s.isGeneral).flatMap((s) => s.documents.map((d) => d.id));
+    return new Set(areaDocuments.filter((id) => pending.assignedDocuments.has(id)));
+  });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { collaborator } = pending;
+
+  const allSelected = new Set(selected);
+  areaRoute.filter((s) => s.isGeneral).forEach((s) => s.documents.forEach((d) => allSelected.add(d.id)));
+  const problem = validateSelection(areaRoute, allSelected);
 
   const toggle = (documentId: string) => {
     setSelected((prev) => {
@@ -38,7 +46,7 @@ export function PendingValidationCard({ pending, catalog, onConfirmed }: Pending
     setSaving(true);
     setError(null);
     try {
-      await confirmOnboarding(pending, selected, catalog);
+      await confirmOnboarding(pending, selected);
       onConfirmed(collaborator.fullName);
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -79,23 +87,32 @@ export function PendingValidationCard({ pending, catalog, onConfirmed }: Pending
           </div>
         </dl>
 
-        <h3 className="pending-card__section-title">
-          Documentación propuesta · destilde para quitar, tilde para sumar ({pluralize(selected.size, 'documento seleccionado', 'documentos seleccionados')})
+        <h3 className="section-label">
+          Documentación por etapa · las Etapas 1 y 2 son obligatorias; en la Etapa 3 puede quitar o sumar documentos del área
         </h3>
 
-        {catalog.map((stage) => {
-          const selectedInStage = stage.documents.filter((d) => selected.has(d.id)).length;
+        {areaRoute.map((stage) => {
+          const editable = !stage.isGeneral;
+          const marked = stage.documents.filter((d) => allSelected.has(d.id)).length;
           return (
-            <StageGroup key={stage.id} name={stage.name} summary={`${selectedInStage} de ${stage.documents.length}`}>
+            <StageGroup
+              key={stage.id}
+              name={stage.name}
+              summary={
+                <span className="pending-card__stage-summary">
+                  {editable ? `${marked} de ${stage.documents.length} seleccionados` : `${stage.documents.length} documentos obligatorios`}
+                  <Badge tone={editable ? 'info' : 'neutral'}>{editable ? 'Editable por el Manager' : 'Fija'}</Badge>
+                </span>
+              }
+            >
               {stage.documents.map((document) => {
                 const inputId = `${pending.onboardingId}-${document.id}`;
-                const isSelected = selected.has(document.id);
-                const wasProposed = pending.assignedDocuments.has(document.id);
+                const isSelected = allSelected.has(document.id);
                 return (
                   <li key={document.id}>
                     <DocumentItem
                       document={document}
-                      htmlFor={inputId}
+                      htmlFor={editable ? inputId : undefined}
                       muted={!isSelected}
                       leading={
                         <input
@@ -103,15 +120,17 @@ export function PendingValidationCard({ pending, catalog, onConfirmed }: Pending
                           type="checkbox"
                           className="doc-item__check"
                           checked={isSelected}
-                          disabled={saving}
+                          disabled={!editable || saving}
                           onChange={() => toggle(document.id)}
                         />
                       }
                       actions={
-                        isSelected && !wasProposed ? (
-                          <Badge tone="success">Agregado</Badge>
-                        ) : !isSelected && wasProposed ? (
-                          <Badge tone="danger">Se quitará</Badge>
+                        editable ? (
+                          pending.assignedDocuments.has(document.id) ? (
+                            <Badge tone="success">Enviado por el Admin</Badge>
+                          ) : (
+                            <Badge>Adicional del área</Badge>
+                          )
                         ) : null
                       }
                     />
@@ -126,14 +145,12 @@ export function PendingValidationCard({ pending, catalog, onConfirmed }: Pending
       </div>
 
       <footer className="pending-card__footer">
-        <Button onClick={handleConfirm} disabled={saving || selected.size === 0}>
+        <Button onClick={handleConfirm} disabled={saving || problem !== null}>
           <Check size={16} />
           {saving ? 'Activando…' : 'Confirmar y activar ruta'}
         </Button>
         <span className="pending-card__hint">
-          {selected.size === 0
-            ? 'Seleccione al menos un documento para activar la ruta.'
-            : 'Al confirmar, el colaborador podrá ver su documentación y empezar a leer.'}
+          {problem ?? 'Al confirmar, el colaborador podrá ver su documentación y empezar a leer.'}
         </span>
       </footer>
     </section>

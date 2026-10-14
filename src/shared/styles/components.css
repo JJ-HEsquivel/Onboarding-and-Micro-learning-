@@ -212,6 +212,28 @@
   font-size: 13px;
 }
 
+/* ---------- Título de sección en mayúsculas (ej. "RUTA PROPUESTA POR ETAPA") ---------- */
+.section-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Grilla de formulario en 2 columnas ---------- */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---------- Persona (avatar + nombre + cargo) ---------- */
 .person-cell {
   display: flex;
@@ -487,4 +509,58 @@
     padding-left: 16px;
     padding-right: 16px;
   }
+}
+
+/* ---------- Anillo de porcentaje (ProgressRing) ---------- */
+.progress-ring {
+  --ring-color: var(--color-primary);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: conic-gradient(var(--ring-color) var(--ring-value), var(--tone-neutral-bg) 0);
+}
+
+.progress-ring--success {
+  --ring-color: var(--color-success);
+}
+
+.progress-ring--danger {
+  --ring-color: var(--color-danger);
+}
+
+.progress-ring__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 78%;
+  height: 78%;
+  border-radius: 50%;
+  background: var(--color-surface);
+}
+
+.progress-ring__inner strong {
+  font-size: 22px;
+  line-height: 1.1;
+}
+
+.progress-ring__inner small {
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Ruta pendiente de validación (vista del colaborador) ---------- */
+.pending-route {
+  padding: 0 20px 20px;
+}
+
+.pending-route .section-label {
+  margin-bottom: 10px;
+}
+
+.page-loading {
+  padding: 40px 16px;
+  color: var(--color-text-muted);
+  text-align: center;
 }
