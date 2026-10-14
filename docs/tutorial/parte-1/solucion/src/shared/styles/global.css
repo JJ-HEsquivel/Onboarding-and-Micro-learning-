@@ -1,0 +1,46 @@
+/* ---------- Tokens de diseño (colores y medidas que usa toda la app) ---------- */
+:root {
+  --color-primary: #1d4ed8;
+  --color-danger: #dc2626;
+
+  --color-bg: #f3f5f9;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f8fafc;
+  --color-border: #e2e8f0;
+  --color-text: #0f172a;
+  --color-text-muted: #64748b;
+
+  --tone-info-bg: #eaf0ff;
+  --radius-card: 12px;
+
+  font-family: 'Segoe UI', system-ui, Roboto, sans-serif;
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+}
+
+h1,
+p,
+ul {
+  margin: 0;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+button {
+  font: inherit;
+}

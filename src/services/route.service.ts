@@ -152,7 +152,8 @@ export async function saveOnboardingProgress(onboardingId: string): Promise<Prog
   const changes: OnboardingChanges = {
     jsi_progressstatus: PROGRESS_VALUE[progress.status] as OnboardingChanges['jsi_progressstatus'],
     jsi_risklevel: RISK_VALUE[progress.risk] as OnboardingChanges['jsi_risklevel'],
-    jsi_completedon: progress.status === 'completed' ? todayIso() : undefined,
+    // Si vuelve a tener pendientes (ej. el Manager le sumó documentos), deja de estar cerrada.
+    jsi_completedon: (progress.status === 'completed' ? todayIso() : null) as OnboardingChanges['jsi_completedon'],
   };
   unwrap(await Jsi_onboardingsService.update(onboardingId, changes), 'Guardar avance de la inducción');
   return progress;

@@ -1,8 +1,15 @@
 import type { BadgeTone } from '@/shared/components/Badge';
-import type { MyDocument } from '@/services/myInduction.service';
+import type { DocumentStep, ExamState } from '@/shared/domain/onboardingProgress';
 
-/** Estado de un documento en el lenguaje del colaborador (función pura). */
-export function documentStatus(document: MyDocument, today: string): { label: string; tone: BadgeTone } {
+interface DocumentState {
+  step: DocumentStep;
+  exam: ExamState | null;
+  /** Vencimiento de la lectura, "AAAA-MM-DD". */
+  dueDate: string | null;
+}
+
+/** Estado de un documento de la ruta en lenguaje simple (función pura). */
+export function documentStatus(document: DocumentState, today: string): { label: string; tone: BadgeTone } {
   const { step, exam } = document;
   if (step === 'read') {
     const overdue = document.dueDate !== null && document.dueDate < today;

@@ -1,0 +1,13 @@
+{
+  "//": "Solo para verificar que el código del tutorial compila usando los archivos generados del proyecto real.",
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "tsBuildInfoFile": null,
+    "paths": {
+      "@/generated/*": ["../../../../src/generated/*"],
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src"]
+}

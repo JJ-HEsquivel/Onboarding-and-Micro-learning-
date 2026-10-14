@@ -6,10 +6,11 @@ import { PageHeader } from '@/shared/components/PageHeader';
 import { useAsync } from '@/shared/hooks/useAsync';
 import { loadCollaboratorsOverview } from '@/services/collaborators.service';
 import { CollaboratorStats } from './components/CollaboratorStats';
+import { CollaboratorProfileDrawer } from '@/modules/common/components/CollaboratorProfileDrawer';
 import { CollaboratorsTable } from './components/CollaboratorsTable';
 import { CollaboratorsToolbar } from './components/CollaboratorsToolbar';
 import { RegisterCollaboratorModal } from './components/RegisterCollaboratorModal';
-import { EMPTY_FILTERS, exportCollaboratorsCsv, filterCollaborators } from './collaboratorFilters';
+import { EMPTY_FILTERS, exportCollaboratorsCsv, filterCollaborators } from '@/modules/common/collaboratorFilters';
 import './AdminCollaboratorsPage.css';
 
 export default function AdminCollaboratorsPage() {
@@ -17,6 +18,7 @@ export default function AdminCollaboratorsPage() {
   const [filters, setFilters] = useState(EMPTY_FILTERS);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
+  const [profileId, setProfileId] = useState<string | null>(null);
 
   const collaborators = useMemo(() => overview.data?.collaborators ?? [], [overview.data]);
   const visibleCollaborators = useMemo(() => filterCollaborators(collaborators, filters), [collaborators, filters]);
@@ -73,9 +75,14 @@ export default function AdminCollaboratorsPage() {
             loading={overview.loading && !overview.data}
             hasCollaborators={collaborators.length > 0}
             onRegister={openRegister}
+            onOpen={(c) => setProfileId(c.id)}
           />
         </section>
       </div>
+
+      {profileId && (
+        <CollaboratorProfileDrawer personId={profileId} viewer="admin" onClose={() => setProfileId(null)} onChanged={overview.reload} />
+      )}
 
       {isRegisterOpen && overview.data && (
         <RegisterCollaboratorModal

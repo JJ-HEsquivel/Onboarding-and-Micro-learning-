@@ -53,6 +53,22 @@ export async function recordEvidence(evidence: NewEvidence): Promise<void> {
   unwrap(await Jsi_evidencesService.create(record), 'Registrar evidencia');
 }
 
+/** Fecha ("AAAA-MM-DD") de la evidencia más reciente de cada persona: su última actividad. */
+export async function lastActivityByPerson(): Promise<Map<string, string>> {
+  const rows = await fetchAll(
+    (o) => Jsi_evidencesService.getAll(o),
+    { select: ['_jsi_employee_value', 'jsi_date'], filter: `${ACTIVE_RECORDS} and jsi_date ne null` },
+    'Leer actividad',
+  );
+  const latest = new Map<string, string>();
+  for (const row of rows) {
+    const personId = row._jsi_employee_value;
+    const date = row.jsi_date?.slice(0, 10);
+    if (personId && date && date > (latest.get(personId) ?? '')) latest.set(personId, date);
+  }
+  return latest;
+}
+
 const TYPE_BY_VALUE = new Map(Object.entries(EVIDENCE_TYPE).map(([key, value]) => [value as number, key as EvidenceType]));
 
 /** Evidencias de una persona, de la más reciente a la más antigua. */

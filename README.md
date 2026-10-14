@@ -30,6 +30,7 @@ npm run lint     # revisar el código
     │   │   └── pages/          # Una pantalla por opción del menú
     │   ├── manager/
     │   ├── collaborator/
+    │   ├── common/             # Pantallas compartidas entre roles (ficha del colaborador, lector)
     │   └── auth/               # Inicio: elegir rol y persona (temporal, para practicar)
     ├── services/               # Acceso a datos: usa src/generated y devuelve modelos de dominio
     ├── shared/                 # Código reutilizable entre roles
@@ -93,3 +94,15 @@ una persona que tenga ese rol en Dataverse (tabla `jsi_roleassignment`). La sesi
    cualquier etapa y confirma. Se calculan los vencimientos y la inducción pasa a "Validated".
 3. **Colaborador → Mis documentos:** ve su ruta solo si ya fue validada y confirma cada lectura
    (se guarda una evidencia en `jsi_evidence`).
+
+## Gestión del equipo (fase 3)
+
+- **Ficha del colaborador** (`modules/common`): Admin y Manager la abren desde cualquier tabla.
+  Muestra ruta por etapas, historial y motivos de atención; permite recordar, habilitar un nuevo
+  intento a quien agotó los 3, asignar documentos (Manager), ascender y dar de baja (Admin).
+- **Manager:** Panel del equipo, Mi equipo, Asignar documentos (solo Etapa 3 de su área),
+  Documentos (solo lectura), Resultados e Historial de inducción (si llegó por ascenso).
+- **Admin:** Panel general con indicadores, estado por área y colaboradores que requieren atención.
+- "Requiere atención" se calcula en `shared/domain/attention.ts`: validación pendiente, lecturas
+  vencidas, exámenes reprobados o agotados y días sin actividad (`PROGRAM_RULES.inactivityDays`).
+- Las pantallas se cargan bajo demanda (`React.lazy`): cada una se descarga al abrirla.

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router';
 import { useSession } from '@/app/session/useSession';
 import type { RoleModule } from '@/shared/types/navigation';
@@ -43,7 +43,10 @@ export function AppLayout({ module }: AppLayoutProps) {
           onToggleSidebar={() => setSidebarOpen((open) => !open)}
         />
         <main className="app-layout__content">
-          <Outlet />
+          {/* Las pantallas se descargan al abrirlas: mientras tanto se muestra este aviso. */}
+          <Suspense fallback={<p className="page-loading">Cargando…</p>}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
     </div>

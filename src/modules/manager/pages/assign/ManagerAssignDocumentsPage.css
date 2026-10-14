@@ -1,0 +1,60 @@
+.assign {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.assign__member-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.assign__member {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.assign__member:hover {
+  background: var(--color-surface-muted);
+}
+
+.assign__member input {
+  accent-color: var(--color-primary);
+}
+
+.assign__member span {
+  display: flex;
+  flex-direction: column;
+}
+
+.assign__member small {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.assign__footer {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.assign__footer .form-field {
+  width: 180px;
+}
+
+@media (max-width: 1000px) {
+  .assign {
+    grid-template-columns: 1fr;
+  }
+
+  .assign__members {
+    order: -1;
+  }
+}

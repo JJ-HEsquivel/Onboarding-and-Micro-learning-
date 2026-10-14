@@ -11,3 +11,8 @@ export function getInitials(fullName: string): string {
 export function pluralize(count: number, singular: string, plural: string): string {
   return `${count} ${count === 1 ? singular : plural}`;
 }
+
+/** Minúsculas y sin tildes, para buscar sin importar acentos: "jose" encuentra a "José". */
+export function normalizeText(text: string): string {
+  return text.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
+}

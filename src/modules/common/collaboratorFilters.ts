@@ -1,6 +1,7 @@
 import { COLLABORATOR_STATUS } from '@/shared/constants/collaboratorStatus';
 import { downloadCsv } from '@/shared/lib/csv';
 import { formatDate, todayIso } from '@/shared/lib/dates';
+import { normalizeText as normalize } from '@/shared/lib/format';
 import type { Collaborator, CollaboratorStatus } from '@/shared/types/onboarding';
 
 export interface CollaboratorFilters {
@@ -10,11 +11,6 @@ export interface CollaboratorFilters {
 }
 
 export const EMPTY_FILTERS: CollaboratorFilters = { search: '', areaId: '', status: '' };
-
-/** Minúsculas y sin tildes, para que "jose" encuentre a "José". */
-function normalize(text: string): string {
-  return text.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
-}
 
 export function filterCollaborators(collaborators: Collaborator[], filters: CollaboratorFilters): Collaborator[] {
   const search = normalize(filters.search.trim());
@@ -27,6 +23,7 @@ export function filterCollaborators(collaborators: Collaborator[], filters: Coll
   );
 }
 
+/** Descarga la lista como CSV (con lo que se ve en pantalla, ya filtrado). */
 export function exportCollaboratorsCsv(collaborators: Collaborator[]): void {
   downloadCsv(
     `colaboradores-${todayIso()}.csv`,

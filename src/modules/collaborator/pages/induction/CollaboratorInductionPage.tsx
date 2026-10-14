@@ -9,7 +9,7 @@ import { formatDate, todayIso } from '@/shared/lib/dates';
 import type { MyDocument } from '@/services/myInduction.service';
 import { DocumentSteps } from '../../components/DocumentSteps';
 import { PendingValidationView } from '../../components/PendingValidationView';
-import { documentStatus } from '../../documentStatus';
+import { documentStatus } from '@/modules/common/documentStatus';
 import { useDocumentDialogs } from '../../hooks/useDocumentDialogs';
 import { useMyInduction } from '../../hooks/useMyInduction';
 import '../../components/induction.css';
