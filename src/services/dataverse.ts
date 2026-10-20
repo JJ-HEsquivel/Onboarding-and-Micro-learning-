@@ -47,6 +47,22 @@ export async function fetchAll<T>(
 }
 
 /**
+ * Texto entre comillas para un filtro OData. Las comillas simples se duplican para que un
+ * valor como "O'Brien" no rompa la consulta.
+ *
+ * @example
+ * `jsi_code eq ${odataString(code)}`  // → jsi_code eq 'POL-TI-001'
+ */
+export function odataString(value: string): string {
+  return `'${value.replace(/'/g, "''")}'`;
+}
+
+/** Filtro "columna eq id1 or columna eq id2 …" entre paréntesis (para leer varios registros a la vez). */
+export function anyOf(column: string, ids: string[]): string {
+  return `(${ids.map((id) => `${column} eq ${id}`).join(' or ')})`;
+}
+
+/**
  * Valor para asignar una columna de búsqueda (lookup) al crear o actualizar un registro.
  *
  * @example

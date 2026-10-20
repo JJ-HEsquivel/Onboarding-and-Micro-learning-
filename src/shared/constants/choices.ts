@@ -13,6 +13,7 @@ import type {
 import type { Jsi_stagesjsi_scope } from '@/generated/models/Jsi_stagesModel';
 import type { Jsi_documentsjsi_criticality, Jsi_documentsjsi_status } from '@/generated/models/Jsi_documentsModel';
 import type { Jsi_documentassignmentsjsi_status } from '@/generated/models/Jsi_documentassignmentsModel';
+import type { Jsi_documentversionsjsi_changelevel } from '@/generated/models/Jsi_documentversionsModel';
 import type { Jsi_assessmentsjsi_type } from '@/generated/models/Jsi_assessmentsModel';
 import type { Jsi_assessmentassignmentsjsi_status } from '@/generated/models/Jsi_assessmentassignmentsModel';
 import type { Jsi_evidencesjsi_type } from '@/generated/models/Jsi_evidencesModel';
@@ -72,6 +73,12 @@ export const DOCUMENT_STATUS = {
   Updated: 100000001,
   Draft: 100000002,
 } as const satisfies Record<string, Jsi_documentsjsi_status>;
+
+/** jsi_documentversion.jsi_changelevel */
+export const CHANGE_LEVEL = {
+  Major: 100000000,
+  Minor: 100000001,
+} as const satisfies Record<string, Jsi_documentversionsjsi_changelevel>;
 
 /** jsi_documentassignment.jsi_status */
 export const ASSIGNMENT_STATUS = {

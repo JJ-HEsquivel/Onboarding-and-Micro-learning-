@@ -106,3 +106,23 @@ una persona que tenga ese rol en Dataverse (tabla `jsi_roleassignment`). La sesi
 - "Requiere atención" se calcula en `shared/domain/attention.ts`: validación pendiente, lecturas
   vencidas, exámenes reprobados o agotados y días sin actividad (`PROGRAM_RULES.inactivityDays`).
 - Las pantallas se cargan bajo demanda (`React.lazy`): cada una se descarga al abrirla.
+
+## Gestión de contenido (fase 4)
+
+Tres pantallas del Admin, con sus estilos y piezas comunes en `modules/admin/content`:
+
+- **Documentos** (`documentCatalog.service.ts`, `documentVersion.service.ts`): alta y edición
+  (código único, etapa, categoría, criticidad, contenido con vista previa, áreas destinatarias,
+  borrador). **Nueva versión**: queda en `jsi_documentversion`, el documento pasa a "Actualizado"
+  y se avisa a quienes lo tienen asignado. Si el cambio es **mayor**, quien sigue en inducción y
+  ya lo leyó debe releerlo y su examen se reinicia (las inducciones completadas no se reabren).
+  Reglas de numeración en `shared/domain/documentVersion.ts`.
+- **Rutas de aprendizaje** (`stages.service.ts`): alta y edición de etapas (orden, plazo, alcance
+  General o Por área con sus áreas en `jsi_stagearea`) y la ruta propuesta a cada área, donde se
+  marca qué documentos de la etapa por área se proponen por defecto (`jsi_isdefault`).
+- **Evaluaciones** (`assessmentEditor.service.ts`): nota mínima, intentos, duración y preguntas
+  con sus opciones, más intentos rendidos y tasa de aprobación. Una pregunta ya respondida nunca
+  se modifica ni se borra: se archiva (`jsi_active = false`) y se crea otra, para que el historial
+  de respuestas siga siendo exacto (`shared/domain/assessmentChanges.ts`).
+- No se eliminan etapas ni documentos: las relaciones de Dataverse son "Restrict". Un documento se
+  retira de las rutas nuevas pasándolo a borrador.

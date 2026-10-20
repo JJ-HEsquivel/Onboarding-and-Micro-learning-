@@ -1,0 +1,338 @@
+/* Estilos comunes de la gestión de contenido: Documentos, Rutas de aprendizaje y Evaluaciones. */
+
+.content-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.content-page__stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.content-page__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px 12px;
+}
+
+.content-page__header h2 {
+  font-size: 16px;
+}
+
+.content-page__header p {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Barra de filtros ---------- */
+.content-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px 14px;
+}
+
+.content-toolbar .input {
+  width: auto;
+}
+
+.content-toolbar__search {
+  flex: 1;
+  min-width: 220px;
+}
+
+.content-toolbar__count {
+  margin-left: auto;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.content-page__empty {
+  padding: 16px 20px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Celdas de tabla ---------- */
+.doc-cell__title {
+  font-weight: 600;
+}
+
+.doc-cell__meta {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.table-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.table-actions .btn {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.cell-muted {
+  color: var(--color-text-muted);
+}
+
+/* ---------- Formularios de contenido ---------- */
+.content-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.content-form textarea.input {
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.content-form textarea.content-form__content {
+  min-height: 220px;
+  font-family: Consolas, 'Cascadia Mono', monospace;
+  font-size: 13px;
+}
+
+.content-form__inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.content-form__choices {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.choice-card {
+  display: flex;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.choice-card:has(input:checked) {
+  border-color: var(--color-primary);
+  background: var(--tone-info-bg);
+}
+
+.choice-card strong {
+  display: block;
+  font-size: 14px;
+}
+
+.choice-card small {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Casillas de áreas ---------- */
+.area-checklist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.area-checklist__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.area-checklist__item:has(input:checked) {
+  border-color: var(--color-primary);
+  background: var(--tone-info-bg);
+  color: var(--tone-info-text);
+}
+
+/* ---------- Vista previa del contenido ---------- */
+.content-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 220px;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.content-preview h4 {
+  font-size: 14px;
+}
+
+.content-preview p {
+  white-space: pre-line;
+}
+
+.content-form__label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ---------- Ruta propuesta por área ---------- */
+.route-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 20px 20px;
+}
+
+/* ---------- Editor de evaluaciones ---------- */
+.assessment-settings {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.question-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.question-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface-muted);
+}
+
+.question-card--invalid {
+  border-color: var(--color-danger);
+}
+
+.question-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.question-card__number {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.question-card__tools {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.question-card__tools .btn,
+.question-card__option .btn {
+  padding: 6px 8px;
+}
+
+.question-card__hint {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.question-card__options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.question-card__option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.question-card__option input[type='radio'] {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  accent-color: var(--color-success);
+}
+
+.assessment-plan {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Historial de versiones (línea de tiempo) ---------- */
+.version-history {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-left: 14px;
+  border-left: 2px solid var(--color-border);
+}
+
+.version-history__item {
+  position: relative;
+  font-size: 14px;
+}
+
+.version-history__item::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: -20px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+.version-history__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+@media (max-width: 1100px) {
+  .content-page__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .content-page__stats,
+  .content-form__choices,
+  .assessment-settings {
+    grid-template-columns: 1fr;
+  }
+}

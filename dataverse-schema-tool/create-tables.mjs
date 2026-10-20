@@ -364,7 +364,34 @@ async function ensureLookupColumns(table) {
 }
 
 // -----------------------------------------------------------------------------
-// 8. Publicar cambios (necesario para que se vean en la interfaz / Code Apps)
+// 8. PASE 4 — claves alternativas (valores unicos, ej. el correo de una persona)
+// Dataverse crea el indice en segundo plano: la clave puede tardar unos minutos
+// en quedar "Activa". Mientras tanto no garantiza la unicidad.
+// -----------------------------------------------------------------------------
+async function ensureAlternateKeys(table) {
+  const logicalName = logicalOf(table.schemaName);
+  for (const key of table.alternateKeys ?? []) {
+    // En dry-run la tabla puede no existir todavia: entonces la clave tampoco.
+    const tableExists = await entityExists(logicalName);
+    const existing = tableExists
+      ? (await get(`EntityDefinitions(LogicalName='${logicalName}')/Keys?$select=SchemaName&$filter=SchemaName eq '${key.schemaName}'`)).value
+      : [];
+    if (existing.length > 0) {
+      console.log(`   [key] ${table.schemaName}.${key.schemaName} ya existe.`);
+      continue;
+    }
+    console.log(`   [key] ${table.schemaName}.${key.schemaName} (${key.columns.join(', ')}) NO existe -> ${DRY_RUN ? 'se crearia' : 'creando...'}`);
+    if (DRY_RUN) continue;
+    await post(`EntityDefinitions(LogicalName='${logicalName}')/Keys`, {
+      SchemaName: key.schemaName,
+      DisplayName: label(key.displayName),
+      KeyAttributes: key.columns,
+    });
+  }
+}
+
+// -----------------------------------------------------------------------------
+// 9. Publicar cambios (necesario para que se vean en la interfaz / Code Apps)
 // -----------------------------------------------------------------------------
 async function publishAll() {
   if (DRY_RUN) { console.log('\n[publish] (dry-run) se ejecutaria PublishAllXml al final.'); return; }
@@ -391,13 +418,16 @@ async function main() {
   ];
 
   console.log('--- PASE 1: tablas -----------------------------------------------');
-  for (const t of TABLES) await ensureEntity(t); // las extensiones (contact) ya existen, no se crean
+  for (const t of TABLES) await ensureEntity(t); // las extensiones son tablas estandar: ya existen
 
   console.log('\n--- PASE 2: columnas (sin lookups) --------------------------------');
   for (const t of allTargets) await ensurePlainColumns(t);
 
   console.log('\n--- PASE 3: columnas lookup / relaciones ---------------------------');
   for (const t of allTargets) await ensureLookupColumns(t);
+
+  console.log('\n--- PASE 4: claves alternativas (valores unicos) ------------------');
+  for (const t of TABLES) await ensureAlternateKeys(t);
 
   await publishAll();
 

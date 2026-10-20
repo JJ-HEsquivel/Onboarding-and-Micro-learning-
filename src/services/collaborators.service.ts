@@ -20,7 +20,7 @@ import { attentionReasons } from '@/shared/domain/attention';
 import { daysBetween, todayIso } from '@/shared/lib/dates';
 import type { Area, Collaborator, Manager, NewCollaboratorInput, RouteStage } from '@/shared/types/onboarding';
 import { listAreas } from './areas.service';
-import { ACTIVE_RECORDS, bind, fetchAll, unwrap } from './dataverse';
+import { ACTIVE_RECORDS, bind, fetchAll, odataString, unwrap } from './dataverse';
 import { lastActivityByPerson } from './evidence.service';
 import { loadOnboardingCatalog } from './onboardingRoute.service';
 import { getPeopleById, getPersonIdsWithRole, toManagers } from './people.service';
@@ -146,7 +146,7 @@ async function isEmailRegistered(email: string): Promise<boolean> {
   const result = await ContactsService.getAll({
     select: ['contactid'],
     // En OData una comilla simple se escribe doble ('').
-    filter: `${ACTIVE_RECORDS} and emailaddress1 eq '${email.replace(/'/g, "''")}'`,
+    filter: `${ACTIVE_RECORDS} and emailaddress1 eq ${odataString(email)}`,
     top: 1,
   });
   return unwrap(result, 'Verificar correo').length > 0;

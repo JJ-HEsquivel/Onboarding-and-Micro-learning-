@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 // =============================================================================
 // remove-columns.mjs
-// Borra de Dataverse las columnas listadas en REMOVED_COLUMNS (schema.mjs).
+// Borra de Dataverse lo listado en schema.mjs:
+//   1) REMOVED_RELATIONSHIPS: relaciones 1:N (al borrarlas, Dataverse borra
+//      tambien su columna lookup).
+//   2) REMOVED_COLUMNS: columnas comunes.
 // create-tables.mjs nunca borra nada; este script es el unico que lo hace.
 //
 // USO (dentro de la carpeta dataverse-schema-tool):
@@ -11,14 +14,14 @@
 // ATENCION: borrar una columna borra tambien los datos que tenga. Es
 // IDEMPOTENTE: si una columna ya no existe, la salta.
 // =============================================================================
-import { REMOVED_COLUMNS } from './schema.mjs';
+import { REMOVED_COLUMNS, REMOVED_RELATIONSHIPS } from './schema.mjs';
 import { connect, getDataverseUrl } from './lib/dataverse-client.mjs';
 
 const DRY_RUN = process.argv.includes('--dry-run');
 const DATAVERSE_URL = getDataverseUrl();
 
 console.log('==================================================================');
-console.log(' Onboarding and Micro-learning · Borrado de columnas obsoletas');
+console.log(' Onboarding and Micro-learning · Borrado de relaciones y columnas obsoletas');
 console.log(` Entorno: ${DATAVERSE_URL}`);
 console.log(` Modo:    ${DRY_RUN ? 'DRY-RUN (no se borra nada)' : 'EJECUCION REAL'}`);
 console.log('==================================================================\n');
@@ -32,6 +35,45 @@ async function main() {
   let removed = 0;
   let failed = 0;
 
+  /** Cuantos registros de `table` tienen un valor en `column` (se perderan al borrarla). */
+  async function dataNoteFor(table, column) {
+    entitySets[table] ??= (await api('GET', `EntityDefinitions(LogicalName='${table}')?$select=EntitySetName`)).EntitySetName;
+    const withData = await api('GET', `${entitySets[table]}?$select=${column}&$filter=${column} ne null&$count=true&$top=1`);
+    const count = withData['@odata.count'] ?? 0;
+    return count > 0 ? ` · ATENCION: ${count} registro(s) tienen datos en esta columna` : '';
+  }
+
+  console.log('--- 1/2 Relaciones (columnas lookup) ---');
+  for (const { schemaName, column, reason } of REMOVED_RELATIONSHIPS) {
+    const label = `${column} (${schemaName})`;
+    const found = await api(
+      'GET',
+      `RelationshipDefinitions/Microsoft.Dynamics.CRM.OneToManyRelationshipMetadata?$select=MetadataId,ReferencingEntity,ReferencingAttribute&$filter=SchemaName eq '${schemaName}'`,
+    );
+    const relationship = found.value[0];
+    if (!relationship) {
+      console.log(`   [ya no existe] ${label}`);
+      continue;
+    }
+    const dataNote = await dataNoteFor(relationship.ReferencingEntity, `_${relationship.ReferencingAttribute}_value`);
+
+    if (DRY_RUN) {
+      console.log(`   [se BORRARIA] ${label}  (${reason})${dataNote}`);
+      continue;
+    }
+    try {
+      await api('DELETE', `RelationshipDefinitions(${relationship.MetadataId})`);
+      console.log(`   [borrada]     ${label}${dataNote}`);
+      removed++;
+    } catch (e) {
+      failed++;
+      console.log(`   [ERROR]       ${label}: ${e.message}`);
+      console.log('                 Si el error menciona dependencias, quita la columna de los formularios y');
+      console.log('                 vistas de la tabla en make.powerapps.com y vuelve a ejecutar este script.');
+    }
+  }
+
+  console.log('\n--- 2/2 Columnas ---');
   for (const { table, column, reason } of REMOVED_COLUMNS) {
     const label = `${table}.${column}`;
     const attributePath = `EntityDefinitions(LogicalName='${table}')/Attributes(LogicalName='${column}')`;
@@ -46,11 +88,7 @@ async function main() {
       throw e;
     }
 
-    // Cuantos registros tienen un valor en esa columna (se perderan al borrarla).
-    entitySets[table] ??= (await api('GET', `EntityDefinitions(LogicalName='${table}')?$select=EntitySetName`)).EntitySetName;
-    const withData = await api('GET', `${entitySets[table]}?$select=${column}&$filter=${column} ne null&$count=true&$top=1`);
-    const count = withData['@odata.count'] ?? 0;
-    const dataNote = count > 0 ? ` · ATENCION: ${count} registro(s) tienen datos en esta columna` : '';
+    const dataNote = await dataNoteFor(table, column);
 
     if (DRY_RUN) {
       console.log(`   [se BORRARIA] ${label}  (${reason})${dataNote}`);
