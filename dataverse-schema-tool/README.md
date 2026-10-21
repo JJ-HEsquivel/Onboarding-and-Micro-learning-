@@ -199,6 +199,7 @@ Si necesitas agregar una tabla o columna nueva más adelante, edítala en
 | `npm run seed:people:dry-run` / `npm run seed:people` | Solo áreas, personas base y sus roles (no toca el catálogo) |
 | `npm run migrate:person:dry-run` / `npm run migrate:person` | Migración de una sola vez de `contact` a `jsi_person` (sección 13; pide escribir MIGRAR) |
 | `npm run audit:dry-run` / `npm run audit` / `npm run audit:org` | Activa la auditoría de Dataverse en las tablas; `audit:org` también la del entorno, con 90 días de retención (sección 14) |
+| `npm run roles:dry-run` / `npm run roles` | Crea o actualiza los 3 roles de seguridad de `security-roles.mjs` (sección 15) |
 
 Archivos:
 - `lib/dataverse-client.mjs`: inicio de sesión y llamadas a la Web API, compartido por los scripts.
@@ -313,3 +314,18 @@ npm run audit:org       # activa la del entorno (90 días) y la de todas las tab
 administrador; en ese caso basta `npm run audit` para las tablas. La retención está en
 `CONFIG.auditRetentionDays` (schema.mjs). Los registros se ven en make.powerapps.com, en el
 **Historial de auditoría** de cada registro.
+
+## 15. Roles de seguridad
+
+Los permisos que el **servidor** hace cumplir están en `security-roles.mjs`: una matriz por rol y
+tabla (C crear, R leer, W modificar, D borrar, A asignar lookup, T recibir lookup).
+
+```powershell
+npm run roles:dry-run   # muestra la matriz y si cada rol se crearía o actualizaría
+npm run roles           # deja cada rol con exactamente esos permisos
+```
+
+Crea **Onboarding - Administrador**, **Onboarding - Manager** y **Onboarding - Colaborador** en la
+unidad de negocio raíz y los agrega a la solución. Después, en el Centro de administración, a cada
+usuario se le asigna **Basic User** y su rol. La matriz y sus motivos están en
+`docs/entrega/08-seguridad-y-riesgos.md`.

@@ -15,6 +15,14 @@ en producción la versión mayor es 0.
 - Claves alternativas: correo único por persona y código único por documento.
 - Vite actualizado a 7.3.7 (aviso GHSA-rq7h-c2jc-7f22).
 - Plantilla de pull request con checklist de seguridad.
+- Roles de seguridad de Dataverse declarados en `security-roles.mjs` (`npm run roles`); la evidencia
+  no se puede modificar ni borrar.
+
+### Agregado
+- 63 pruebas unitarias con Vitest (`npm test`) para las reglas de negocio y las consultas seguras.
+- Integración continua en GitHub: lint, pruebas, build y `npm audit` en cada pull request.
+- Aviso de bienvenida al validar la ruta de un colaborador (lo enviará Power Automate).
+- Paquete de entrega de JLS-ENG-PR01 en `docs/entrega` y decisiones de arquitectura en `docs/adr`.
 
 ### Cambiado
 - La persona pasa de la tabla estándar `contact` a la tabla propia `jsi_person`

@@ -9,11 +9,12 @@ import { Jsi_onboardingsService } from '@/generated/services/Jsi_onboardingsServ
 import { Jsi_documentassignmentsService } from '@/generated/services/Jsi_documentassignmentsService';
 import { Jsi_assessmentassignmentsService } from '@/generated/services/Jsi_assessmentassignmentsService';
 import { ASSIGNMENT_STATUS, EXAM_STATUS, VALIDATION_STATUS } from '@/shared/constants/choices';
-import { todayIso } from '@/shared/lib/dates';
+import { formatDate, todayIso } from '@/shared/lib/dates';
 import type { RouteStage } from '@/shared/types/onboarding';
 import { listAreas } from './areas.service';
 import { ACTIVE_RECORDS, bind, fetchAll, unwrap } from './dataverse';
 import { buildAreaRoute, computeStageDueDates, filterRoute, loadOnboardingCatalog } from './onboardingRoute.service';
+import { notify } from './notification.service';
 import { getPeopleById } from './people.service';
 
 type NewAssignmentRecord = Parameters<typeof Jsi_documentassignmentsService.create>[0];
@@ -186,4 +187,17 @@ export async function confirmOnboarding(pending: PendingOnboarding, selectedEtap
     jsi_validatedon: new Date().toISOString(),
   };
   unwrap(await Jsi_onboardingsService.update(onboardingId, changes), 'Validar inducción');
+
+  // 6. Bienvenida: recién ahora la persona puede ver su ruta. El correo lo envía el flujo
+  //    de Power Automate que se dispara al crearse el aviso (ver docs/entrega/02-arquitectura.md).
+  const documentCount = route.reduce((sum, stage) => sum + stage.documents.length, 0);
+  const firstDue = [...dueDates.values()].find((date) => date !== null);
+  await notify({
+    personId: collaborator.id,
+    type: 'Welcome',
+    title: 'Bienvenido al programa de inducción',
+    details:
+      `Su ruta de inducción ya está disponible: ${documentCount} documento(s) por leer y aprobar` +
+      (firstDue ? `, empezando por la primera etapa, con plazo hasta el ${formatDate(firstDue)}.` : '.'),
+  });
 }

@@ -1,0 +1,39 @@
+# Verificación automática de cada cambio (políticas JLS-EIS-PO33 y JLS-EIS-PO12).
+# Corre en cada pull request y en cada push a main. Un pull request con un paso en rojo
+# no debe unirse (configurar la rama main como protegida y exigir este check).
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Lint, pruebas, build y vulnerabilidades
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias (versiones exactas del lock)
+        run: npm ci
+
+      - name: Estándares de codificación (ESLint)
+        run: npm run lint
+
+      - name: Pruebas unitarias (Vitest)
+        run: npm test
+
+      - name: Build de producción (TypeScript + Vite)
+        run: npm run build
+
+      - name: Vulnerabilidades en dependencias publicadas
+        run: npm audit --omit=dev --audit-level=high

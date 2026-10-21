@@ -21,7 +21,9 @@
     "migrate:person": "node migrate-contact-to-person.mjs",
     "audit:dry-run": "node enable-auditing.mjs --dry-run --org",
     "audit": "node enable-auditing.mjs",
-    "audit:org": "node enable-auditing.mjs --org"
+    "audit:org": "node enable-auditing.mjs --org",
+    "roles:dry-run": "node create-security-roles.mjs --dry-run",
+    "roles": "node create-security-roles.mjs"
   },
   "dependencies": {
     "@azure/msal-node": "^2.13.1",
