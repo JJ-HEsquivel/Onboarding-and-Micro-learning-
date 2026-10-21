@@ -198,6 +198,7 @@ Si necesitas agregar una tabla o columna nueva más adelante, edítala en
 | `npm run seed:dry-run` / `npm run seed` | Carga el catálogo de `data/catalog.json` y las personas de `data/people.json` |
 | `npm run seed:people:dry-run` / `npm run seed:people` | Solo áreas, personas base y sus roles (no toca el catálogo) |
 | `npm run migrate:person:dry-run` / `npm run migrate:person` | Migración de una sola vez de `contact` a `jsi_person` (sección 13; pide escribir MIGRAR) |
+| `npm run audit:dry-run` / `npm run audit` / `npm run audit:org` | Activa la auditoría de Dataverse en las tablas; `audit:org` también la del entorno, con 90 días de retención (sección 14) |
 
 Archivos:
 - `lib/dataverse-client.mjs`: inicio de sesión y llamadas a la Web API, compartido por los scripts.
@@ -296,3 +297,19 @@ pac code add-data-source -a dataverse -t jsi_evidence
 
 Entre el paso 2 y la actualización del código de la app, **la app no funciona** (sus servicios
 todavía leen `contact`). Conviene hacerlo en una rama de git.
+
+## 14. Auditoría (logs de al menos 30 días)
+
+La política JLS-EIS-PO12 pide registros (logs) para monitoreo y auditoría por un mínimo de 30
+días. Dataverse los genera solo: quién creó, cambió o borró cada registro, cuándo, y el valor
+anterior y el nuevo. Hay que activarlo en dos niveles: el entorno y cada tabla.
+
+```powershell
+npm run audit:dry-run   # muestra el estado del entorno y de cada tabla
+npm run audit:org       # activa la del entorno (90 días) y la de todas las tablas
+```
+
+`audit:org` necesita ser administrador del entorno. En el entorno de la empresa lo hace su
+administrador; en ese caso basta `npm run audit` para las tablas. La retención está en
+`CONFIG.auditRetentionDays` (schema.mjs). Los registros se ven en make.powerapps.com, en el
+**Historial de auditoría** de cada registro.

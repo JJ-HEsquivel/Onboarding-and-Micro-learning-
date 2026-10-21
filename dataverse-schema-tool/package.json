@@ -18,7 +18,10 @@
     "seed:people:dry-run": "node seed-data.mjs --people-only --dry-run",
     "seed:people": "node seed-data.mjs --people-only",
     "migrate:person:dry-run": "node migrate-contact-to-person.mjs --dry-run",
-    "migrate:person": "node migrate-contact-to-person.mjs"
+    "migrate:person": "node migrate-contact-to-person.mjs",
+    "audit:dry-run": "node enable-auditing.mjs --dry-run --org",
+    "audit": "node enable-auditing.mjs",
+    "audit:org": "node enable-auditing.mjs --org"
   },
   "dependencies": {
     "@azure/msal-node": "^2.13.1",

@@ -131,10 +131,15 @@ const post = (path, body) => callApi('POST', path, body);
 // -----------------------------------------------------------------------------
 // 2. Helpers de metadatos de Dataverse
 // -----------------------------------------------------------------------------
+// Idioma base del entorno (1033 = inglés, 3082 = español...). Se lee de Dataverse al iniciar
+// (ver main): algunas operaciones, como crear claves alternativas, rechazan etiquetas en un
+// idioma que el entorno no tiene instalado.
+let LANGUAGE_CODE = 1033;
+
 const label = (text) => ({
   '@odata.type': 'Microsoft.Dynamics.CRM.Label',
-  LocalizedLabels: [{ '@odata.type': 'Microsoft.Dynamics.CRM.LocalizedLabel', Label: text, LanguageCode: 1033 }],
-  UserLocalizedLabel: { '@odata.type': 'Microsoft.Dynamics.CRM.LocalizedLabel', Label: text, LanguageCode: 1033 },
+  LocalizedLabels: [{ '@odata.type': 'Microsoft.Dynamics.CRM.LocalizedLabel', Label: text, LanguageCode: LANGUAGE_CODE }],
+  UserLocalizedLabel: { '@odata.type': 'Microsoft.Dynamics.CRM.LocalizedLabel', Label: text, LanguageCode: LANGUAGE_CODE },
 });
 
 const requiredLevel = (value = 'None') => ({
@@ -408,7 +413,12 @@ async function main() {
 
   // Prueba de conexion: confirma que el token funciona en tu entorno antes de tocar nada.
   const who = await get('WhoAmI');
-  console.log(`Conexion OK con Dataverse (UserId: ${who.UserId}).\n`);
+  console.log(`Conexion OK con Dataverse (UserId: ${who.UserId}).`);
+
+  // Las etiquetas (nombres visibles) se crean en el idioma base del entorno.
+  const organization = (await get('organizations?$select=languagecode')).value[0];
+  LANGUAGE_CODE = organization?.languagecode ?? LANGUAGE_CODE;
+  console.log(`Idioma base del entorno: ${LANGUAGE_CODE}\n`);
 
   await ensurePublisherAndSolution();
 

@@ -27,6 +27,9 @@ export const CONFIG = {
   solutionUniqueName: 'OnboardingMicroLearning',
   solutionFriendlyName: 'Onboarding and Micro-learning',
   solutionVersion: '1.0.0.0',
+  // Dias que Dataverse conserva el registro de auditoria (quien cambio que y cuando).
+  // La politica JLS-EIS-PO12 exige un minimo de 30 dias; se dejan 90 para cubrir un trimestre.
+  auditRetentionDays: 90,
 };
 
 // Helper: genera un option set local secuencial. Cada atributo tiene su
@@ -128,6 +131,8 @@ export const TABLES = [
       { schemaName: 'jsi_IsDefault', type: 'Boolean', displayName: 'Default In Route', trueLabel: 'Yes', falseLabel: 'No', defaultValue: true },
       { schemaName: 'jsi_File', type: 'File', displayName: 'File', requiredLevel: OPTIONAL },
     ],
+    // Dataverse rechaza dos documentos con el mismo codigo (la app tambien lo valida antes).
+    alternateKeys: [{ schemaName: 'jsi_document_code_key', displayName: 'Code', columns: ['jsi_code'] }],
   },
   {
     schemaName: 'jsi_DocumentArea', // JUNCTION TABLE (Document N:N Area)
