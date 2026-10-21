@@ -1,0 +1,124 @@
+.admin-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-dashboard__stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.admin-dashboard__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.admin-dashboard__card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 20px;
+}
+
+.admin-dashboard__card h2,
+.admin-dashboard__header h2 {
+  font-size: 16px;
+}
+
+.admin-dashboard__subtitle {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.admin-dashboard__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px 12px;
+}
+
+.admin-dashboard__empty {
+  padding: 12px 20px 20px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.admin-dashboard__reason {
+  max-width: 320px;
+  font-size: 13px;
+}
+
+.admin-dashboard__area-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ---------- Lista de áreas ---------- */
+.area-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.area-list__row {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) auto minmax(0, 1.4fr) 16px;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.area-list__row:hover {
+  border-color: var(--color-primary);
+}
+
+.area-list__count {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.area-list__detail {
+  font-size: 13px;
+  text-align: right;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 1100px) {
+  .admin-dashboard__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-dashboard__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-dashboard__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .area-list__row {
+    grid-template-columns: minmax(0, 1fr) 16px;
+  }
+
+  .area-list__count,
+  .area-list__detail {
+    grid-column: 1;
+    text-align: left;
+  }
+}

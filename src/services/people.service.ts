@@ -7,7 +7,7 @@ import type { Contacts } from '@/generated/models/ContactsModel';
 import type { RoleValue } from '@/shared/constants/choices';
 import type { SessionUser } from '@/shared/types/navigation';
 import type { Manager } from '@/shared/types/onboarding';
-import { ACTIVE_RECORDS, fetchAll } from './dataverse';
+import { ACTIVE_RECORDS, fetchAll, odataId, odataString } from './dataverse';
 
 const PERSON_FIELDS = [
   'contactid',
@@ -52,6 +52,34 @@ export function toManagers(people: Map<string, Contacts>, managerIds: Set<string
         : [];
     })
     .sort((a, b) => a.fullName.localeCompare(b.fullName));
+}
+
+/** La persona activa con ese correo, o null si no está registrada. */
+export async function findPersonByEmail(email: string): Promise<SessionUser | null> {
+  const rows = await fetchAll(
+    (o) => ContactsService.getAll(o),
+    {
+      select: ['contactid', 'fullname', 'jsi_jobtitle'],
+      filter: `${ACTIVE_RECORDS} and emailaddress1 eq ${odataString(email.trim())}`,
+      top: 1,
+    },
+    'Buscar persona por correo',
+  );
+  const person = rows[0];
+  return person ? { id: person.contactid, fullName: person.fullname ?? '', jobTitle: person.jsi_jobtitle ?? '' } : null;
+}
+
+/** Roles activos de una persona (valores de jsi_roleassignment.jsi_role). */
+export async function getActiveRoles(personId: string): Promise<RoleValue[]> {
+  const assignments = await fetchAll(
+    (o) => Jsi_roleassignmentsService.getAll(o),
+    {
+      select: ['jsi_role'],
+      filter: `${ACTIVE_RECORDS} and jsi_isactive eq true and _jsi_person_value eq ${odataId(personId)}`,
+    },
+    'Leer roles de la persona',
+  );
+  return [...new Set(assignments.map((a) => a.jsi_role as RoleValue))];
 }
 
 /** Personas con el rol indicado activo, ordenadas por nombre (para elegir con quién ingresar). */

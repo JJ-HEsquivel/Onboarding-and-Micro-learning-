@@ -13,9 +13,10 @@ interface CollaboratorsTableProps {
   /** true si existen colaboradores aunque los filtros los oculten. */
   hasCollaborators: boolean;
   onRegister: () => void;
+  onOpen: (collaborator: Collaborator) => void;
 }
 
-export function CollaboratorsTable({ collaborators, loading, hasCollaborators, onRegister }: CollaboratorsTableProps) {
+export function CollaboratorsTable({ collaborators, loading, hasCollaborators, onRegister, onOpen }: CollaboratorsTableProps) {
   if (loading) {
     return <p className="collaborators-table__loading">Cargando colaboradores…</p>;
   }
@@ -56,7 +57,7 @@ export function CollaboratorsTable({ collaborators, loading, hasCollaborators, o
         </thead>
         <tbody>
           {collaborators.map((c) => (
-            <tr key={c.id}>
+            <tr key={c.id} className="table__row--clickable" onClick={() => onOpen(c)}>
               <td>
                 <div className="person-cell">
                   <Avatar initials={getInitials(c.fullName)} size="sm" />
@@ -79,8 +80,13 @@ export function CollaboratorsTable({ collaborators, loading, hasCollaborators, o
                 <CollaboratorStatusBadge status={c.status} />
               </td>
               <td>
-                {/* TODO: abrir la ficha del colaborador. */}
-                <Button variant="secondary" disabled title="Disponible próximamente">
+                <Button
+                  variant="secondary"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onOpen(c);
+                  }}
+                >
                   Ver ficha
                 </Button>
               </td>

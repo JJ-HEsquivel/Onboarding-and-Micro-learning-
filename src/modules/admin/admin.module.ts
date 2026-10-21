@@ -1,3 +1,4 @@
+import { lazy } from 'react';
 import {
   Award,
   Bell,
@@ -13,17 +14,18 @@ import {
 } from 'lucide-react';
 import { ROLE } from '@/shared/constants/choices';
 import type { RoleModule } from '@/shared/types/navigation';
-import AdminDashboardPage from './pages/AdminDashboardPage';
-import AdminCollaboratorsPage from './pages/collaborators/AdminCollaboratorsPage';
-import AdminManagersPage from './pages/managers/AdminManagersPage';
-import AdminDocumentsPage from './pages/AdminDocumentsPage';
-import AdminLearningPathsPage from './pages/AdminLearningPathsPage';
-import AdminAssessmentsPage from './pages/AdminAssessmentsPage';
-import AdminMicroLearningPage from './pages/AdminMicroLearningPage';
-import AdminAnalyticsPage from './pages/AdminAnalyticsPage';
-import AdminAutomationsPage from './pages/AdminAutomationsPage';
-import AdminEvidencePage from './pages/AdminEvidencePage';
-import AdminSettingsPage from './pages/AdminSettingsPage';
+// Cada pantalla se descarga recién cuando se abre (code splitting).
+const AdminDashboardPage = lazy(() => import('./pages/dashboard/AdminDashboardPage'));
+const AdminCollaboratorsPage = lazy(() => import('./pages/collaborators/AdminCollaboratorsPage'));
+const AdminManagersPage = lazy(() => import('./pages/managers/AdminManagersPage'));
+const AdminDocumentsPage = lazy(() => import('./pages/documents/AdminDocumentsPage'));
+const AdminLearningPathsPage = lazy(() => import('./pages/learning-paths/AdminLearningPathsPage'));
+const AdminAssessmentsPage = lazy(() => import('./pages/assessments/AdminAssessmentsPage'));
+const AdminMicroLearningPage = lazy(() => import('./pages/AdminMicroLearningPage'));
+const AdminAnalyticsPage = lazy(() => import('./pages/AdminAnalyticsPage'));
+const AdminAutomationsPage = lazy(() => import('./pages/AdminAutomationsPage'));
+const AdminEvidencePage = lazy(() => import('./pages/AdminEvidencePage'));
+const AdminSettingsPage = lazy(() => import('./pages/AdminSettingsPage'));
 
 export const adminModule: RoleModule = {
   role: 'admin',

@@ -92,9 +92,10 @@ Revisa con calma esta salida antes de seguir.
 ```powershell
 npm run create
 ```
-Mismo login. Esta vez el script si crea publisher, solution, 20 tablas
-personalizadas, sus columnas, las relaciones, y agrega las columnas nuevas a
-la tabla estandar `contact` (Employee). Al final publica los cambios
+Mismo login. Esta vez el script si crea publisher, solution, las 23 tablas
+personalizadas (incluida la persona, `jsi_person`), sus columnas, las
+relaciones y las claves alternativas (ej. el correo unico de cada persona).
+Al final publica los cambios
 (`PublishAllXml`) para que se vean de inmediato en `make.powerapps.com`.
 
 **Puedes correrlo varias veces sin miedo**: lo que ya existe se detecta y se
@@ -126,7 +127,7 @@ pac code add-data-source -a dataverse -t jsi_area
 pac code add-data-source -a dataverse -t jsi_stage
 pac code add-data-source -a dataverse -t jsi_document
 pac code add-data-source -a dataverse -t jsi_documentassignment
-pac code add-data-source -a dataverse -t contact
+pac code add-data-source -a dataverse -t jsi_person
 ```
 (repite para cada tabla adicional que necesites: `jsi_assessment`,
 `jsi_assessmentassignment`, `jsi_campaign`, etc.)
@@ -169,6 +170,11 @@ pac code push        # publica la Code App
 onboarding-dataverse-schema-tool/
 ├── schema.mjs          <- Definicion de tablas/columnas/relaciones (editable)
 ├── create-tables.mjs    <- Motor que lee schema.mjs y llama a la Web API
+├── remove-columns.mjs   <- Borra relaciones y columnas obsoletas
+├── reset-data.mjs / seed-data.mjs   <- Reinicio y carga de datos base
+├── migrate-contact-to-person.mjs    <- Migracion de una sola vez (seccion 13)
+├── data/                <- catalog.json y people.json
+├── lib/                 <- Cliente de la Web API y operaciones sobre registros
 ├── package.json
 ├── .env.example         <- Plantilla (sin datos reales)
 ├── .env                 <- TU creas este archivo, con tus valores (no se sube a git)
@@ -187,9 +193,13 @@ Si necesitas agregar una tabla o columna nueva más adelante, edítala en
 | Comando | Qué hace |
 |---|---|
 | `npm run dry-run` / `npm run create` | Crea tablas, columnas y relaciones que falten (nunca borra) |
-| `npm run remove-columns:dry-run` / `npm run remove-columns` | Borra las columnas listadas en `REMOVED_COLUMNS` (schema.mjs) |
+| `npm run remove-columns:dry-run` / `npm run remove-columns` | Borra las relaciones de `REMOVED_RELATIONSHIPS` y las columnas de `REMOVED_COLUMNS` (schema.mjs) |
 | `npm run reset:dry-run` / `npm run reset` | Borra los datos de inducción y el catálogo, conservando áreas y personas base (pide escribir REINICIAR) |
 | `npm run seed:dry-run` / `npm run seed` | Carga el catálogo de `data/catalog.json` y las personas de `data/people.json` |
+| `npm run seed:people:dry-run` / `npm run seed:people` | Solo áreas, personas base y sus roles (no toca el catálogo) |
+| `npm run migrate:person:dry-run` / `npm run migrate:person` | Migración de una sola vez de `contact` a `jsi_person` (sección 13; pide escribir MIGRAR) |
+| `npm run audit:dry-run` / `npm run audit` / `npm run audit:org` | Activa la auditoría de Dataverse en las tablas; `audit:org` también la del entorno, con 90 días de retención (sección 14) |
+| `npm run roles:dry-run` / `npm run roles` | Crea o actualiza los 3 roles de seguridad de `security-roles.mjs` (sección 15) |
 
 Archivos:
 - `lib/dataverse-client.mjs`: inicio de sesión y llamadas a la Web API, compartido por los scripts.
@@ -197,7 +207,7 @@ Archivos:
 
 ## 11. Cambio de modelo: personas, roles e inducciones
 
-La persona (`contact`) existe una sola vez. Sus roles están en `jsi_roleassignment`
+La persona (hoy `jsi_person`; en esta versión era `contact`) existe una sola vez. Sus roles están en `jsi_roleassignment`
 (puede tener varios) y cada inducción en `jsi_onboarding`. Por eso se quitaron de
 `contact` las columnas `jsi_onboardingstatus`, `jsi_progressstatus`, `jsi_risklevel`
 y `jsi_userrole`.
@@ -236,3 +246,86 @@ npm run seed              # vuelve a cargar catálogo y personas base
 
 `reset` conserva las áreas y a las personas de `people.json`; borra todo lo demás (inducciones,
 roles, asignaciones, intentos, evidencias, campañas, documentos y preguntas). No se puede deshacer.
+
+## 13. Migración: de `contact` a la tabla propia `jsi_person`
+
+**Por qué:** `contact` es una tabla estándar que, en un entorno de empresa, comparten otras
+apps (en Dynamics 365 representa a clientes). Con `jsi_person` los colaboradores no se mezclan
+con otros datos, los permisos se dan solo sobre nuestra tabla y la solución se instala y
+desinstala limpia. Además, `jsi_person.jsi_email` tiene una **clave alternativa**: Dataverse no
+permite dos personas con el mismo correo.
+
+**Por qué hay que borrar y volver a crear los lookups:** Dataverse no permite cambiar el destino
+de una columna lookup. `jsi_onboarding.jsi_employee` apuntaba a `contact`: se borra esa relación
+y se crea otra con el mismo nombre de columna que apunta a `jsi_person`.
+
+Se hace **una sola vez**, en este orden (primero el dry-run de cada paso):
+
+```powershell
+# 1. Datos: borra roles, inducciones, asignaciones, intentos, evidencias y avisos,
+#    y las personas que la app creó en contact. CONSERVA el catálogo.
+npm run migrate:person:dry-run
+npm run migrate:person          # pide escribir MIGRAR
+
+# 2. Esquema: borra los 11 lookups viejos hacia contact y sus columnas
+npm run remove-columns:dry-run
+npm run remove-columns
+
+# 3. Esquema: crea jsi_person, los lookups nuevos y la clave del correo
+npm run dry-run
+npm run create
+
+# 4. Datos: vuelve a crear las personas base y sus roles (sin tocar el catálogo)
+npm run seed:people:dry-run
+npm run seed:people
+```
+
+Después, en la carpeta de la Code App, hay que regenerar los modelos y servicios
+(`src/generated`), porque cambió a qué tabla apuntan los lookups:
+
+```powershell
+# Quitar la fuente "contact": confirme los parámetros con  pac code delete-data-source --help
+pac code delete-data-source -a dataverse -ds contact
+pac code add-data-source -a dataverse -t jsi_person
+# Las tablas con lookups a la persona:
+pac code add-data-source -a dataverse -t jsi_roleassignment
+pac code add-data-source -a dataverse -t jsi_onboarding
+pac code add-data-source -a dataverse -t jsi_documentassignment
+pac code add-data-source -a dataverse -t jsi_assessmentassignment
+pac code add-data-source -a dataverse -t jsi_notification
+pac code add-data-source -a dataverse -t jsi_evidence
+```
+
+Entre el paso 2 y la actualización del código de la app, **la app no funciona** (sus servicios
+todavía leen `contact`). Conviene hacerlo en una rama de git.
+
+## 14. Auditoría (logs de al menos 30 días)
+
+La política JLS-EIS-PO12 pide registros (logs) para monitoreo y auditoría por un mínimo de 30
+días. Dataverse los genera solo: quién creó, cambió o borró cada registro, cuándo, y el valor
+anterior y el nuevo. Hay que activarlo en dos niveles: el entorno y cada tabla.
+
+```powershell
+npm run audit:dry-run   # muestra el estado del entorno y de cada tabla
+npm run audit:org       # activa la del entorno (90 días) y la de todas las tablas
+```
+
+`audit:org` necesita ser administrador del entorno. En el entorno de la empresa lo hace su
+administrador; en ese caso basta `npm run audit` para las tablas. La retención está en
+`CONFIG.auditRetentionDays` (schema.mjs). Los registros se ven en make.powerapps.com, en el
+**Historial de auditoría** de cada registro.
+
+## 15. Roles de seguridad
+
+Los permisos que el **servidor** hace cumplir están en `security-roles.mjs`: una matriz por rol y
+tabla (C crear, R leer, W modificar, D borrar, A asignar lookup, T recibir lookup).
+
+```powershell
+npm run roles:dry-run   # muestra la matriz y si cada rol se crearía o actualizaría
+npm run roles           # deja cada rol con exactamente esos permisos
+```
+
+Crea **Onboarding - Administrador**, **Onboarding - Manager** y **Onboarding - Colaborador** en la
+unidad de negocio raíz y los agrega a la solución. Después, en el Centro de administración, a cada
+usuario se le asigna **Basic User** y su rol. La matriz y sus motivos están en
+`docs/entrega/08-seguridad-y-riesgos.md`.

@@ -1,12 +1,14 @@
+import { lazy } from 'react';
 import { Award, BookOpen, House, MessageSquare, SquareCheckBig, Zap } from 'lucide-react';
 import { ROLE } from '@/shared/constants/choices';
 import type { RoleModule } from '@/shared/types/navigation';
-import CollaboratorProgressPage from './pages/progress/CollaboratorProgressPage';
-import CollaboratorInductionPage from './pages/induction/CollaboratorInductionPage';
-import CollaboratorAssessmentsPage from './pages/assessments/CollaboratorAssessmentsPage';
-import CollaboratorMicroLearningPage from './pages/CollaboratorMicroLearningPage';
-import CollaboratorAssistantPage from './pages/CollaboratorAssistantPage';
-import CollaboratorCertificatesPage from './pages/certificates/CollaboratorCertificatesPage';
+// Cada pantalla se descarga recién cuando se abre (code splitting).
+const CollaboratorProgressPage = lazy(() => import('./pages/progress/CollaboratorProgressPage'));
+const CollaboratorInductionPage = lazy(() => import('./pages/induction/CollaboratorInductionPage'));
+const CollaboratorAssessmentsPage = lazy(() => import('./pages/assessments/CollaboratorAssessmentsPage'));
+const CollaboratorMicroLearningPage = lazy(() => import('./pages/CollaboratorMicroLearningPage'));
+const CollaboratorAssistantPage = lazy(() => import('./pages/CollaboratorAssistantPage'));
+const CollaboratorCertificatesPage = lazy(() => import('./pages/certificates/CollaboratorCertificatesPage'));
 
 export const collaboratorModule: RoleModule = {
   role: 'collaborator',

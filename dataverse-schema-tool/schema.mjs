@@ -27,6 +27,9 @@ export const CONFIG = {
   solutionUniqueName: 'OnboardingMicroLearning',
   solutionFriendlyName: 'Onboarding and Micro-learning',
   solutionVersion: '1.0.0.0',
+  // Dias que Dataverse conserva el registro de auditoria (quien cambio que y cuando).
+  // La politica JLS-EIS-PO12 exige un minimo de 30 dias; se dejan 90 para cubrir un trimestre.
+  auditRetentionDays: 90,
 };
 
 // Helper: genera un option set local secuencial. Cada atributo tiene su
@@ -128,6 +131,8 @@ export const TABLES = [
       { schemaName: 'jsi_IsDefault', type: 'Boolean', displayName: 'Default In Route', trueLabel: 'Yes', falseLabel: 'No', defaultValue: true },
       { schemaName: 'jsi_File', type: 'File', displayName: 'File', requiredLevel: OPTIONAL },
     ],
+    // Dataverse rechaza dos documentos con el mismo codigo (la app tambien lo valida antes).
+    alternateKeys: [{ schemaName: 'jsi_document_code_key', displayName: 'Code', columns: ['jsi_code'] }],
   },
   {
     schemaName: 'jsi_DocumentArea', // JUNCTION TABLE (Document N:N Area)
@@ -204,10 +209,39 @@ export const TABLES = [
 
   // =====================================================================
   // PERSONAS: ROLES E INDUCCIONES
-  // La persona existe UNA sola vez (contact). Sus roles y sus inducciones
+  // La persona existe UNA sola vez (jsi_Person). Sus roles y sus inducciones
   // son registros aparte, asi una persona puede tener varios roles a la vez
   // (ej. Manager y Administrador) y conservar el historial de sus inducciones.
+  //
+  // Por que una tabla propia y no la estandar "contact": en Dynamics 365
+  // "contact" representa a clientes/personas externas y la comparten otras
+  // apps del entorno (datos mezclados, permisos sobre toda la tabla, flujos o
+  // reglas ajenas). jsi_Person llega con esta solucion y solo la usa esta app.
   // =====================================================================
+  {
+    schemaName: 'jsi_Person',
+    displayName: 'Person', displayCollectionName: 'People',
+    // UserOwned: permite restringir la lectura por unidad de negocio mas adelante (datos personales).
+    ownershipType: 'UserOwned',
+    description: 'A person of the organization who uses the onboarding app (collaborator, manager or administrator).',
+    // Nombre completo: la app lo arma como "Nombres Apellidos" al crear o editar.
+    primaryColumn: { schemaName: 'jsi_FullName', displayName: 'Full Name', maxLength: 200 },
+    columns: [
+      { schemaName: 'jsi_FirstName', type: 'String', displayName: 'First Name', maxLength: 50, requiredLevel: REQUIRED },
+      { schemaName: 'jsi_LastName', type: 'String', displayName: 'Last Name', maxLength: 50, requiredLevel: REQUIRED },
+      // Correo corporativo: identifica a la persona. Es unico (ver alternateKeys).
+      { schemaName: 'jsi_Email', type: 'String', displayName: 'Email', maxLength: 100, requiredLevel: REQUIRED },
+      { schemaName: 'jsi_JobTitle', type: 'String', displayName: 'Job Title', maxLength: 100, requiredLevel: OPTIONAL },
+      { schemaName: 'jsi_HireDate', type: 'DateOnly', displayName: 'Hire Date', requiredLevel: OPTIONAL },
+      { schemaName: 'jsi_Area', type: 'Lookup', displayName: 'Area', requiredLevel: REQUIRED, target: 'jsi_Area', relationshipSchemaName: 'jsi_area_person' },
+      { schemaName: 'jsi_Manager', type: 'Lookup', displayName: 'Manager', requiredLevel: OPTIONAL, target: 'jsi_Person', relationshipSchemaName: 'jsi_person_manager_person' },
+      // Cuenta real de la empresa (Microsoft Entra ID). Vacia mientras se use el
+      // inicio de sesion simulado; servira para saber quien abrio la app.
+      { schemaName: 'jsi_User', type: 'Lookup', displayName: 'User', requiredLevel: OPTIONAL, target: 'systemuser', relationshipSchemaName: 'jsi_systemuser_person' },
+    ],
+    // Clave alternativa: Dataverse rechaza dos personas con el mismo correo.
+    alternateKeys: [{ schemaName: 'jsi_person_email_key', displayName: 'Email', columns: ['jsi_email'] }],
+  },
   {
     schemaName: 'jsi_RoleAssignment',
     displayName: 'Role Assignment', displayCollectionName: 'Role Assignments',
@@ -215,13 +249,13 @@ export const TABLES = [
     description: 'A role held by a person in the app (a person can hold several).',
     primaryColumn: { schemaName: 'jsi_Name', displayName: 'Name', maxLength: 100, autoNumber: 'ROLE-{SEQNUM:5}' },
     columns: [
-      { schemaName: 'jsi_Person', type: 'Lookup', displayName: 'Person', requiredLevel: REQUIRED, target: 'contact', relationshipSchemaName: 'jsi_contact_roleassignment' },
+      { schemaName: 'jsi_Person', type: 'Lookup', displayName: 'Person', requiredLevel: REQUIRED, target: 'jsi_Person', relationshipSchemaName: 'jsi_person_roleassignment' },
       { schemaName: 'jsi_Role', type: 'Picklist', displayName: 'Role', requiredLevel: REQUIRED, options: choice(['Administrator', 'Manager', 'Collaborator']) },
       { schemaName: 'jsi_StartDate', type: 'DateOnly', displayName: 'Start Date', requiredLevel: OPTIONAL },
       { schemaName: 'jsi_EndDate', type: 'DateOnly', displayName: 'End Date', requiredLevel: OPTIONAL },
       { schemaName: 'jsi_IsActive', type: 'Boolean', displayName: 'Is Active', trueLabel: 'Yes', falseLabel: 'No', defaultValue: true },
       { schemaName: 'jsi_JobTitle', type: 'String', displayName: 'Job Title', maxLength: 100, requiredLevel: OPTIONAL },
-      { schemaName: 'jsi_AssignedBy', type: 'Lookup', displayName: 'Assigned By', requiredLevel: OPTIONAL, target: 'contact', relationshipSchemaName: 'jsi_contact_roleassignment_assignedby' },
+      { schemaName: 'jsi_AssignedBy', type: 'Lookup', displayName: 'Assigned By', requiredLevel: OPTIONAL, target: 'jsi_Person', relationshipSchemaName: 'jsi_person_roleassignment_assignedby' },
     ],
   },
   {
@@ -231,9 +265,9 @@ export const TABLES = [
     description: 'One onboarding process of a person (initial onboarding or a later one, e.g. after a promotion).',
     primaryColumn: { schemaName: 'jsi_Name', displayName: 'Name', maxLength: 100, autoNumber: 'ONB-{SEQNUM:5}' },
     columns: [
-      { schemaName: 'jsi_Employee', type: 'Lookup', displayName: 'Employee', requiredLevel: REQUIRED, target: 'contact', relationshipSchemaName: 'jsi_contact_onboarding' },
-      { schemaName: 'jsi_Validator', type: 'Lookup', displayName: 'Validator', requiredLevel: OPTIONAL, target: 'contact', relationshipSchemaName: 'jsi_contact_onboarding_validator' },
-      { schemaName: 'jsi_RegisteredBy', type: 'Lookup', displayName: 'Registered By', requiredLevel: OPTIONAL, target: 'contact', relationshipSchemaName: 'jsi_contact_onboarding_registeredby' },
+      { schemaName: 'jsi_Employee', type: 'Lookup', displayName: 'Employee', requiredLevel: REQUIRED, target: 'jsi_Person', relationshipSchemaName: 'jsi_person_onboarding' },
+      { schemaName: 'jsi_Validator', type: 'Lookup', displayName: 'Validator', requiredLevel: OPTIONAL, target: 'jsi_Person', relationshipSchemaName: 'jsi_person_onboarding_validator' },
+      { schemaName: 'jsi_RegisteredBy', type: 'Lookup', displayName: 'Registered By', requiredLevel: OPTIONAL, target: 'jsi_Person', relationshipSchemaName: 'jsi_person_onboarding_registeredby' },
       { schemaName: 'jsi_Area', type: 'Lookup', displayName: 'Area', requiredLevel: REQUIRED, target: 'jsi_Area', relationshipSchemaName: 'jsi_area_onboarding' },
       { schemaName: 'jsi_Type', type: 'Picklist', displayName: 'Type', requiredLevel: REQUIRED, options: choice(['Initial', 'RoleChange']) },
       { schemaName: 'jsi_ValidationStatus', type: 'Picklist', displayName: 'Validation Status', requiredLevel: REQUIRED, options: choice(['PendingValidation', 'Validated']) },
@@ -255,7 +289,7 @@ export const TABLES = [
     description: 'A document assigned to one employee, with its reading status.',
     primaryColumn: { schemaName: 'jsi_Name', displayName: 'Name', maxLength: 200, autoNumber: 'DOCA-{SEQNUM:6}' },
     columns: [
-      { schemaName: 'jsi_Employee', type: 'Lookup', displayName: 'Employee', requiredLevel: REQUIRED, target: 'contact', relationshipSchemaName: 'jsi_contact_documentassignment' },
+      { schemaName: 'jsi_Employee', type: 'Lookup', displayName: 'Employee', requiredLevel: REQUIRED, target: 'jsi_Person', relationshipSchemaName: 'jsi_person_documentassignment' },
       { schemaName: 'jsi_Document', type: 'Lookup', displayName: 'Document', requiredLevel: REQUIRED, target: 'jsi_Document', relationshipSchemaName: 'jsi_document_documentassignment' },
       { schemaName: 'jsi_Stage', type: 'Lookup', displayName: 'Stage', requiredLevel: OPTIONAL, target: 'jsi_Stage', relationshipSchemaName: 'jsi_stage_documentassignment' },
       { schemaName: 'jsi_Onboarding', type: 'Lookup', displayName: 'Onboarding', requiredLevel: OPTIONAL, target: 'jsi_Onboarding', relationshipSchemaName: 'jsi_onboarding_documentassignment' },
@@ -272,7 +306,7 @@ export const TABLES = [
     description: 'An assessment assigned to one employee, with its progress.',
     primaryColumn: { schemaName: 'jsi_Name', displayName: 'Name', maxLength: 200, autoNumber: 'ASGN-{SEQNUM:6}' },
     columns: [
-      { schemaName: 'jsi_Employee', type: 'Lookup', displayName: 'Employee', requiredLevel: REQUIRED, target: 'contact', relationshipSchemaName: 'jsi_contact_assessmentassignment' },
+      { schemaName: 'jsi_Employee', type: 'Lookup', displayName: 'Employee', requiredLevel: REQUIRED, target: 'jsi_Person', relationshipSchemaName: 'jsi_person_assessmentassignment' },
       { schemaName: 'jsi_Assessment', type: 'Lookup', displayName: 'Assessment', requiredLevel: REQUIRED, target: 'jsi_Assessment', relationshipSchemaName: 'jsi_assessment_assessmentassignment' },
       { schemaName: 'jsi_CampaignDelivery', type: 'Lookup', displayName: 'Campaign Delivery', requiredLevel: OPTIONAL, target: 'jsi_CampaignDelivery', relationshipSchemaName: 'jsi_campaigndelivery_assessmentassignment' },
       { schemaName: 'jsi_Onboarding', type: 'Lookup', displayName: 'Onboarding', requiredLevel: OPTIONAL, target: 'jsi_Onboarding', relationshipSchemaName: 'jsi_onboarding_assessmentassignment' },
@@ -369,7 +403,7 @@ export const TABLES = [
     description: 'A notification sent to an employee.',
     primaryColumn: { schemaName: 'jsi_Title', displayName: 'Title', maxLength: 200 },
     columns: [
-      { schemaName: 'jsi_Employee', type: 'Lookup', displayName: 'Employee', requiredLevel: REQUIRED, target: 'contact', relationshipSchemaName: 'jsi_contact_notification' },
+      { schemaName: 'jsi_Employee', type: 'Lookup', displayName: 'Employee', requiredLevel: REQUIRED, target: 'jsi_Person', relationshipSchemaName: 'jsi_person_notification' },
       { schemaName: 'jsi_Type', type: 'Picklist', displayName: 'Type', requiredLevel: REQUIRED, options: choice(['Reminder', 'DocumentUpdate', 'Assessment', 'Campaign', 'Welcome']) },
       { schemaName: 'jsi_Details', type: 'Memo', displayName: 'Details', maxLength: 2000, requiredLevel: OPTIONAL },
       { schemaName: 'jsi_Date', type: 'DateTime', displayName: 'Date', requiredLevel: OPTIONAL },
@@ -383,7 +417,7 @@ export const TABLES = [
     description: 'Audit trail of a reading confirmation or assessment result.',
     primaryColumn: { schemaName: 'jsi_Name', displayName: 'Name', maxLength: 200, autoNumber: 'EVID-{SEQNUM:6}' },
     columns: [
-      { schemaName: 'jsi_Employee', type: 'Lookup', displayName: 'Employee', requiredLevel: REQUIRED, target: 'contact', relationshipSchemaName: 'jsi_contact_evidence' },
+      { schemaName: 'jsi_Employee', type: 'Lookup', displayName: 'Employee', requiredLevel: REQUIRED, target: 'jsi_Person', relationshipSchemaName: 'jsi_person_evidence' },
       { schemaName: 'jsi_Document', type: 'Lookup', displayName: 'Document', requiredLevel: OPTIONAL, target: 'jsi_Document', relationshipSchemaName: 'jsi_document_evidence' },
       { schemaName: 'jsi_Assessment', type: 'Lookup', displayName: 'Assessment', requiredLevel: OPTIONAL, target: 'jsi_Assessment', relationshipSchemaName: 'jsi_assessment_evidence' },
       { schemaName: 'jsi_Version', type: 'String', displayName: 'Version', maxLength: 10, requiredLevel: OPTIONAL },
@@ -411,26 +445,36 @@ export const TABLES = [
 ];
 
 // =============================================================================
-// Extension de la tabla estandar "contact" (la PERSONA). NO se crea la tabla,
-// solo se agregan columnas y relaciones si faltan.
-// Solo guarda datos de la persona; los roles estan en jsi_RoleAssignment y el
-// avance de la induccion en jsi_Onboarding.
-// El correo usa la columna estandar "emailaddress1".
+// Extensiones de tablas estandar de Dataverse (agregar columnas a una tabla que
+// no es nuestra). Hoy no hay ninguna: antes se extendia "contact", ahora la
+// persona es la tabla propia jsi_Person.
 // =============================================================================
-export const TABLE_EXTENSIONS = [
-  {
-    targetTable: 'contact',
-    columns: [
-      { schemaName: 'jsi_JobTitle', type: 'String', displayName: 'Job Title', maxLength: 100, requiredLevel: OPTIONAL },
-      { schemaName: 'jsi_Area', type: 'Lookup', displayName: 'Area', requiredLevel: REQUIRED, target: 'jsi_Area', relationshipSchemaName: 'jsi_area_contact' },
-      { schemaName: 'jsi_Manager', type: 'Lookup', displayName: 'Manager', requiredLevel: OPTIONAL, target: 'contact', relationshipSchemaName: 'jsi_contact_manager_contact' },
-      { schemaName: 'jsi_HireDate', type: 'DateOnly', displayName: 'Hire Date', requiredLevel: OPTIONAL },
-    ],
-  },
+export const TABLE_EXTENSIONS = [];
+
+// =============================================================================
+// Relaciones (columnas lookup) que existieron en versiones anteriores y se
+// deben BORRAR. Dataverse no permite cambiar el destino de un lookup: para que
+// jsi_Employee apunte a jsi_Person hay que borrar la relacion vieja (que
+// apuntaba a contact) y crear la nueva con create-tables.mjs.
+// Las borra remove-columns.mjs (antes que las columnas).
+// =============================================================================
+const toPerson = 'Ahora apunta a jsi_person';
+export const REMOVED_RELATIONSHIPS = [
+  { schemaName: 'jsi_contact_roleassignment', column: 'jsi_roleassignment.jsi_person', reason: toPerson },
+  { schemaName: 'jsi_contact_roleassignment_assignedby', column: 'jsi_roleassignment.jsi_assignedby', reason: toPerson },
+  { schemaName: 'jsi_contact_onboarding', column: 'jsi_onboarding.jsi_employee', reason: toPerson },
+  { schemaName: 'jsi_contact_onboarding_validator', column: 'jsi_onboarding.jsi_validator', reason: toPerson },
+  { schemaName: 'jsi_contact_onboarding_registeredby', column: 'jsi_onboarding.jsi_registeredby', reason: toPerson },
+  { schemaName: 'jsi_contact_documentassignment', column: 'jsi_documentassignment.jsi_employee', reason: toPerson },
+  { schemaName: 'jsi_contact_assessmentassignment', column: 'jsi_assessmentassignment.jsi_employee', reason: toPerson },
+  { schemaName: 'jsi_contact_notification', column: 'jsi_notification.jsi_employee', reason: toPerson },
+  { schemaName: 'jsi_contact_evidence', column: 'jsi_evidence.jsi_employee', reason: toPerson },
+  { schemaName: 'jsi_area_contact', column: 'contact.jsi_area', reason: 'Ahora es jsi_person.jsi_area' },
+  { schemaName: 'jsi_contact_manager_contact', column: 'contact.jsi_manager', reason: 'Ahora es jsi_person.jsi_manager' },
 ];
 
 // =============================================================================
-// Columnas que existieron en versiones anteriores y se deben BORRAR.
+// Columnas (no lookup) que existieron en versiones anteriores y se deben BORRAR.
 // create-tables.mjs nunca borra nada; las borra remove-columns.mjs.
 // =============================================================================
 export const REMOVED_COLUMNS = [
@@ -438,5 +482,7 @@ export const REMOVED_COLUMNS = [
   { table: 'contact', column: 'jsi_progressstatus', reason: 'Ahora es jsi_onboarding.jsi_progressstatus' },
   { table: 'contact', column: 'jsi_risklevel', reason: 'Ahora es jsi_onboarding.jsi_risklevel' },
   { table: 'contact', column: 'jsi_userrole', reason: 'Reemplazada por la tabla jsi_roleassignment' },
+  { table: 'contact', column: 'jsi_jobtitle', reason: 'Ahora es jsi_person.jsi_jobtitle' },
+  { table: 'contact', column: 'jsi_hiredate', reason: 'Ahora es jsi_person.jsi_hiredate' },
   { table: 'jsi_assessment', column: 'jsi_origin', reason: 'Reemplazada por jsi_assessment.jsi_type' },
 ];

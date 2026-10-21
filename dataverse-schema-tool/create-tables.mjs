@@ -131,10 +131,15 @@ const post = (path, body) => callApi('POST', path, body);
 // -----------------------------------------------------------------------------
 // 2. Helpers de metadatos de Dataverse
 // -----------------------------------------------------------------------------
+// Idioma base del entorno (1033 = inglés, 3082 = español...). Se lee de Dataverse al iniciar
+// (ver main): algunas operaciones, como crear claves alternativas, rechazan etiquetas en un
+// idioma que el entorno no tiene instalado.
+let LANGUAGE_CODE = 1033;
+
 const label = (text) => ({
   '@odata.type': 'Microsoft.Dynamics.CRM.Label',
-  LocalizedLabels: [{ '@odata.type': 'Microsoft.Dynamics.CRM.LocalizedLabel', Label: text, LanguageCode: 1033 }],
-  UserLocalizedLabel: { '@odata.type': 'Microsoft.Dynamics.CRM.LocalizedLabel', Label: text, LanguageCode: 1033 },
+  LocalizedLabels: [{ '@odata.type': 'Microsoft.Dynamics.CRM.LocalizedLabel', Label: text, LanguageCode: LANGUAGE_CODE }],
+  UserLocalizedLabel: { '@odata.type': 'Microsoft.Dynamics.CRM.LocalizedLabel', Label: text, LanguageCode: LANGUAGE_CODE },
 });
 
 const requiredLevel = (value = 'None') => ({
@@ -364,7 +369,34 @@ async function ensureLookupColumns(table) {
 }
 
 // -----------------------------------------------------------------------------
-// 8. Publicar cambios (necesario para que se vean en la interfaz / Code Apps)
+// 8. PASE 4 — claves alternativas (valores unicos, ej. el correo de una persona)
+// Dataverse crea el indice en segundo plano: la clave puede tardar unos minutos
+// en quedar "Activa". Mientras tanto no garantiza la unicidad.
+// -----------------------------------------------------------------------------
+async function ensureAlternateKeys(table) {
+  const logicalName = logicalOf(table.schemaName);
+  for (const key of table.alternateKeys ?? []) {
+    // En dry-run la tabla puede no existir todavia: entonces la clave tampoco.
+    const tableExists = await entityExists(logicalName);
+    const existing = tableExists
+      ? (await get(`EntityDefinitions(LogicalName='${logicalName}')/Keys?$select=SchemaName&$filter=SchemaName eq '${key.schemaName}'`)).value
+      : [];
+    if (existing.length > 0) {
+      console.log(`   [key] ${table.schemaName}.${key.schemaName} ya existe.`);
+      continue;
+    }
+    console.log(`   [key] ${table.schemaName}.${key.schemaName} (${key.columns.join(', ')}) NO existe -> ${DRY_RUN ? 'se crearia' : 'creando...'}`);
+    if (DRY_RUN) continue;
+    await post(`EntityDefinitions(LogicalName='${logicalName}')/Keys`, {
+      SchemaName: key.schemaName,
+      DisplayName: label(key.displayName),
+      KeyAttributes: key.columns,
+    });
+  }
+}
+
+// -----------------------------------------------------------------------------
+// 9. Publicar cambios (necesario para que se vean en la interfaz / Code Apps)
 // -----------------------------------------------------------------------------
 async function publishAll() {
   if (DRY_RUN) { console.log('\n[publish] (dry-run) se ejecutaria PublishAllXml al final.'); return; }
@@ -381,7 +413,12 @@ async function main() {
 
   // Prueba de conexion: confirma que el token funciona en tu entorno antes de tocar nada.
   const who = await get('WhoAmI');
-  console.log(`Conexion OK con Dataverse (UserId: ${who.UserId}).\n`);
+  console.log(`Conexion OK con Dataverse (UserId: ${who.UserId}).`);
+
+  // Las etiquetas (nombres visibles) se crean en el idioma base del entorno.
+  const organization = (await get('organizations?$select=languagecode')).value[0];
+  LANGUAGE_CODE = organization?.languagecode ?? LANGUAGE_CODE;
+  console.log(`Idioma base del entorno: ${LANGUAGE_CODE}\n`);
 
   await ensurePublisherAndSolution();
 
@@ -391,13 +428,16 @@ async function main() {
   ];
 
   console.log('--- PASE 1: tablas -----------------------------------------------');
-  for (const t of TABLES) await ensureEntity(t); // las extensiones (contact) ya existen, no se crean
+  for (const t of TABLES) await ensureEntity(t); // las extensiones son tablas estandar: ya existen
 
   console.log('\n--- PASE 2: columnas (sin lookups) --------------------------------');
   for (const t of allTargets) await ensurePlainColumns(t);
 
   console.log('\n--- PASE 3: columnas lookup / relaciones ---------------------------');
   for (const t of allTargets) await ensureLookupColumns(t);
+
+  console.log('\n--- PASE 4: claves alternativas (valores unicos) ------------------');
+  for (const t of TABLES) await ensureAlternateKeys(t);
 
   await publishAll();
 

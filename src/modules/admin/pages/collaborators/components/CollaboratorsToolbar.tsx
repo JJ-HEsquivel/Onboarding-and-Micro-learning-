@@ -3,7 +3,7 @@ import { Button } from '@/shared/components/Button';
 import { COLLABORATOR_STATUS } from '@/shared/constants/collaboratorStatus';
 import { pluralize } from '@/shared/lib/format';
 import type { Area, CollaboratorStatus } from '@/shared/types/onboarding';
-import type { CollaboratorFilters } from '../collaboratorFilters';
+import type { CollaboratorFilters } from '@/modules/common/collaboratorFilters';
 
 interface CollaboratorsToolbarProps {
   filters: CollaboratorFilters;

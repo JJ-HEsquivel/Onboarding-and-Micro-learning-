@@ -76,19 +76,16 @@ async function main() {
     const { pk } = await store.getMeta(table);
     plan.push({ table, ids: rows.map((r) => r[pk]) });
   }
-  // Personas de la app = contactos con área (las de otras apps de Dataverse no tienen jsi_area).
-  const contacts = await store.fetchAll('contact', {
-    select: ['emailaddress1', 'fullname', '_jsi_manager_value'],
-    filter: '_jsi_area_value ne null',
-  });
-  const contactsToDelete = contacts.filter((c) => !KEEP_EMAILS.has((c.emailaddress1 ?? '').toLowerCase()));
-  const deleteIds = new Set(contactsToDelete.map((c) => c.contactid));
+  // Personas de la app (jsi_person es una tabla propia: todas sus filas son de esta app).
+  const people = await store.fetchAll('jsi_person', { select: ['jsi_email', 'jsi_fullname', '_jsi_manager_value'] });
+  const peopleToDelete = people.filter((p) => !KEEP_EMAILS.has((p.jsi_email ?? '').toLowerCase()));
+  const deleteIds = new Set(peopleToDelete.map((p) => p.jsi_personid));
 
   console.log('Registros a borrar:');
   for (const { table, ids } of plan) console.log(`   ${table.padEnd(26)} ${String(ids.length).padStart(5)}`);
-  console.log(`   ${'contact (personas)'.padEnd(26)} ${String(contactsToDelete.length).padStart(5)}`);
-  contactsToDelete.forEach((c) => console.log(`      - ${c.fullname ?? '(sin nombre)'} <${c.emailaddress1 ?? 'sin correo'}>`));
-  console.log(`\nSe conservan: ${contacts.length - contactsToDelete.length} persona(s) base y todas las áreas.`);
+  console.log(`   ${'jsi_person (personas)'.padEnd(26)} ${String(peopleToDelete.length).padStart(5)}`);
+  peopleToDelete.forEach((p) => console.log(`      - ${p.jsi_fullname ?? '(sin nombre)'} <${p.jsi_email ?? 'sin correo'}>`));
+  console.log(`\nSe conservan: ${people.length - peopleToDelete.length} persona(s) base y todas las áreas.`);
 
   if (DRY_RUN) {
     console.log('\nDRY-RUN finalizado. No se modifico Dataverse.');
@@ -108,10 +105,10 @@ async function main() {
   }
 
   // 3) Personas: primero se quitan las referencias "Manager" hacia quienes se van a borrar
-  const pointingToDeleted = contacts.filter((c) => c._jsi_manager_value && deleteIds.has(c._jsi_manager_value));
-  await inBatches(pointingToDeleted, 10, (c) => store.clearLookup('contact', c.contactid, 'jsi_manager'));
-  await inBatches(contactsToDelete, 10, (c) => store.remove('contact', c.contactid));
-  console.log(`   [borradas] personas (${contactsToDelete.length})`);
+  const pointingToDeleted = people.filter((p) => p._jsi_manager_value && deleteIds.has(p._jsi_manager_value));
+  await inBatches(pointingToDeleted, 10, (p) => store.clearLookup('jsi_person', p.jsi_personid, 'jsi_manager'));
+  await inBatches(peopleToDelete, 10, (p) => store.remove('jsi_person', p.jsi_personid));
+  console.log(`   [borradas] personas (${peopleToDelete.length})`);
 
   console.log('\n==================================================================');
   console.log(' Reinicio terminado. Ahora ejecute: npm run seed');

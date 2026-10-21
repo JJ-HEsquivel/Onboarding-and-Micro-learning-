@@ -109,7 +109,7 @@ export function createDataStore(api, { dryRun = false } = {}) {
     await api('DELETE', `${m.set}(${id})`);
   }
 
-  /** Deja vacío un lookup (ej. contact.jsi_manager) para poder borrar el registro al que apunta. */
+  /** Deja vacío un lookup (ej. jsi_person.jsi_manager) para poder borrar el registro al que apunta. */
   async function clearLookup(logical, id, attr) {
     const m = await getMeta(logical);
     if (dryRun) return;

@@ -9,6 +9,10 @@ export const PROGRAM_RULES = {
   maxAttempts: 3,
   /** Días corridos para rendir el examen desde que se confirma la lectura. */
   examDueDays: 3,
+  /** Días sin actividad a partir de los que el colaborador aparece en "Requiere atención". */
+  inactivityDays: 3,
+  /** Días de plazo para leer un documento que el Manager suma a la Etapa 3. */
+  extraDocumentDueDays: 5,
   /** Solo se puede ascender a Manager a quien completó su inducción. */
   requireCompletedOnboardingForPromotion: true,
 } as const;

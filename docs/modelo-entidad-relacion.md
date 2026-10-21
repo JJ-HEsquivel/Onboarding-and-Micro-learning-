@@ -10,6 +10,8 @@ Generado a partir de `schema.mjs`. Prefijo de publisher: `jsi_`. Solución: **On
 - **Relación:** cada lookup crea una relación 1:N cuyo nombre se indica en la columna "Relación".
 - Las tablas `*Area` (StageArea, DocumentArea, CampaignArea) son **tablas puente** que implementan relaciones N:N.
 - Los valores Choice empiezan en 100000000 y suben de 1 en 1.
+- Todas las tablas son **propias** (prefijo `jsi_`). La única tabla estándar es `systemuser` (los usuarios reales de la empresa), solo como destino del lookup opcional `jsi_person.jsi_user`.
+- El diagrama interactivo `modelo-er-grafico.html` se genera desde `schema.mjs` con `node docs/scripts/build-er-diagram.mjs`.
 
 ## 1. Diagrama ER
 
@@ -26,10 +28,10 @@ erDiagram
     jsi_document |o--o{ jsi_assessment : "jsi_document"
     jsi_assessment ||--o{ jsi_question : "jsi_assessment"
     jsi_question ||--o{ jsi_answeroption : "jsi_question"
-    contact ||--o{ jsi_documentassignment : "jsi_employee"
+    jsi_person ||--o{ jsi_documentassignment : "jsi_employee"
     jsi_document ||--o{ jsi_documentassignment : "jsi_document"
     jsi_stage |o--o{ jsi_documentassignment : "jsi_stage"
-    contact ||--o{ jsi_assessmentassignment : "jsi_employee"
+    jsi_person ||--o{ jsi_assessmentassignment : "jsi_employee"
     jsi_assessment ||--o{ jsi_assessmentassignment : "jsi_assessment"
     jsi_campaigndelivery |o--o{ jsi_assessmentassignment : "jsi_campaigndelivery"
     jsi_assessmentassignment ||--o{ jsi_assessmentattempt : "jsi_assignment"
@@ -41,18 +43,19 @@ erDiagram
     jsi_area ||--o{ jsi_campaignarea : "jsi_area"
     jsi_campaign ||--o{ jsi_campaigndelivery : "jsi_campaign"
     jsi_assessment ||--o{ jsi_campaigndelivery : "jsi_assessment"
-    contact ||--o{ jsi_notification : "jsi_employee"
-    contact ||--o{ jsi_evidence : "jsi_employee"
+    jsi_person ||--o{ jsi_notification : "jsi_employee"
+    jsi_person ||--o{ jsi_evidence : "jsi_employee"
     jsi_document |o--o{ jsi_evidence : "jsi_document"
     jsi_assessment |o--o{ jsi_evidence : "jsi_assessment"
     jsi_document ||--o{ jsi_gap : "jsi_document"
-    jsi_area ||--o{ contact : "jsi_area"
-    contact |o--o{ contact : "jsi_manager"
-    contact ||--o{ jsi_roleassignment : "jsi_person"
-    contact |o--o{ jsi_roleassignment : "jsi_assignedby"
-    contact ||--o{ jsi_onboarding : "jsi_employee"
-    contact |o--o{ jsi_onboarding : "jsi_validator"
-    contact |o--o{ jsi_onboarding : "jsi_registeredby"
+    jsi_area ||--o{ jsi_person : "jsi_area"
+    jsi_person |o--o{ jsi_person : "jsi_manager"
+    systemuser |o--o{ jsi_person : "jsi_user"
+    jsi_person ||--o{ jsi_roleassignment : "jsi_person"
+    jsi_person |o--o{ jsi_roleassignment : "jsi_assignedby"
+    jsi_person ||--o{ jsi_onboarding : "jsi_employee"
+    jsi_person |o--o{ jsi_onboarding : "jsi_validator"
+    jsi_person |o--o{ jsi_onboarding : "jsi_registeredby"
     jsi_area ||--o{ jsi_onboarding : "jsi_area"
     jsi_onboarding |o--o{ jsi_documentassignment : "jsi_onboarding"
     jsi_onboarding |o--o{ jsi_assessmentassignment : "jsi_onboarding"
@@ -170,11 +173,16 @@ erDiagram
         string jsi_topic
         uuid jsi_document FK
     }
-    contact {
-        uuid contactid PK
-        string fullname
+    jsi_person {
+        uuid jsi_personid PK
+        string jsi_fullname
         uuid jsi_area FK
         uuid jsi_manager FK
+        uuid jsi_user FK
+    }
+    systemuser {
+        uuid systemuserid PK
+        string fullname
     }
     jsi_roleassignment {
         uuid jsi_roleassignmentid PK
@@ -218,7 +226,7 @@ erDiagram
 | 18 | Notification | `jsi_notification` | `jsi_notificationid` | `jsi_title` |
 | 19 | Evidence | `jsi_evidence` | `jsi_evidenceid` | `jsi_name` |
 | 20 | Gap | `jsi_gap` | `jsi_gapid` | `jsi_topic` |
-| 21 | Employee (tabla estándar Contact) | `contact` | `contactid` | `fullname` |
+| 21 | Person | `jsi_person` | `jsi_personid` | `jsi_fullname` |
 | 22 | Role Assignment | `jsi_roleassignment` | `jsi_roleassignmentid` | `jsi_name` |
 | 23 | Onboarding | `jsi_onboarding` | `jsi_onboardingid` | `jsi_name` |
 
@@ -237,10 +245,10 @@ erDiagram
 | `jsi_document` | `jsi_assessment` | `jsi_document` | `jsi_document_assessment` | No |
 | `jsi_assessment` | `jsi_question` | `jsi_assessment` | `jsi_assessment_question` | Sí |
 | `jsi_question` | `jsi_answeroption` | `jsi_question` | `jsi_question_answeroption` | Sí |
-| `contact` | `jsi_documentassignment` | `jsi_employee` | `jsi_contact_documentassignment` | Sí |
+| `jsi_person` | `jsi_documentassignment` | `jsi_employee` | `jsi_person_documentassignment` | Sí |
 | `jsi_document` | `jsi_documentassignment` | `jsi_document` | `jsi_document_documentassignment` | Sí |
 | `jsi_stage` | `jsi_documentassignment` | `jsi_stage` | `jsi_stage_documentassignment` | No |
-| `contact` | `jsi_assessmentassignment` | `jsi_employee` | `jsi_contact_assessmentassignment` | Sí |
+| `jsi_person` | `jsi_assessmentassignment` | `jsi_employee` | `jsi_person_assessmentassignment` | Sí |
 | `jsi_assessment` | `jsi_assessmentassignment` | `jsi_assessment` | `jsi_assessment_assessmentassignment` | Sí |
 | `jsi_campaigndelivery` | `jsi_assessmentassignment` | `jsi_campaigndelivery` | `jsi_campaigndelivery_assessmentassignment` | No |
 | `jsi_assessmentassignment` | `jsi_assessmentattempt` | `jsi_assignment` | `jsi_assessmentassignment_assessmentattempt` | Sí |
@@ -252,18 +260,19 @@ erDiagram
 | `jsi_area` | `jsi_campaignarea` | `jsi_area` | `jsi_area_campaignarea` | Sí |
 | `jsi_campaign` | `jsi_campaigndelivery` | `jsi_campaign` | `jsi_campaign_campaigndelivery` | Sí |
 | `jsi_assessment` | `jsi_campaigndelivery` | `jsi_assessment` | `jsi_assessment_campaigndelivery` | Sí |
-| `contact` | `jsi_notification` | `jsi_employee` | `jsi_contact_notification` | Sí |
-| `contact` | `jsi_evidence` | `jsi_employee` | `jsi_contact_evidence` | Sí |
+| `jsi_person` | `jsi_notification` | `jsi_employee` | `jsi_person_notification` | Sí |
+| `jsi_person` | `jsi_evidence` | `jsi_employee` | `jsi_person_evidence` | Sí |
 | `jsi_document` | `jsi_evidence` | `jsi_document` | `jsi_document_evidence` | No |
 | `jsi_assessment` | `jsi_evidence` | `jsi_assessment` | `jsi_assessment_evidence` | No |
 | `jsi_document` | `jsi_gap` | `jsi_document` | `jsi_document_gap` | Sí |
-| `jsi_area` | `contact` | `jsi_area` | `jsi_area_contact` | Sí |
-| `contact` | `contact` | `jsi_manager` | `jsi_contact_manager_contact` | No |
-| `contact` | `jsi_roleassignment` | `jsi_person` | `jsi_contact_roleassignment` | Sí |
-| `contact` | `jsi_roleassignment` | `jsi_assignedby` | `jsi_contact_roleassignment_assignedby` | No |
-| `contact` | `jsi_onboarding` | `jsi_employee` | `jsi_contact_onboarding` | Sí |
-| `contact` | `jsi_onboarding` | `jsi_validator` | `jsi_contact_onboarding_validator` | No |
-| `contact` | `jsi_onboarding` | `jsi_registeredby` | `jsi_contact_onboarding_registeredby` | No |
+| `jsi_area` | `jsi_person` | `jsi_area` | `jsi_area_person` | Sí |
+| `jsi_person` | `jsi_person` | `jsi_manager` | `jsi_person_manager_person` | No |
+| `systemuser` (estándar) | `jsi_person` | `jsi_user` | `jsi_systemuser_person` | No |
+| `jsi_person` | `jsi_roleassignment` | `jsi_person` | `jsi_person_roleassignment` | Sí |
+| `jsi_person` | `jsi_roleassignment` | `jsi_assignedby` | `jsi_person_roleassignment_assignedby` | No |
+| `jsi_person` | `jsi_onboarding` | `jsi_employee` | `jsi_person_onboarding` | Sí |
+| `jsi_person` | `jsi_onboarding` | `jsi_validator` | `jsi_person_onboarding_validator` | No |
+| `jsi_person` | `jsi_onboarding` | `jsi_registeredby` | `jsi_person_onboarding_registeredby` | No |
 | `jsi_area` | `jsi_onboarding` | `jsi_area` | `jsi_area_onboarding` | Sí |
 | `jsi_onboarding` | `jsi_documentassignment` | `jsi_onboarding` | `jsi_onboarding_documentassignment` | No |
 | `jsi_onboarding` | `jsi_assessmentassignment` | `jsi_onboarding` | `jsi_onboarding_assessmentassignment` | No |
@@ -289,7 +298,7 @@ Business areas/departments of the organization.
 - `jsi_stagearea` mediante la columna `jsi_area` (relación `jsi_area_stagearea`)
 - `jsi_documentarea` mediante la columna `jsi_area` (relación `jsi_area_documentarea`)
 - `jsi_campaignarea` mediante la columna `jsi_area` (relación `jsi_area_campaignarea`)
-- `contact` mediante la columna `jsi_area` (relación `jsi_area_contact`)
+- `jsi_person` mediante la columna `jsi_area` (relación `jsi_area_person`)
 
 ### 4.2 Stage — `jsi_stage`
 
@@ -500,7 +509,7 @@ A document assigned to one employee, with its reading status.
 |---|---|---|---|---|
 | `jsi_documentassignmentid` | ID | GUID (PK) | Auto | Clave primaria |
 | `jsi_name` | Name | Texto (columna principal) | Auto | Autonumérica |
-| `jsi_employee` | Employee | Lookup (FK) | Sí | → `contact` · relación `jsi_contact_documentassignment` |
+| `jsi_employee` | Employee | Lookup (FK) | Sí | → `jsi_person` · relación `jsi_person_documentassignment` |
 | `jsi_document` | Document | Lookup (FK) | Sí | → `jsi_document` · relación `jsi_document_documentassignment` |
 | `jsi_stage` | Stage | Lookup (FK) | No | → `jsi_stage` · relación `jsi_stage_documentassignment` |
 | `jsi_onboarding` | Onboarding | Lookup (FK) | No | → `jsi_onboarding` · relación `jsi_onboarding_documentassignment` |
@@ -521,7 +530,7 @@ An assessment assigned to one employee, with its progress.
 |---|---|---|---|---|
 | `jsi_assessmentassignmentid` | ID | GUID (PK) | Auto | Clave primaria |
 | `jsi_name` | Name | Texto (columna principal) | Auto | Autonumérica |
-| `jsi_employee` | Employee | Lookup (FK) | Sí | → `contact` · relación `jsi_contact_assessmentassignment` |
+| `jsi_employee` | Employee | Lookup (FK) | Sí | → `jsi_person` · relación `jsi_person_assessmentassignment` |
 | `jsi_assessment` | Assessment | Lookup (FK) | Sí | → `jsi_assessment` · relación `jsi_assessment_assessmentassignment` |
 | `jsi_campaigndelivery` | Campaign Delivery | Lookup (FK) | No | → `jsi_campaigndelivery` · relación `jsi_campaigndelivery_assessmentassignment` |
 | `jsi_onboarding` | Onboarding | Lookup (FK) | No | → `jsi_onboarding` · relación `jsi_onboarding_assessmentassignment` |
@@ -651,7 +660,7 @@ A notification sent to an employee.
 |---|---|---|---|---|
 | `jsi_notificationid` | ID | GUID (PK) | Auto | Clave primaria |
 | `jsi_title` | Title | Texto (columna principal) | Auto |  |
-| `jsi_employee` | Employee | Lookup (FK) | Sí | → `contact` · relación `jsi_contact_notification` |
+| `jsi_employee` | Employee | Lookup (FK) | Sí | → `jsi_person` · relación `jsi_person_notification` |
 | `jsi_type` | Type | Choice | Sí | 100000000=Reminder, 100000001=DocumentUpdate, 100000002=Assessment, 100000003=Campaign, 100000004=Welcome |
 | `jsi_details` | Details | Texto multilínea | No |  |
 | `jsi_date` | Date | Fecha y hora | No |  |
@@ -669,7 +678,7 @@ Audit trail of a reading confirmation or assessment result.
 |---|---|---|---|---|
 | `jsi_evidenceid` | ID | GUID (PK) | Auto | Clave primaria |
 | `jsi_name` | Name | Texto (columna principal) | Auto | Autonumérica |
-| `jsi_employee` | Employee | Lookup (FK) | Sí | → `contact` · relación `jsi_contact_evidence` |
+| `jsi_employee` | Employee | Lookup (FK) | Sí | → `jsi_person` · relación `jsi_person_evidence` |
 | `jsi_document` | Document | Lookup (FK) | No | → `jsi_document` · relación `jsi_document_evidence` |
 | `jsi_assessment` | Assessment | Lookup (FK) | No | → `jsi_assessment` · relación `jsi_assessment_evidence` |
 | `jsi_version` | Version | Texto (1 línea) | No | máx. 10 car. |
@@ -697,33 +706,42 @@ Periodic snapshot of a comprehension gap on a Document topic.
 | `jsi_trend` | Trend | Choice | Sí | 100000000=Rising, 100000001=Stable, 100000002=Falling |
 | `jsi_cutoffdate` | Cutoff Date | Fecha | No |  |
 
-### 4.21 Employee (tabla estándar Contact) — `contact`
+### 4.21 Person — `jsi_person`
 
-Tabla estándar de Dataverse que representa a la **persona** (existe una sola vez por persona). Solo guarda datos personales: sus roles están en `jsi_roleassignment` y el avance de su inducción en `jsi_onboarding`. El correo usa la columna estándar `emailaddress1`. Solo se listan las columnas agregadas por este proyecto (jsi_).
+Tabla **propia** que representa a la persona (existe una sola vez por persona). Solo guarda datos personales: sus roles están en `jsi_roleassignment` y el avance de su inducción en `jsi_onboarding`.
 
-- **ID (PK):** `contactid`
-- **Columna principal:** `fullname` (Full Name)
+> **Por qué una tabla propia y no la estándar `jsi_person`:** en Dynamics 365, `jsi_person` representa a clientes y personas externas, y la comparten otras apps del entorno (datos mezclados, permisos sobre toda la tabla, flujos o reglas de otros equipos). `jsi_person` llega con esta solución y solo la usa esta app.
+
+- **Propiedad:** Por usuario (UserOwned) — permite limitar la lectura por unidad de negocio (datos personales).
+- **ID (PK):** `jsi_personid`
+- **Columna principal:** `jsi_fullname` (Full Name) — la app la arma como «Nombres Apellidos».
+- **Clave alternativa:** `jsi_person_email_key` sobre `jsi_email` — Dataverse no permite dos personas con el mismo correo.
 
 | Columna (lógico) | Nombre visible | Tipo | Obligatoria | Detalle |
 |---|---|---|---|---|
-| `contactid` | ID | GUID (PK) | Auto | Clave primaria |
-| `fullname` | Full Name | Texto (columna principal) | Auto |  |
+| `jsi_personid` | ID | GUID (PK) | Auto | Clave primaria |
+| `jsi_fullname` | Full Name | Texto (columna principal) | Auto | máx. 200 car. |
+| `jsi_firstname` | First Name | Texto (1 línea) | Sí | máx. 50 car. |
+| `jsi_lastname` | Last Name | Texto (1 línea) | Sí | máx. 50 car. |
+| `jsi_email` | Email | Texto (1 línea) | Sí | Correo corporativo, único · máx. 100 car. |
 | `jsi_jobtitle` | Job Title | Texto (1 línea) | No | máx. 100 car. |
-| `jsi_area` | Area | Lookup (FK) | Sí | → `jsi_area` · relación `jsi_area_contact` |
-| `jsi_manager` | Manager | Lookup (FK) | No | → `contact` · relación `jsi_contact_manager_contact` |
 | `jsi_hiredate` | Hire Date | Fecha | No |  |
+| `jsi_area` | Area | Lookup (FK) | Sí | → `jsi_area` · relación `jsi_area_person` |
+| `jsi_manager` | Manager | Lookup (FK) | No | → `jsi_person` · relación `jsi_person_manager_person` |
+| `jsi_user` | User | Lookup (FK) | No | → `systemuser` (estándar) · relación `jsi_systemuser_person` · su cuenta real de la empresa (Entra ID), para el inicio de sesión real |
 
 **Tablas que dependen de esta (relaciones 1:N):**
 
-- `jsi_documentassignment` mediante la columna `jsi_employee` (relación `jsi_contact_documentassignment`)
-- `jsi_assessmentassignment` mediante la columna `jsi_employee` (relación `jsi_contact_assessmentassignment`)
-- `jsi_notification` mediante la columna `jsi_employee` (relación `jsi_contact_notification`)
-- `jsi_evidence` mediante la columna `jsi_employee` (relación `jsi_contact_evidence`)
-- `contact` mediante la columna `jsi_manager` (relación `jsi_contact_manager_contact`)
-- `jsi_roleassignment` mediante la columna `jsi_person` (relación `jsi_contact_roleassignment`)
-- `jsi_onboarding` mediante la columna `jsi_employee` (relación `jsi_contact_onboarding`)
-- `jsi_onboarding` mediante la columna `jsi_validator` (relación `jsi_contact_onboarding_validator`)
-- `jsi_onboarding` mediante la columna `jsi_registeredby` (relación `jsi_contact_onboarding_registeredby`)
+- `jsi_documentassignment` mediante la columna `jsi_employee` (relación `jsi_person_documentassignment`)
+- `jsi_assessmentassignment` mediante la columna `jsi_employee` (relación `jsi_person_assessmentassignment`)
+- `jsi_notification` mediante la columna `jsi_employee` (relación `jsi_person_notification`)
+- `jsi_evidence` mediante la columna `jsi_employee` (relación `jsi_person_evidence`)
+- `jsi_person` mediante la columna `jsi_manager` (relación `jsi_person_manager_person`)
+- `jsi_roleassignment` mediante la columna `jsi_person` (relación `jsi_person_roleassignment`)
+- `jsi_roleassignment` mediante la columna `jsi_assignedby` (relación `jsi_person_roleassignment_assignedby`)
+- `jsi_onboarding` mediante la columna `jsi_employee` (relación `jsi_person_onboarding`)
+- `jsi_onboarding` mediante la columna `jsi_validator` (relación `jsi_person_onboarding_validator`)
+- `jsi_onboarding` mediante la columna `jsi_registeredby` (relación `jsi_person_onboarding_registeredby`)
 
 ### 4.22 Role Assignment — `jsi_roleassignment`
 
@@ -739,13 +757,13 @@ A role held by a person in the app. Una persona puede tener varios roles a la ve
 |---|---|---|---|---|
 | `jsi_roleassignmentid` | ID | GUID (PK) | Auto | Clave primaria |
 | `jsi_name` | Name | Texto (columna principal) | Auto | Autonumérica |
-| `jsi_person` | Person | Lookup (FK) | Sí | → `contact` · relación `jsi_contact_roleassignment` |
+| `jsi_person` | Person | Lookup (FK) | Sí | → `jsi_person` · relación `jsi_person_roleassignment` |
 | `jsi_role` | Role | Choice | Sí | 100000000=Administrator, 100000001=Manager, 100000002=Collaborator |
 | `jsi_startdate` | Start Date | Fecha | No |  |
 | `jsi_enddate` | End Date | Fecha | No |  |
 | `jsi_isactive` | Is Active | Sí/No | No | Yes/No · por defecto: Sí |
 | `jsi_jobtitle` | Job Title | Texto (1 línea) | No | Cargo con el que tuvo el rol · máx. 100 car. |
-| `jsi_assignedby` | Assigned By | Lookup (FK) | No | → `contact` · relación `jsi_contact_roleassignment_assignedby` (Administrador que lo ascendió) |
+| `jsi_assignedby` | Assigned By | Lookup (FK) | No | → `jsi_person` · relación `jsi_person_roleassignment_assignedby` (Administrador que lo ascendió) |
 
 ### 4.23 Onboarding — `jsi_onboarding`
 
@@ -759,9 +777,9 @@ One onboarding process of a person. La inducción inicial de un colaborador es u
 |---|---|---|---|---|
 | `jsi_onboardingid` | ID | GUID (PK) | Auto | Clave primaria |
 | `jsi_name` | Name | Texto (columna principal) | Auto | Autonumérica |
-| `jsi_employee` | Employee | Lookup (FK) | Sí | → `contact` · relación `jsi_contact_onboarding` |
-| `jsi_validator` | Validator | Lookup (FK) | No | → `contact` · relación `jsi_contact_onboarding_validator` (manager que valida) |
-| `jsi_registeredby` | Registered By | Lookup (FK) | No | → `contact` · relación `jsi_contact_onboarding_registeredby` (administrador que registró) |
+| `jsi_employee` | Employee | Lookup (FK) | Sí | → `jsi_person` · relación `jsi_person_onboarding` |
+| `jsi_validator` | Validator | Lookup (FK) | No | → `jsi_person` · relación `jsi_person_onboarding_validator` (manager que valida) |
+| `jsi_registeredby` | Registered By | Lookup (FK) | No | → `jsi_person` · relación `jsi_person_onboarding_registeredby` (administrador que registró) |
 | `jsi_area` | Area | Lookup (FK) | Sí | → `jsi_area` · relación `jsi_area_onboarding` (área cuya ruta se usó) |
 | `jsi_type` | Type | Choice | Sí | 100000000=Initial, 100000001=RoleChange |
 | `jsi_validationstatus` | Validation Status | Choice | Sí | 100000000=PendingValidation, 100000001=Validated |

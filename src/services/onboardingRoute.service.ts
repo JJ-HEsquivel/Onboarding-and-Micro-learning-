@@ -159,6 +159,20 @@ export function buildAreaRoute(catalog: OnboardingCatalog, areaId: string): Rout
     .filter((stage) => stage.documents.length > 0);
 }
 
+/** Todas las etapas con todos sus documentos, sin filtrar por área (catálogo completo del programa). */
+export function buildFullCatalog(catalog: OnboardingCatalog): RouteStage[] {
+  return sortStages(catalog.stages)
+    .map((stage) => ({
+      id: stage.id,
+      name: stage.name,
+      order: stage.order,
+      isGeneral: stage.isGeneral,
+      businessDays: stage.businessDays,
+      documents: documentsOfStage(catalog, stage.id),
+    }))
+    .filter((stage) => stage.documents.length > 0);
+}
+
 /** Documentos que el Admin propone: todos los de las etapas generales y los "por defecto" de la Etapa 3. */
 export function proposedDocumentIds(areaRoute: RouteStage[]): Set<string> {
   return new Set(

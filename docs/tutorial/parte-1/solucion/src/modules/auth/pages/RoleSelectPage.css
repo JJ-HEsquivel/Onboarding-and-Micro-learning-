@@ -1,0 +1,121 @@
+/* ---------- Tarjeta centrada ---------- */
+.role-select {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 16px;
+}
+
+.role-select__card {
+  width: 100%;
+  max-width: 460px;
+  padding: 32px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+}
+
+.role-select__logo {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.role-select__title {
+  margin-top: 16px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.role-select__subtitle {
+  margin-top: 4px;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Lista de perfiles ---------- */
+.role-select__list {
+  display: grid;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.role-select__item {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+}
+
+.role-select__item--open,
+.role-select__item:hover {
+  border-color: var(--color-primary);
+}
+
+.role-select__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 16px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.role-select__chevron {
+  color: var(--color-text-muted);
+  transition: transform 0.15s ease;
+}
+
+.role-select__item--open .role-select__chevron {
+  transform: rotate(180deg);
+}
+
+/* ---------- Personas de un rol ---------- */
+.role-people {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface-muted);
+}
+
+.role-people__person {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 16px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.role-people__person:hover {
+  background: var(--tone-info-bg);
+}
+
+.role-people__person span {
+  display: flex;
+  flex-direction: column;
+}
+
+.role-people__person small {
+  color: var(--color-text-muted);
+}
+
+.role-people__message {
+  padding: 12px 16px;
+  border-top: 1px solid var(--color-border);
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.role-people__message--error {
+  color: var(--color-danger);
+}

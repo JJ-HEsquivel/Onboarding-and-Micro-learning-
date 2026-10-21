@@ -15,10 +15,14 @@ import {
   ROLE,
   VALIDATION_STATUS,
 } from '@/shared/constants/choices';
-import { daysBetween } from '@/shared/lib/dates';
+import { PROGRAM_RULES } from '@/shared/constants/program';
+import { attentionReasons } from '@/shared/domain/attention';
+import { daysBetween, todayIso } from '@/shared/lib/dates';
 import type { Area, Collaborator, Manager, NewCollaboratorInput, RouteStage } from '@/shared/types/onboarding';
 import { listAreas } from './areas.service';
-import { ACTIVE_RECORDS, bind, fetchAll, unwrap } from './dataverse';
+import { ACTIVE_RECORDS, bind, fetchAll, odataString, unwrap } from './dataverse';
+import { lastActivityByPerson } from './evidence.service';
+import { loadOnboardingCatalog } from './onboardingRoute.service';
 import { getPeopleById, getPersonIdsWithRole, toManagers } from './people.service';
 import { loadRouteEntries, progressOf } from './route.service';
 
@@ -34,7 +38,14 @@ export async function getLatestOnboardings(): Promise<Map<string, Jsi_onboarding
   const onboardings = await fetchAll(
     (o) => Jsi_onboardingsService.getAll(o),
     {
-      select: ['jsi_onboardingid', '_jsi_employee_value', 'jsi_validationstatus', 'jsi_startdate', 'jsi_completedon'],
+      select: [
+        'jsi_onboardingid',
+        '_jsi_employee_value',
+        'jsi_validationstatus',
+        'jsi_startdate',
+        'jsi_validatedon',
+        'jsi_completedon',
+      ],
       filter: ACTIVE_RECORDS,
       orderBy: ['createdon desc'],
     },
@@ -68,8 +79,10 @@ export async function loadCollaboratorsOverview(managerId?: string): Promise<Col
     listAreas(),
     getLatestOnboardings(),
   ]);
-  const routes = await loadRouteEntries();
+  const [routes, catalog, lastActivity] = await Promise.all([loadRouteEntries(), loadOnboardingCatalog(), lastActivityByPerson()]);
   const areaNames = new Map(areas.map((area) => [area.id, area.name]));
+  const documentTitles = new Map(catalog.documents.map((item) => [item.document.id, item.document.title]));
+  const today = todayIso();
 
   const collaborators = [...collaboratorIds].flatMap((personId): Collaborator[] => {
     const person = people.get(personId);
@@ -79,8 +92,11 @@ export async function loadCollaboratorsOverview(managerId?: string): Promise<Col
 
     const areaId = person._jsi_area_value ?? null;
     const onboarding = onboardings.get(personId);
-    const progress = progressOf(onboarding ? (routes.get(onboarding.jsi_onboardingid) ?? []) : []);
+    const entries = onboarding ? (routes.get(onboarding.jsi_onboardingid) ?? []) : [];
+    const progress = progressOf(entries);
     const isPending = onboarding?.jsi_validationstatus === VALIDATION_STATUS.PendingValidation;
+    const status = isPending ? 'pendingValidation' : progress.status;
+    const managerName = (personManagerId && people.get(personManagerId)?.fullname) || '—';
 
     return [
       {
@@ -91,18 +107,30 @@ export async function loadCollaboratorsOverview(managerId?: string): Promise<Col
         areaId,
         areaName: (areaId && areaNames.get(areaId)) || '—',
         managerId: personManagerId,
-        managerName: (personManagerId && people.get(personManagerId)?.fullname) || '—',
+        managerName,
         hireDate: person.jsi_hiredate ?? null,
         onboardingId: onboarding?.jsi_onboardingid ?? null,
-        status: isPending ? 'pendingValidation' : progress.status,
+        status,
         risk: isPending ? 'low' : progress.risk,
         documentsTotal: progress.total,
+        documentsRead: progress.read,
         documentsApproved: progress.approved,
         averageScore: progress.averageScore,
         closingDays:
           progress.status === 'completed' && onboarding?.jsi_startdate && onboarding.jsi_completedon
             ? daysBetween(onboarding.jsi_startdate, onboarding.jsi_completedon)
             : null,
+        lastActivity: lastActivity.get(personId) ?? null,
+        attentionReasons: attentionReasons({
+          status,
+          managerName,
+          items: entries.map((entry) => ({ ...entry, documentTitle: documentTitles.get(entry.documentId) ?? 'un documento' })),
+          lastActivity: lastActivity.get(personId) ?? null,
+          activeSince: onboarding?.jsi_validatedon?.slice(0, 10) ?? null,
+          today,
+          maxAttempts: PROGRAM_RULES.maxAttempts,
+          inactivityDays: PROGRAM_RULES.inactivityDays,
+        }),
       },
     ];
   });
@@ -118,7 +146,7 @@ async function isEmailRegistered(email: string): Promise<boolean> {
   const result = await ContactsService.getAll({
     select: ['contactid'],
     // En OData una comilla simple se escribe doble ('').
-    filter: `${ACTIVE_RECORDS} and emailaddress1 eq '${email.replace(/'/g, "''")}'`,
+    filter: `${ACTIVE_RECORDS} and emailaddress1 eq ${odataString(email)}`,
     top: 1,
   });
   return unwrap(result, 'Verificar correo').length > 0;

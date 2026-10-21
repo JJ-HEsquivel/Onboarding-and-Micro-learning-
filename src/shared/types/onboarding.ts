@@ -55,10 +55,15 @@ export interface Collaborator {
   status: CollaboratorStatus;
   risk: RiskLevel;
   documentsTotal: number;
+  documentsRead: number;
   documentsApproved: number;
   averageScore: number | null;
   /** Duración de la inducción en días, solo si ya se cerró. */
   closingDays: number | null;
+  /** Fecha "AAAA-MM-DD" de su última lectura o examen, o null. */
+  lastActivity: string | null;
+  /** Motivos por los que requiere atención (vacío si está todo en orden). */
+  attentionReasons: string[];
 }
 
 export interface RouteDocument {

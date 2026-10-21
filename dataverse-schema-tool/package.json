@@ -14,7 +14,16 @@
     "reset:dry-run": "node reset-data.mjs --dry-run",
     "reset": "node reset-data.mjs",
     "seed:dry-run": "node seed-data.mjs --dry-run",
-    "seed": "node seed-data.mjs"
+    "seed": "node seed-data.mjs",
+    "seed:people:dry-run": "node seed-data.mjs --people-only --dry-run",
+    "seed:people": "node seed-data.mjs --people-only",
+    "migrate:person:dry-run": "node migrate-contact-to-person.mjs --dry-run",
+    "migrate:person": "node migrate-contact-to-person.mjs",
+    "audit:dry-run": "node enable-auditing.mjs --dry-run --org",
+    "audit": "node enable-auditing.mjs",
+    "audit:org": "node enable-auditing.mjs --org",
+    "roles:dry-run": "node create-security-roles.mjs --dry-run",
+    "roles": "node create-security-roles.mjs"
   },
   "dependencies": {
     "@azure/msal-node": "^2.13.1",

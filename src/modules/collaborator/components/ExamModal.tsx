@@ -41,7 +41,7 @@ export function ExamModal({ document, personId, onboardingId, onClose, onSubmitt
   if (examData.loading && !exam) {
     return (
       <Modal title={document.title} description="Preparando el examen…" onClose={onClose}>
-        <p className="reader__message">Cargando preguntas…</p>
+        <p className="page-loading">Cargando preguntas…</p>
       </Modal>
     );
   }

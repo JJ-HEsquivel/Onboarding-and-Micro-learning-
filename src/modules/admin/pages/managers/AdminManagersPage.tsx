@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router';
 import { useCurrentUser } from '@/app/session/useSession';
 import { Alert } from '@/shared/components/Alert';
 import { Avatar } from '@/shared/components/Avatar';
@@ -43,14 +44,22 @@ export default function AdminManagersPage() {
   const admin = useCurrentUser();
   const overview = useAsync(loadManagersOverview);
   const [dialog, setDialog] = useState<Dialog>(null);
+  // "?ascender=<id>" abre el ascenso de ese colaborador (viene desde su ficha).
+  const [searchParams, setSearchParams] = useSearchParams();
+  const promoteParam = searchParams.get('ascender');
   const [notice, setNotice] = useState<string | null>(null);
   const [reverting, setReverting] = useState(false);
   const [revertError, setRevertError] = useState<string | null>(null);
 
   const data = overview.data;
-  const close = () => setDialog(null);
-  const done = (message: string) => {
+  const close = () => {
     setDialog(null);
+    if (promoteParam) setSearchParams({}, { replace: true });
+  };
+  const linkedCandidate = promoteParam ? data?.candidates.find((c) => c.id === promoteParam && !c.ineligibleReason) : undefined;
+  const activeDialog: Dialog = dialog ?? (linkedCandidate ? { kind: 'promote', candidate: linkedCandidate } : null);
+  const done = (message: string) => {
+    close();
     setNotice(message);
     overview.reload();
   };
@@ -163,11 +172,11 @@ export default function AdminManagersPage() {
         )}
       </div>
 
-      {data && dialog?.kind === 'promote' && (
+      {data && activeDialog?.kind === 'promote' && (
         <PromoteModal
-          candidate={dialog.candidate}
+          candidate={activeDialog.candidate}
           areas={data.areas}
-          otherCollaborators={data.candidates.filter((c) => c.id !== dialog.candidate.id)}
+          otherCollaborators={data.candidates.filter((c) => c.id !== activeDialog.candidate.id)}
           admin={admin}
           onClose={close}
           onPromoted={(name, teamSize) =>
@@ -176,19 +185,19 @@ export default function AdminManagersPage() {
         />
       )}
 
-      {data && dialog?.kind === 'transfer' && (
+      {data && activeDialog?.kind === 'transfer' && (
         <TransferTeamModal
-          manager={dialog.manager}
-          team={data.candidates.filter((c) => c.managerId === dialog.manager.id)}
-          destinations={data.managers.filter((m) => m.id !== dialog.manager.id)}
+          manager={activeDialog.manager}
+          team={data.candidates.filter((c) => c.managerId === activeDialog.manager.id)}
+          destinations={data.managers.filter((m) => m.id !== activeDialog.manager.id)}
           onClose={close}
           onTransferred={(count, destination) => done(`${count} colaborador(es) ahora reportan a ${destination}.`)}
         />
       )}
 
-      {dialog?.kind === 'revert' && (
+      {activeDialog?.kind === 'revert' && (
         <Modal
-          title={`Revertir el ascenso de ${dialog.manager.fullName}`}
+          title={`Revertir el ascenso de ${activeDialog.manager.fullName}`}
           description="Volverá a ingresar como colaborador con su cargo anterior."
           onClose={reverting ? () => undefined : close}
           footer={
@@ -196,7 +205,7 @@ export default function AdminManagersPage() {
               <Button variant="ghost" onClick={close} disabled={reverting}>
                 Cancelar
               </Button>
-              <Button onClick={() => handleRevert(dialog.manager)} disabled={reverting}>
+              <Button onClick={() => handleRevert(activeDialog.manager)} disabled={reverting}>
                 {reverting ? 'Revirtiendo…' : 'Revertir ascenso'}
               </Button>
             </>
