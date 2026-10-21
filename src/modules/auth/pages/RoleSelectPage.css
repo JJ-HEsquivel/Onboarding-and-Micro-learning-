@@ -20,6 +20,23 @@
   font-weight: 700;
 }
 
+.role-select__warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--tone-warning-bg);
+  color: var(--tone-warning-text);
+  font-size: 13px;
+}
+
+.role-select__warning svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
 .role-select__subtitle {
   margin-top: 4px;
   color: var(--color-text-muted);

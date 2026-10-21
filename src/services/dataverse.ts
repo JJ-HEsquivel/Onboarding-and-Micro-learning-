@@ -57,9 +57,21 @@ export function odataString(value: string): string {
   return `'${value.replace(/'/g, "''")}'`;
 }
 
+const GUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * Un id (GUID) validado para usarlo en un filtro OData. Si no tiene formato de GUID lanza un
+ * error en vez de armar la consulta: así un valor manipulado (ej. "x or statecode eq 1") nunca
+ * llega a cambiar el filtro (prevención de inyección, OWASP).
+ */
+export function odataId(id: string): string {
+  if (!GUID_PATTERN.test(id)) throw new Error('Identificador inválido.');
+  return id;
+}
+
 /** Filtro "columna eq id1 or columna eq id2 …" entre paréntesis (para leer varios registros a la vez). */
 export function anyOf(column: string, ids: string[]): string {
-  return `(${ids.map((id) => `${column} eq ${id}`).join(' or ')})`;
+  return `(${ids.map((id) => `${column} eq ${odataId(id)}`).join(' or ')})`;
 }
 
 /**
