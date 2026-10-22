@@ -362,6 +362,7 @@ A policy/manual document that is part of the onboarding program.
 - **Propiedad:** Por organización (OrganizationOwned)
 - **ID (PK):** `jsi_documentid`
 - **Columna principal:** `jsi_title` (Title)
+- **Clave alternativa:** `jsi_document_code_key` sobre `jsi_code` — Dataverse no permite dos documentos con el mismo código.
 
 | Columna (lógico) | Nombre visible | Tipo | Obligatoria | Detalle |
 |---|---|---|---|---|
@@ -710,7 +711,7 @@ Periodic snapshot of a comprehension gap on a Document topic.
 
 Tabla **propia** que representa a la persona (existe una sola vez por persona). Solo guarda datos personales: sus roles están en `jsi_roleassignment` y el avance de su inducción en `jsi_onboarding`.
 
-> **Por qué una tabla propia y no la estándar `jsi_person`:** en Dynamics 365, `jsi_person` representa a clientes y personas externas, y la comparten otras apps del entorno (datos mezclados, permisos sobre toda la tabla, flujos o reglas de otros equipos). `jsi_person` llega con esta solución y solo la usa esta app.
+> **Por qué una tabla propia y no la estándar `contact`:** en Dynamics 365, `contact` representa a clientes y personas externas, y la comparten otras apps del entorno (datos mezclados, permisos sobre toda la tabla, flujos o reglas de otros equipos). `jsi_person` llega con esta solución y solo la usa esta app.
 
 - **Propiedad:** Por usuario (UserOwned) — permite limitar la lectura por unidad de negocio (datos personales).
 - **ID (PK):** `jsi_personid`
