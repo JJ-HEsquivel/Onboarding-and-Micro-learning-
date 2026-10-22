@@ -5,7 +5,7 @@
  * - Puede recibir un equipo inicial: esos colaboradores (y sus validaciones pendientes) pasan a reportarle.
  * - Queda una evidencia del cambio de rol.
  */
-import { ContactsService } from '@/generated/services/ContactsService';
+import { Jsi_personsService } from '@/generated/services/Jsi_personsService';
 import { Jsi_roleassignmentsService } from '@/generated/services/Jsi_roleassignmentsService';
 import { Jsi_onboardingsService } from '@/generated/services/Jsi_onboardingsService';
 import { ROLE, VALIDATION_STATUS } from '@/shared/constants/choices';
@@ -19,7 +19,7 @@ import { getPeopleById } from './people.service';
 
 type NewRoleRecord = Parameters<typeof Jsi_roleassignmentsService.create>[0];
 type RoleChanges = Parameters<typeof Jsi_roleassignmentsService.update>[1];
-type ContactChanges = Parameters<typeof ContactsService.update>[1];
+type PersonChanges = Parameters<typeof Jsi_personsService.update>[1];
 type OnboardingChanges = Parameters<typeof Jsi_onboardingsService.update>[1];
 
 export interface ManagerSummary {
@@ -94,7 +94,7 @@ export async function loadManagersOverview(): Promise<ManagersOverview> {
     .filter((r) => r.jsi_role === ROLE.Administrator && r._jsi_person_value)
     .flatMap((r) => {
       const person = people.get(r._jsi_person_value!);
-      return person ? [{ id: person.contactid, fullName: person.fullname ?? '', jobTitle: person.jsi_jobtitle ?? '' }] : [];
+      return person ? [{ id: person.jsi_personid, fullName: person.jsi_fullname ?? '', jobTitle: person.jsi_jobtitle ?? '' }] : [];
     });
 
   return {
@@ -112,8 +112,8 @@ async function moveCollaborators(collaboratorIds: string[], toManagerId: string)
 
   await Promise.all(
     collaboratorIds.map(async (id) => {
-      const changes = { 'jsi_Manager@odata.bind': bind('contacts', toManagerId) } as ContactChanges;
-      unwrap(await ContactsService.update(id, changes), 'Cambiar manager');
+      const changes = { 'jsi_Manager@odata.bind': bind('jsi_persons', toManagerId) } as PersonChanges;
+      unwrap(await Jsi_personsService.update(id, changes), 'Cambiar manager');
     }),
   );
 
@@ -129,7 +129,7 @@ async function moveCollaborators(collaboratorIds: string[], toManagerId: string)
   );
   await Promise.all(
     pending.map(async (o) => {
-      const changes = { 'jsi_Validator@odata.bind': bind('contacts', toManagerId) } as OnboardingChanges;
+      const changes = { 'jsi_Validator@odata.bind': bind('jsi_persons', toManagerId) } as OnboardingChanges;
       unwrap(await Jsi_onboardingsService.update(o.jsi_onboardingid, changes), 'Cambiar validador');
     }),
   );
@@ -165,8 +165,8 @@ export async function promoteToManager(input: PromotionInput): Promise<void> {
   // 2. Nuevo rol de Manager
   unwrap(
     await Jsi_roleassignmentsService.create({
-      'jsi_Person@odata.bind': bind('contacts', collaborator.id),
-      'jsi_AssignedBy@odata.bind': bind('contacts', admin.id),
+      'jsi_Person@odata.bind': bind('jsi_persons', collaborator.id),
+      'jsi_AssignedBy@odata.bind': bind('jsi_persons', admin.id),
       jsi_role: ROLE.Manager,
       jsi_isactive: true,
       jsi_startdate: today,
@@ -176,11 +176,11 @@ export async function promoteToManager(input: PromotionInput): Promise<void> {
   );
 
   // 3. Nuevo cargo y área
-  const contactChanges = {
+  const personChanges = {
     jsi_jobtitle: input.jobTitle,
     'jsi_Area@odata.bind': bind('jsi_areas', input.areaId),
-  } as ContactChanges;
-  unwrap(await ContactsService.update(collaborator.id, contactChanges), 'Actualizar cargo');
+  } as PersonChanges;
+  unwrap(await Jsi_personsService.update(collaborator.id, personChanges), 'Actualizar cargo');
 
   // 4. Equipo inicial
   await moveCollaborators(input.teamIds, collaborator.id);
@@ -231,8 +231,8 @@ export async function revertPromotion(manager: ManagerSummary, admin: { id: stri
   unwrap(await Jsi_roleassignmentsService.update(collaboratorRole.jsi_roleassignmentid, reopen), 'Reactivar rol de colaborador');
 
   const previousTitle = collaboratorRole.jsi_jobtitle || 'Colaborador';
-  const contactChanges: ContactChanges = { jsi_jobtitle: previousTitle };
-  unwrap(await ContactsService.update(manager.id, contactChanges), 'Restaurar cargo');
+  const personChanges: PersonChanges = { jsi_jobtitle: previousTitle };
+  unwrap(await Jsi_personsService.update(manager.id, personChanges), 'Restaurar cargo');
 
   await recordEvidence({
     personId: manager.id,

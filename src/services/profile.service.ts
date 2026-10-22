@@ -2,7 +2,7 @@
  * Ficha de un colaborador (Admin y Manager): sus datos, su ruta por etapas, su historial
  * y las acciones sobre él (habilitar un nuevo intento, dar de baja).
  */
-import { ContactsService } from '@/generated/services/ContactsService';
+import { Jsi_personsService } from '@/generated/services/Jsi_personsService';
 import { Jsi_onboardingsService } from '@/generated/services/Jsi_onboardingsService';
 import { Jsi_assessmentassignmentsService } from '@/generated/services/Jsi_assessmentassignmentsService';
 import { Jsi_roleassignmentsService } from '@/generated/services/Jsi_roleassignmentsService';
@@ -18,7 +18,7 @@ import { getPeopleById } from './people.service';
 import { loadRouteEntries, saveOnboardingProgress, type RouteEntry } from './route.service';
 
 type ExamChanges = Parameters<typeof Jsi_assessmentassignmentsService.update>[1];
-type ContactChanges = Parameters<typeof ContactsService.update>[1];
+type PersonChanges = Parameters<typeof Jsi_personsService.update>[1];
 type RoleChanges = Parameters<typeof Jsi_roleassignmentsService.update>[1];
 
 export interface ProfileDocument extends RouteDocument {
@@ -75,7 +75,7 @@ export async function loadCollaboratorProfile(personId: string): Promise<Collabo
     stages.get(stageId)!.documents.push({ ...item.document, entry, step: documentStep(entry, PROGRAM_RULES.maxAttempts) });
   }
 
-  const nameOf = (id: string | undefined) => (id && people.get(id)?.fullname) || null;
+  const nameOf = (id: string | undefined) => (id && people.get(id)?.jsi_fullname) || null;
   return {
     collaborator,
     validatorName: nameOf(onboarding?._jsi_validator_value),
@@ -123,6 +123,6 @@ export async function deactivatePerson(personId: string): Promise<void> {
   );
 
   // statecode 1 / statuscode 2 = Inactivo
-  const changes = { statecode: 1, statuscode: 2 } as ContactChanges;
-  unwrap(await ContactsService.update(personId, changes), 'Dar de baja');
+  const changes = { statecode: 1, statuscode: 2 } as PersonChanges;
+  unwrap(await Jsi_personsService.update(personId, changes), 'Dar de baja');
 }

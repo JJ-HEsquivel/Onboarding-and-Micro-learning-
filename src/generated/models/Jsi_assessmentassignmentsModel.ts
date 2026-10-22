@@ -51,7 +51,6 @@ export interface Jsi_assessmentassignments extends Jsi_assessmentassignmentsBase
   jsi_assessmentname?: string;
   jsi_campaigndeliveryname?: string;
   jsi_employeename?: string;
-  jsi_employeeyominame?: string;
   jsi_onboardingname?: string;
   jsi_statusname?: string;
   modifiedbyname?: string;

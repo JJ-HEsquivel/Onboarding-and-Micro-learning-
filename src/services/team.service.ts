@@ -64,7 +64,7 @@ export async function addStageDocuments(input: StageDocumentsInput): Promise<voi
   await Promise.all(
     documents.map(async (document) => {
       const record = {
-        'jsi_Employee@odata.bind': bind('contacts', collaborator.id),
+        'jsi_Employee@odata.bind': bind('jsi_persons', collaborator.id),
         'jsi_Document@odata.bind': bind('jsi_documents', document.id),
         'jsi_Stage@odata.bind': bind('jsi_stages', stage.id),
         'jsi_Onboarding@odata.bind': bind('jsi_onboardings', onboardingId),
@@ -76,7 +76,7 @@ export async function addStageDocuments(input: StageDocumentsInput): Promise<voi
 
       if (document.assessmentId) {
         const exam = {
-          'jsi_Employee@odata.bind': bind('contacts', collaborator.id),
+          'jsi_Employee@odata.bind': bind('jsi_persons', collaborator.id),
           'jsi_Assessment@odata.bind': bind('jsi_assessments', document.assessmentId),
           'jsi_Onboarding@odata.bind': bind('jsi_onboardings', onboardingId),
           jsi_status: EXAM_STATUS.Locked,

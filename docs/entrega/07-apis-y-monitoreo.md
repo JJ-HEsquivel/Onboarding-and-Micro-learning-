@@ -36,7 +36,6 @@ Cada servicio de `src/services` es el único punto que usa sus tablas. Operacion
 | `evidence` | `jsi_evidences` | L, C (nunca A ni B) |
 | `notification` | `jsi_notifications` | C |
 
-Nota: hasta completar la migración de la persona (ver [13 · Pendientes](13-pendientes-del-proceso.md)), los servicios leen la persona de `contacts`.
 
 ## 3. Monitoreo
 

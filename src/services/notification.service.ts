@@ -27,7 +27,7 @@ export interface NewNotification {
 
 export async function notify(notification: NewNotification): Promise<void> {
   const record = {
-    'jsi_Employee@odata.bind': bind('contacts', notification.personId),
+    'jsi_Employee@odata.bind': bind('jsi_persons', notification.personId),
     jsi_type: NOTIFICATION_TYPE[notification.type],
     jsi_status: NOTIFICATION_STATUS_SENT,
     jsi_title: notification.title.slice(0, 200),

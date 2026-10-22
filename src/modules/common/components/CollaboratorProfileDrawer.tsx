@@ -280,7 +280,7 @@ export function CollaboratorProfileDrawer({ personId, viewer, onClose, onChanged
             </>
           }
         >
-          <p>Se desactiva su registro y se cierran sus roles. Esta acción se puede revertir reactivando el contacto en Dataverse.</p>
+          <p>Se desactiva su registro y se cierran sus roles. Esta acción se puede revertir reactivando a la persona en Dataverse.</p>
         </Modal>
       )}
     </>

@@ -47,7 +47,6 @@ export interface Jsi_documentassignments extends Jsi_documentassignmentsBase {
   createdonbehalfbyyominame: string;
   jsi_documentname?: string;
   jsi_employeename?: string;
-  jsi_employeeyominame?: string;
   jsi_onboardingname?: string;
   jsi_stagename?: string;
   jsi_statusname?: string;

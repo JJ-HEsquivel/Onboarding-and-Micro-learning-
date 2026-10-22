@@ -26,7 +26,7 @@ en producción la versión mayor es 0.
 
 ### Cambiado
 - La persona pasa de la tabla estándar `contact` a la tabla propia `jsi_person`
-  (esquema y scripts; el código de la app se adapta al regenerar las fuentes de datos).
+  (esquema, scripts, fuentes de datos regeneradas y servicios de la app).
 
 ## [0.4.0] — Gestión de contenido
 

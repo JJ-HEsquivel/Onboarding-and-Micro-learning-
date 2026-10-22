@@ -93,16 +93,7 @@
           "x-ms-dataverse-type": "StringType",
           "x-ms-schema-name": "jsi_AssignedByName",
           "x-ms-read-only": true,
-          "maxLength": 160
-        },
-        "jsi_assignedbyyominame": {
-          "type": "string",
-          "title": "jsi_assignedbyyominame",
-          "x-ms-dataverse-attribute": "jsi_assignedbyyominame",
-          "x-ms-dataverse-type": "StringType",
-          "x-ms-schema-name": "jsi_AssignedByYomiName",
-          "x-ms-read-only": true,
-          "maxLength": 450
+          "maxLength": 850
         },
         "jsi_enddate": {
           "type": "string",
@@ -174,16 +165,7 @@
           "x-ms-dataverse-type": "StringType",
           "x-ms-schema-name": "jsi_PersonName",
           "x-ms-read-only": true,
-          "maxLength": 160
-        },
-        "jsi_personyominame": {
-          "type": "string",
-          "title": "jsi_personyominame",
-          "x-ms-dataverse-attribute": "jsi_personyominame",
-          "x-ms-dataverse-type": "StringType",
-          "x-ms-schema-name": "jsi_PersonYomiName",
-          "x-ms-read-only": true,
-          "maxLength": 450
+          "maxLength": 850
         },
         "jsi_role": {
           "type": "string",

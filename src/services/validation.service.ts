@@ -87,15 +87,15 @@ export async function loadPendingValidations(managerId: string): Promise<Pending
       {
         onboardingId: onboarding.jsi_onboardingid,
         collaborator: {
-          id: person.contactid,
-          fullName: person.fullname ?? '',
+          id: person.jsi_personid,
+          fullName: person.jsi_fullname ?? '',
           jobTitle: person.jsi_jobtitle ?? '',
-          email: person.emailaddress1 ?? '',
+          email: person.jsi_email ?? '',
         },
         areaName: areaNames.get(areaId) ?? '—',
         hireDate: person.jsi_hiredate ?? null,
         startDate: onboarding.jsi_startdate ?? null,
-        registeredByName: (registeredById && people.get(registeredById)?.fullname) || null,
+        registeredByName: (registeredById && people.get(registeredById)?.jsi_fullname) || null,
         areaRoute: buildAreaRoute(catalog, areaId),
         assignedDocuments,
       },
@@ -156,7 +156,7 @@ export async function confirmOnboarding(pending: PendingOnboarding, selectedEtap
           unwrap(await Jsi_documentassignmentsService.update(assignmentId, changes), 'Actualizar vencimiento');
         } else {
           const record = {
-            'jsi_Employee@odata.bind': bind('contacts', collaborator.id),
+            'jsi_Employee@odata.bind': bind('jsi_persons', collaborator.id),
             'jsi_Document@odata.bind': bind('jsi_documents', document.id),
             'jsi_Stage@odata.bind': bind('jsi_stages', stage.id),
             'jsi_Onboarding@odata.bind': bind('jsi_onboardings', onboardingId),
@@ -169,7 +169,7 @@ export async function confirmOnboarding(pending: PendingOnboarding, selectedEtap
 
         if (document.assessmentId) {
           const exam = {
-            'jsi_Employee@odata.bind': bind('contacts', collaborator.id),
+            'jsi_Employee@odata.bind': bind('jsi_persons', collaborator.id),
             'jsi_Assessment@odata.bind': bind('jsi_assessments', document.assessmentId),
             'jsi_Onboarding@odata.bind': bind('jsi_onboardings', onboardingId),
             jsi_status: EXAM_STATUS.Locked,

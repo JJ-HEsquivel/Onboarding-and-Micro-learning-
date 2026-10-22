@@ -1,35 +1,35 @@
 /**
- * Personas (tabla estándar contact) y sus roles (jsi_roleassignment).
+ * Personas (jsi_person) y sus roles (jsi_roleassignment).
  */
-import { ContactsService } from '@/generated/services/ContactsService';
+import { Jsi_personsService } from '@/generated/services/Jsi_personsService';
 import { Jsi_roleassignmentsService } from '@/generated/services/Jsi_roleassignmentsService';
-import type { Contacts } from '@/generated/models/ContactsModel';
+import type { Jsi_persons } from '@/generated/models/Jsi_personsModel';
 import type { RoleValue } from '@/shared/constants/choices';
 import type { SessionUser } from '@/shared/types/navigation';
 import type { Manager } from '@/shared/types/onboarding';
 import { ACTIVE_RECORDS, fetchAll, odataId, odataString } from './dataverse';
 
 const PERSON_FIELDS = [
-  'contactid',
-  'fullname',
-  'emailaddress1',
+  'jsi_personid',
+  'jsi_fullname',
+  'jsi_email',
   'jsi_jobtitle',
   '_jsi_area_value',
   '_jsi_manager_value',
   'jsi_hiredate',
 ];
 
-/** Personas activas, indexadas por contactid. */
-export async function getPeopleById(): Promise<Map<string, Contacts>> {
+/** Personas activas, indexadas por jsi_personid. */
+export async function getPeopleById(): Promise<Map<string, Jsi_persons>> {
   const people = await fetchAll(
-    (o) => ContactsService.getAll(o),
-    { select: PERSON_FIELDS, filter: ACTIVE_RECORDS, orderBy: ['fullname asc'] },
+    (o) => Jsi_personsService.getAll(o),
+    { select: PERSON_FIELDS, filter: ACTIVE_RECORDS, orderBy: ['jsi_fullname asc'] },
     'Leer personas',
   );
-  return new Map(people.map((person) => [person.contactid, person]));
+  return new Map(people.map((person) => [person.jsi_personid, person]));
 }
 
-/** Ids (contactid) de las personas que tienen el rol indicado activo. */
+/** Ids (jsi_personid) de las personas que tienen el rol indicado activo. */
 export async function getPersonIdsWithRole(role: RoleValue): Promise<Set<string>> {
   const assignments = await fetchAll(
     (o) => Jsi_roleassignmentsService.getAll(o),
@@ -43,12 +43,12 @@ export async function getPersonIdsWithRole(role: RoleValue): Promise<Set<string>
 }
 
 /** Convierte las personas con rol Manager en opciones para un selector, ordenadas por nombre. */
-export function toManagers(people: Map<string, Contacts>, managerIds: Set<string>): Manager[] {
+export function toManagers(people: Map<string, Jsi_persons>, managerIds: Set<string>): Manager[] {
   return [...managerIds]
     .flatMap((id) => {
       const person = people.get(id);
       return person
-        ? [{ id, fullName: person.fullname ?? '', jobTitle: person.jsi_jobtitle ?? '', areaId: person._jsi_area_value ?? null }]
+        ? [{ id, fullName: person.jsi_fullname ?? '', jobTitle: person.jsi_jobtitle ?? '', areaId: person._jsi_area_value ?? null }]
         : [];
     })
     .sort((a, b) => a.fullName.localeCompare(b.fullName));
@@ -57,16 +57,16 @@ export function toManagers(people: Map<string, Contacts>, managerIds: Set<string
 /** La persona activa con ese correo, o null si no está registrada. */
 export async function findPersonByEmail(email: string): Promise<SessionUser | null> {
   const rows = await fetchAll(
-    (o) => ContactsService.getAll(o),
+    (o) => Jsi_personsService.getAll(o),
     {
-      select: ['contactid', 'fullname', 'jsi_jobtitle'],
-      filter: `${ACTIVE_RECORDS} and emailaddress1 eq ${odataString(email.trim())}`,
+      select: ['jsi_personid', 'jsi_fullname', 'jsi_jobtitle'],
+      filter: `${ACTIVE_RECORDS} and jsi_email eq ${odataString(email.trim())}`,
       top: 1,
     },
     'Buscar persona por correo',
   );
   const person = rows[0];
-  return person ? { id: person.contactid, fullName: person.fullname ?? '', jobTitle: person.jsi_jobtitle ?? '' } : null;
+  return person ? { id: person.jsi_personid, fullName: person.jsi_fullname ?? '', jobTitle: person.jsi_jobtitle ?? '' } : null;
 }
 
 /** Roles activos de una persona (valores de jsi_roleassignment.jsi_role). */
@@ -88,7 +88,7 @@ export async function listPeopleWithRole(role: RoleValue): Promise<SessionUser[]
   return [...ids]
     .flatMap((id) => {
       const person = people.get(id);
-      return person ? [{ id, fullName: person.fullname ?? '', jobTitle: person.jsi_jobtitle ?? '' }] : [];
+      return person ? [{ id, fullName: person.jsi_fullname ?? '', jobTitle: person.jsi_jobtitle ?? '' }] : [];
     })
     .sort((a, b) => a.fullName.localeCompare(b.fullName));
 }

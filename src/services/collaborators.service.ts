@@ -1,8 +1,8 @@
 /**
- * Colaboradores: personas (contact) con el rol Collaborator activo, junto con su
+ * Colaboradores: personas (jsi_person) con el rol Collaborator activo, junto con su
  * inducción más reciente (jsi_onboarding) y el avance real de su ruta.
  */
-import { ContactsService } from '@/generated/services/ContactsService';
+import { Jsi_personsService } from '@/generated/services/Jsi_personsService';
 import { Jsi_roleassignmentsService } from '@/generated/services/Jsi_roleassignmentsService';
 import { Jsi_onboardingsService } from '@/generated/services/Jsi_onboardingsService';
 import { Jsi_documentassignmentsService } from '@/generated/services/Jsi_documentassignmentsService';
@@ -28,12 +28,12 @@ import { loadRouteEntries, progressOf } from './route.service';
 
 // Los tipos generados exigen columnas de sistema (ownerid, statecode...) que Dataverse
 // completa solo; por eso los registros nuevos se construyen con estos tipos.
-type NewContactRecord = Parameters<typeof ContactsService.create>[0];
+type NewPersonRecord = Parameters<typeof Jsi_personsService.create>[0];
 type NewRoleRecord = Parameters<typeof Jsi_roleassignmentsService.create>[0];
 type NewOnboardingRecord = Parameters<typeof Jsi_onboardingsService.create>[0];
 type NewAssignmentRecord = Parameters<typeof Jsi_documentassignmentsService.create>[0];
 
-/** La inducción más reciente de cada persona (clave: contactid). */
+/** La inducción más reciente de cada persona (clave: jsi_personid). */
 export async function getLatestOnboardings(): Promise<Map<string, Jsi_onboardings>> {
   const onboardings = await fetchAll(
     (o) => Jsi_onboardingsService.getAll(o),
@@ -96,13 +96,13 @@ export async function loadCollaboratorsOverview(managerId?: string): Promise<Col
     const progress = progressOf(entries);
     const isPending = onboarding?.jsi_validationstatus === VALIDATION_STATUS.PendingValidation;
     const status = isPending ? 'pendingValidation' : progress.status;
-    const managerName = (personManagerId && people.get(personManagerId)?.fullname) || '—';
+    const managerName = (personManagerId && people.get(personManagerId)?.jsi_fullname) || '—';
 
     return [
       {
         id: personId,
-        fullName: person.fullname ?? '',
-        email: person.emailaddress1 ?? '',
+        fullName: person.jsi_fullname ?? '',
+        email: person.jsi_email ?? '',
         jobTitle: person.jsi_jobtitle ?? '',
         areaId,
         areaName: (areaId && areaNames.get(areaId)) || '—',
@@ -143,10 +143,10 @@ export async function loadCollaboratorsOverview(managerId?: string): Promise<Col
 
 /** true si alguna persona activa ya tiene ese correo. */
 async function isEmailRegistered(email: string): Promise<boolean> {
-  const result = await ContactsService.getAll({
-    select: ['contactid'],
+  const result = await Jsi_personsService.getAll({
+    select: ['jsi_personid'],
     // En OData una comilla simple se escribe doble ('').
-    filter: `${ACTIVE_RECORDS} and emailaddress1 eq ${odataString(email)}`,
+    filter: `${ACTIVE_RECORDS} and jsi_email eq ${odataString(email)}`,
     top: 1,
   });
   return unwrap(result, 'Verificar correo').length > 0;
@@ -154,14 +154,14 @@ async function isEmailRegistered(email: string): Promise<boolean> {
 
 /**
  * Registra un colaborador (Etapa 1 del flujo):
- * 1. Crea la persona (contact).
+ * 1. Crea la persona (jsi_person).
  * 2. Le asigna el rol Collaborator (jsi_roleassignment).
  * 3. Crea su inducción inicial, pendiente de validación por su manager (jsi_onboarding).
  * 4. Le asigna los documentos de la ruta propuesta, en estado Pending (jsi_documentassignment).
  *    Los exámenes se crean recién cuando el Manager valida la ruta.
  *
  * Antes de crear nada verifica que el correo no esté registrado.
- * @param registeredById contactid del Administrador que registra (se le muestra al Manager).
+ * @param registeredById jsi_personid del Administrador que registra (se le muestra al Manager).
  * Si algún paso falla, se deshace lo creado para no dejar datos a medias.
  */
 export async function registerCollaborator(
@@ -179,23 +179,25 @@ export async function registerCollaborator(
 
   try {
     const person = unwrap(
-      await ContactsService.create({
-        firstname: input.firstName.trim(),
-        lastname: input.lastName.trim(),
-        emailaddress1: email,
+      await Jsi_personsService.create({
+        // En jsi_person el nombre completo lo arma la app (en contact lo calculaba Dataverse).
+        jsi_fullname: `${input.firstName.trim()} ${input.lastName.trim()}`,
+        jsi_firstname: input.firstName.trim(),
+        jsi_lastname: input.lastName.trim(),
+        jsi_email: email,
         jsi_jobtitle: input.jobTitle.trim(),
         jsi_hiredate: input.hireDate,
         'jsi_Area@odata.bind': bind('jsi_areas', input.areaId),
-        'jsi_Manager@odata.bind': bind('contacts', input.managerId),
-      } as NewContactRecord),
+        'jsi_Manager@odata.bind': bind('jsi_persons', input.managerId),
+      } as NewPersonRecord),
       'Registrar persona',
     );
-    const personId = person.contactid;
-    undo.push(() => ContactsService.delete(personId));
+    const personId = person.jsi_personid;
+    undo.push(() => Jsi_personsService.delete(personId));
 
     const role = unwrap(
       await Jsi_roleassignmentsService.create({
-        'jsi_Person@odata.bind': bind('contacts', personId),
+        'jsi_Person@odata.bind': bind('jsi_persons', personId),
         jsi_role: ROLE.Collaborator,
         jsi_isactive: true,
         jsi_startdate: input.hireDate,
@@ -207,9 +209,9 @@ export async function registerCollaborator(
 
     const onboarding = unwrap(
       await Jsi_onboardingsService.create({
-        'jsi_Employee@odata.bind': bind('contacts', personId),
-        'jsi_Validator@odata.bind': bind('contacts', input.managerId),
-        'jsi_RegisteredBy@odata.bind': bind('contacts', registeredById),
+        'jsi_Employee@odata.bind': bind('jsi_persons', personId),
+        'jsi_Validator@odata.bind': bind('jsi_persons', input.managerId),
+        'jsi_RegisteredBy@odata.bind': bind('jsi_persons', registeredById),
         'jsi_Area@odata.bind': bind('jsi_areas', input.areaId),
         jsi_type: ONBOARDING_TYPE.Initial,
         jsi_validationstatus: VALIDATION_STATUS.PendingValidation,
@@ -226,7 +228,7 @@ export async function registerCollaborator(
       stage.documents.map(
         (document) =>
           ({
-            'jsi_Employee@odata.bind': bind('contacts', personId),
+            'jsi_Employee@odata.bind': bind('jsi_persons', personId),
             'jsi_Document@odata.bind': bind('jsi_documents', document.id),
             'jsi_Stage@odata.bind': bind('jsi_stages', stage.id),
             'jsi_Onboarding@odata.bind': bind('jsi_onboardings', onboardingId),

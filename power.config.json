@@ -93,10 +93,6 @@
           "entitySetName": "jsi_gaps",
           "logicalName": "jsi_gap"
         },
-        "contactos": {
-          "entitySetName": "contacts",
-          "logicalName": "contact"
-        },
         "roleassignments": {
           "entitySetName": "jsi_roleassignments",
           "logicalName": "jsi_roleassignment"
@@ -104,6 +100,10 @@
         "onboardings": {
           "entitySetName": "jsi_onboardings",
           "logicalName": "jsi_onboarding"
+        },
+        "people": {
+          "entitySetName": "jsi_persons",
+          "logicalName": "jsi_person"
         }
       },
       "environmentVariableName": ""

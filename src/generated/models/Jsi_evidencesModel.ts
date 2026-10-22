@@ -51,7 +51,6 @@ export interface Jsi_evidences extends Jsi_evidencesBase {
   jsi_assessmentname?: string;
   jsi_documentname?: string;
   jsi_employeename?: string;
-  jsi_employeeyominame?: string;
   jsi_typename?: string;
   modifiedbyname?: string;
   modifiedbyyominame: string;

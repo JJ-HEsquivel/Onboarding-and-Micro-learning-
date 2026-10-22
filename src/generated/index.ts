@@ -5,7 +5,6 @@
 
 // Models
 export * as CommonModels from './models/CommonModels';
-export * as ContactsModel from './models/ContactsModel';
 export * as Jsi_answeroptionsModel from './models/Jsi_answeroptionsModel';
 export * as Jsi_areasModel from './models/Jsi_areasModel';
 export * as Jsi_assessmentassignmentsModel from './models/Jsi_assessmentassignmentsModel';
@@ -23,6 +22,7 @@ export * as Jsi_evidencesModel from './models/Jsi_evidencesModel';
 export * as Jsi_gapsModel from './models/Jsi_gapsModel';
 export * as Jsi_notificationsModel from './models/Jsi_notificationsModel';
 export * as Jsi_onboardingsModel from './models/Jsi_onboardingsModel';
+export * as Jsi_personsModel from './models/Jsi_personsModel';
 export * as Jsi_questionresponsesModel from './models/Jsi_questionresponsesModel';
 export * as Jsi_questionsModel from './models/Jsi_questionsModel';
 export * as Jsi_roleassignmentsModel from './models/Jsi_roleassignmentsModel';
@@ -30,7 +30,6 @@ export * as Jsi_stageareasModel from './models/Jsi_stageareasModel';
 export * as Jsi_stagesModel from './models/Jsi_stagesModel';
 
 // Services
-export * from './services/ContactsService';
 export * from './services/Jsi_answeroptionsService';
 export * from './services/Jsi_areasService';
 export * from './services/Jsi_assessmentassignmentsService';
@@ -48,6 +47,7 @@ export * from './services/Jsi_evidencesService';
 export * from './services/Jsi_gapsService';
 export * from './services/Jsi_notificationsService';
 export * from './services/Jsi_onboardingsService';
+export * from './services/Jsi_personsService';
 export * from './services/Jsi_questionresponsesService';
 export * from './services/Jsi_questionsService';
 export * from './services/Jsi_roleassignmentsService';

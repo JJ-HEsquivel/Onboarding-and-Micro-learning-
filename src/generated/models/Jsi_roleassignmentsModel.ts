@@ -44,10 +44,8 @@ export interface Jsi_roleassignments extends Jsi_roleassignmentsBase {
   createdonbehalfbyname?: string;
   createdonbehalfbyyominame: string;
   jsi_assignedbyname?: string;
-  jsi_assignedbyyominame?: string;
   jsi_isactivename?: string;
   jsi_personname?: string;
-  jsi_personyominame?: string;
   jsi_rolename?: string;
   modifiedbyname?: string;
   modifiedbyyominame: string;

@@ -118,16 +118,7 @@
           "x-ms-dataverse-type": "StringType",
           "x-ms-schema-name": "jsi_EmployeeName",
           "x-ms-read-only": true,
-          "maxLength": 160
-        },
-        "jsi_employeeyominame": {
-          "type": "string",
-          "title": "jsi_employeeyominame",
-          "x-ms-dataverse-attribute": "jsi_employeeyominame",
-          "x-ms-dataverse-type": "StringType",
-          "x-ms-schema-name": "jsi_EmployeeYomiName",
-          "x-ms-read-only": true,
-          "maxLength": 450
+          "maxLength": 850
         },
         "jsi_name": {
           "type": "string",
@@ -200,16 +191,7 @@
           "x-ms-dataverse-type": "StringType",
           "x-ms-schema-name": "jsi_RegisteredByName",
           "x-ms-read-only": true,
-          "maxLength": 160
-        },
-        "jsi_registeredbyyominame": {
-          "type": "string",
-          "title": "jsi_registeredbyyominame",
-          "x-ms-dataverse-attribute": "jsi_registeredbyyominame",
-          "x-ms-dataverse-type": "StringType",
-          "x-ms-schema-name": "jsi_RegisteredByYomiName",
-          "x-ms-read-only": true,
-          "maxLength": 450
+          "maxLength": 850
         },
         "jsi_risklevel": {
           "type": "string",
@@ -338,16 +320,7 @@
           "x-ms-dataverse-type": "StringType",
           "x-ms-schema-name": "jsi_ValidatorName",
           "x-ms-read-only": true,
-          "maxLength": 160
-        },
-        "jsi_validatoryominame": {
-          "type": "string",
-          "title": "jsi_validatoryominame",
-          "x-ms-dataverse-attribute": "jsi_validatoryominame",
-          "x-ms-dataverse-type": "StringType",
-          "x-ms-schema-name": "jsi_ValidatorYomiName",
-          "x-ms-read-only": true,
-          "maxLength": 450
+          "maxLength": 850
         },
         "modifiedby": {
           "type": "string",

@@ -7,7 +7,7 @@ export type UserRole = 'admin' | 'manager' | 'collaborator';
 
 /** Persona con la que se ingresó a la app (se muestra en la barra lateral). */
 export interface SessionUser {
-  /** contactid en Dataverse. */
+  /** jsi_personid en Dataverse. */
   id: string;
   fullName: string;
   jobTitle: string;

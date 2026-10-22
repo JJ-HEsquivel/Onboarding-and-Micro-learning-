@@ -13,7 +13,7 @@ Se dividen en tres grupos: lo que el equipo debe **ejecutar** (el código ya est
 
 | # | Pendiente | Comando o acción | Requisito |
 | --- | --- | --- | --- |
-| E-1 | Terminar la migración de la persona a `jsi_person` | `npm run create`, `npm run seed:people`, regenerar fuentes de datos con `pac`, adaptar los servicios | Rama `feature/person-table` |
+| E-1 | Completar los datos de la migración a `jsi_person` (el código ya está migrado) | `npm run create` (claves únicas) y `npm run seed:people` | Rama `feature/person-table` |
 | E-2 | Crear los roles de seguridad de Dataverse | `npm run roles:dry-run` y `npm run roles` | System Customizer |
 | E-3 | Activar la auditoría del entorno (90 días) | `npm run audit:dry-run` y `npm run audit:org` | System Administrator del entorno |
 | E-4 | Proteger la rama `main` en GitHub | Settings > Branches: exigir 1 aprobación y el check «CI» | Dueño del repositorio |

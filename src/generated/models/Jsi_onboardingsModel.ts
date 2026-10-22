@@ -68,15 +68,12 @@ export interface Jsi_onboardings extends Jsi_onboardingsBase {
   createdonbehalfbyyominame: string;
   jsi_areaname?: string;
   jsi_employeename?: string;
-  jsi_employeeyominame?: string;
   jsi_progressstatusname?: string;
   jsi_registeredbyname?: string;
-  jsi_registeredbyyominame?: string;
   jsi_risklevelname?: string;
   jsi_typename?: string;
   jsi_validationstatusname?: string;
   jsi_validatorname?: string;
-  jsi_validatoryominame?: string;
   modifiedbyname?: string;
   modifiedbyyominame: string;
   modifiedon?: string;

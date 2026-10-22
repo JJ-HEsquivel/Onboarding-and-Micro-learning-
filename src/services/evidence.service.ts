@@ -40,7 +40,7 @@ function evidenceHash(): string {
 
 export async function recordEvidence(evidence: NewEvidence): Promise<void> {
   const record = {
-    'jsi_Employee@odata.bind': bind('contacts', evidence.personId),
+    'jsi_Employee@odata.bind': bind('jsi_persons', evidence.personId),
     ...(evidence.documentId ? { 'jsi_Document@odata.bind': bind('jsi_documents', evidence.documentId) } : {}),
     ...(evidence.assessmentId ? { 'jsi_Assessment@odata.bind': bind('jsi_assessments', evidence.assessmentId) } : {}),
     jsi_type: EVIDENCE_TYPE[evidence.type],

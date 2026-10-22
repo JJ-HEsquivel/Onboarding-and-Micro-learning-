@@ -82,7 +82,7 @@ export async function loadMyInduction(personId: string): Promise<MyInduction> {
   const validatorId = onboarding._jsi_validator_value;
   const info: InductionInfo = {
     onboardingId: onboarding.jsi_onboardingid,
-    validatorName: (validatorId && people.get(validatorId)?.fullname) || null,
+    validatorName: (validatorId && people.get(validatorId)?.jsi_fullname) || null,
     areaName: areas.find((a) => a.id === onboarding._jsi_area_value)?.name ?? '—',
     startDate: onboarding.jsi_startdate ?? null,
   };

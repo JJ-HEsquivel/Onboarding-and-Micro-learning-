@@ -61,13 +61,6 @@ export const dataSourcesInfo = {
     "dataSourceType": "Dataverse",
     "apis": {}
   },
-  "contacts": {
-    "tableId": "",
-    "version": "",
-    "primaryKey": "contactid",
-    "dataSourceType": "Dataverse",
-    "apis": {}
-  },
   "jsi_documentareas": {
     "tableId": "",
     "version": "",
@@ -128,6 +121,13 @@ export const dataSourcesInfo = {
     "tableId": "",
     "version": "",
     "primaryKey": "jsi_onboardingid",
+    "dataSourceType": "Dataverse",
+    "apis": {}
+  },
+  "jsi_persons": {
+    "tableId": "",
+    "version": "",
+    "primaryKey": "jsi_personid",
     "dataSourceType": "Dataverse",
     "apis": {}
   },

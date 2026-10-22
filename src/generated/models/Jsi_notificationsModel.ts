@@ -51,7 +51,6 @@ export interface Jsi_notifications extends Jsi_notificationsBase {
   createdonbehalfbyname?: string;
   createdonbehalfbyyominame: string;
   jsi_employeename?: string;
-  jsi_employeeyominame?: string;
   jsi_statusname?: string;
   jsi_typename?: string;
   modifiedbyname?: string;
